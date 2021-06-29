@@ -1,3 +1,5 @@
+passageidentity/passage_identity.egg-info/
+passage_identity.egg-info/
 dist/
 build/
 .eggs/

@@ -1,7 +1,0 @@
-README.md
-setup.py
-passage/passage_identity.egg-info/PKG-INFO
-passage/passage_identity.egg-info/SOURCES.txt
-passage/passage_identity.egg-info/dependency_links.txt
-passage/passage_identity.egg-info/requires.txt
-passage/passage_identity.egg-info/top_level.txt
