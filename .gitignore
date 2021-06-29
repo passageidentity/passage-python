@@ -1,3 +1,5 @@
+tests/__pycache__/
+.pypirc
 passageidentity/passage_identity.egg-info/
 passage_identity.egg-info/
 dist/
