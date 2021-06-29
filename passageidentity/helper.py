@@ -5,7 +5,7 @@ from base64 import b64decode
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
 
-from errors import PassageError
+from passageidentity.errors import PassageError
 
 TOKEN_TYPE = "Bearer"
 

@@ -6,6 +6,8 @@ This Python SDK allows for verification of server-side authentication for applic
 
 To authenticate an HTTP request in a Flask application, you can use the Passage library in a middleware function. 
 
+Please make sure you export your Passage public key and set it as an environment variable in your application (`PASSAGE_PUBLIC_KEY`)
+
 ```python
 from passageidentity import Passage
 

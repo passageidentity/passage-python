@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: passage-identity
+Version: 0.0.2a5
+Summary: Python library to help manage your Passage application and users
+Home-page: https://github.com/passageidentity/passage-python
+Author: Passage Identity, Inc
+Author-email: support@passage.id
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/passageidentity/passage-python/issues
+Description: # passage-python
+        
+        This Python SDK allows for verification of server-side authentication for applications using [Passage](https://passage.id)
+        
+        ## Authenticating a Request
+        
+        To authenticate an HTTP request in a Flask application, you can use the Passage library in a middleware function. 
+        
+        ```python
+        from passageidentity import Passage
+        
+        def exampleFlaskMiddleware(request):
+            psg = Passage()
+            user = psg.authenticateRequest(request)
+        ```
+        
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

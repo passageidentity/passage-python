@@ -1,7 +1,7 @@
 
 import jwt
-from helper import extractToken, getAuthTokenFromRequest, loadPublicKey 
-from errors import PassageError
+from passageidentity.helper import extractToken, getAuthTokenFromRequest, loadPublicKey 
+from passageidentity.errors import PassageError
 
 class Passage:
 

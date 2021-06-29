@@ -14,7 +14,7 @@ Use a virtual environment and install dependencies
 
 This will create the `/dist` directory
 ```
-python3 -m build
+python setup.py sdist bdist_wheel
 ```
 
 ### Run tests
