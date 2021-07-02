@@ -2,6 +2,12 @@
 
 This Python SDK allows for verification of server-side authentication for applications using [Passage](https://passage.id)
 
+Install this package using [pip](https://pypi.org/project/passage-identity/).
+
+```
+pip install passage-identity
+```
+
 ## Authenticating a Request
 
 To authenticate an HTTP request in a Flask application, you can use the Passage library in a middleware function. 
