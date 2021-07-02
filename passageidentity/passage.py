@@ -23,7 +23,6 @@ class Passage:
         if not token:
             raise PassageError("Could not find JWT.")
 
-        print(token)
         # load and parse the JWT
         try:
             claims = jwt.decode(token, self.passage_pubkey, algorithms=["RS256"])
