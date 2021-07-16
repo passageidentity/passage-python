@@ -1,6 +1,7 @@
 import os
 import re
 from base64 import b64decode
+import requests
 
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
@@ -39,23 +40,22 @@ def getAuthTokenFromRequest(request):
             raise PassageError("No Passage authentication token.")
         return request.cookies['psg_auth_token']
 
-
 """
-Helper function to load the Base-64 encoded passage public key from an environment
-variable
+Helper function to fetch the public key for the given app handle from Passage
 """
-def loadPublicKey():
-    # load base64 encoded public key 
-    b64Key = os.environ.get("PASSAGE_PUBLIC_KEY")
-    if not b64Key:
-        raise PassageError("Missing PASSAGE_PUBLIC_KEY environment variable")
+def fetchPublicKey(app_handle):
+    # unauthenticated request to get the public key
+    r = requests.get("https://api.passage.id/v1/app/" + app_handle)
 
-    # decode public key into PEM format
+    # check response code
+    if r.status_code != 200:
+        raise PassageError("Could not fetch public key for app handle " + app_handle)
+
     try:
-        keyBytes = b64decode(b64Key)
+        public_key = r.json()["public_key"]
+        keyBytes = b64decode(public_key)
         pubKey = load_pem_public_key(keyBytes, default_backend())
         return pubKey
     except Exception as e:
-        raise PassageError("PASSAGE_PUBLIC_KEY is not a valid public key")
+        raise PassageError("Could not fetch public key for app handle " + app_handle)
 
-		
