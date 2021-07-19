@@ -35,7 +35,7 @@ def testGetUserInfoValid():
     psg_apikey = os.environ.get("PASSAGE_API_KEY")
     psg = Passage("UKbRUx", psg_apikey)
     
-    user = psg.getPassageUser('j6PYZBq3GwUjeRHLqmgR')
+    user = psg.getUser('j6PYZBq3GwUjeRHLqmgR')
     assert user.email == "fae@ar"
 
 def testGetUserInfoUserDoesNotExist():

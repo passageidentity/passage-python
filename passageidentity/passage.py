@@ -67,7 +67,7 @@ class Passage:
     """
     Get instance of Passage User
     """
-    def getPassageUser(self, user_handle):
+    def getUser(self, user_handle):
         return Passage.PassageUser(self, user_handle)
 
     """
