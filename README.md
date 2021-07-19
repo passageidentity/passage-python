@@ -53,9 +53,9 @@ The information available in the Passage User object is as
 | email  | string  | 
 | active | boolean |
 | email_verified | boolean  |  
-| start_date  | string  | 
-| last_login_date | string |
+| start_date  | Datetime  | 
+| last_login_date | Datetime |
 | password | boolean  |  
 | webauthn  | boolean  | 
 | webauthn_devices | array |
-|recent_events| array |
+|recent_events| array of PassageEvents |

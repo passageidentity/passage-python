@@ -1,6 +1,7 @@
 
 import jwt
 import requests
+from datetime import datetime
 from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
 from passageidentity.errors import PassageError
 
@@ -83,13 +84,37 @@ class Passage:
             self.email = data["email"]
             self.active = data["active"]
             self.email_verified = data["email_verified"]
-            self.start_date = data["start_date"]
-            self.last_login_date = data["last_login_date"]
+
+            try:
+                self.start_date = datetime.strptime(data["start_date"],"%Y-%m-%dT%H:%M:%S.%fZ")
+            except:
+                self.start_date = datetime.strptime(data["start_date"],"%Y-%m-%dT%H:%M:%SZ")
+
+            try:
+                self.last_login_date = datetime.strptime(data["last_login_date"],"%Y-%m-%dT%H:%M:%S.%fZ")
+            except:
+                self.last_login_date = datetime.strptime(data["last_login_date"],"%Y-%m-%dT%H:%M:%SZ")
+
             self.password = data["password"]
             self.webauthn = data["webauthn"]
             self.webauthn_devices = data["webauthn_devices"]
-            self.recent_events = data["recent_events"]
+            events = data["recent_events"]
+            self.recent_events = []
+            for e in events:    
+                pe = PassageEvent(e)
+                self.recent_events.append(pe)
 
 
+class PassageEvent:
 
+    def __init__(self, event):
+        self.email = event["email"]
+        self.event_type = event["event_type"]
+        self.handle = event["handle"]
+        self.status = event["status"]
 
+        try:
+            self.timestamp = datetime.strptime(event["timestamp"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+             self.timestamp = datetime.strptime(event["timestamp"],"%Y-%m-%dT%H:%M:%SZ")
+           
