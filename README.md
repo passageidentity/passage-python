@@ -11,16 +11,16 @@ pip install passage-identity
 ## Authenticating a Request
 
 To authenticate an HTTP request in a Flask application, you can use the Passage library in a middleware function. 
-You need to provide Passage with your app handle in order to verify the JWTs.
+You need to provide Passage with your app ID in order to verify the JWTs.
 
 ```python
 from passageidentity import Passage
 import os
 
-PASSAGE_APPHANDLE = os.environ.get("PASSAGE_APPHANDLE")
+PASSAGE_APP_ID_ = os.environ.get("PASSAGE_APP_ID")
 
 def exampleFlaskMiddleware(request):
-    psg = Passage(PASSAGE_APPHANDLE)
+    psg = Passage(PASSAGE_APP_ID)
     user = psg.authenticateRequest(request)
 ```
 
@@ -32,9 +32,9 @@ This API key must be protected and stored in an appropriate secure storage locat
 from passageidentity import Passage
 import os
 
-PASSAGE_APPHANDLE = os.environ.get("PASSAGE_APPHANDLE")
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
-psg = Passage(PASSAGE_APPHANDLE, PASSAGE_API_KEY)
+psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
 def exampleFlaskMiddleware(request):
     g.user = psg.authenticateRequest(request)
@@ -49,13 +49,12 @@ The information available in the Passage User object is as
 
 | Field  | Type    |
 |--------|---------|
-| handle | string  |  
+| id | string  |  
 | email  | string  | 
 | active | boolean |
 | email_verified | boolean  |  
-| start_date  | Datetime  | 
-| last_login_date | Datetime |
-| password | boolean  |  
+| created_at  | Datetime  | 
+| last_login_at | Datetime | 
 | webauthn  | boolean  | 
 | webauthn_devices | array |
 |recent_events| array of PassageEvents |
