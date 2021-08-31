@@ -56,7 +56,7 @@ class Passage:
 
             if r.status_code != 200:
                 # get error message
-                message = r.json()
+                message = r.json()["status"]
                 raise PassageError("Failed request to get user data: " + message)
             return r.json()["user"]
         except Exception as e:
