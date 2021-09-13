@@ -41,21 +41,21 @@ def getAuthTokenFromRequest(request):
         return request.cookies['psg_auth_token']
 
 """
-Helper function to fetch the public key for the given app handle from Passage
+Helper function to fetch the public key for the given app id from Passage
 """
-def fetchPublicKey(app_handle):
+def fetchPublicKey(app_id):
     # unauthenticated request to get the public key
-    r = requests.get("https://api.passage.id/v1/app/" + app_handle)
+    r = requests.get("https://api.passage.id/v1/apps/" + app_id)
 
     # check response code
     if r.status_code != 200:
-        raise PassageError("Could not fetch public key for app handle " + app_handle)
+        raise PassageError("Could not fetch public key for app id " + app_id)
 
     try:
-        public_key = r.json()["public_key"]
+        public_key = r.json()["app"]["rsa_public_key"]
         keyBytes = b64decode(public_key)
         pubKey = load_pem_public_key(keyBytes, default_backend())
         return pubKey
     except Exception as e:
-        raise PassageError("Could not fetch public key for app handle " + app_handle)
+        raise PassageError("Could not fetch public key for app id " + app_id)
 
