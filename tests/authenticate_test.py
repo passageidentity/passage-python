@@ -36,8 +36,28 @@ def testGetUserInfoValid():
     psg_id = os.environ.get("PASSAGE_APP_ID")
     psg = Passage(psg_id, psg_apikey)
     
-    user = psg.getUser('WWMxNyZdeBFRhapRy0ykhTvI')
-    assert user.email == "testuser@passage.id"
+    user = psg.getUser('j6PYZBq3GwUjeRHLqmgR')
+    assert user.email == "fae@ar"
+    
+def testActivateUser():
+    psg_apikey = os.environ.get("PASSAGE_API_KEY")
+    psg_id = os.environ.get("PASSAGE_APP_ID")
+    psg = Passage(psg_id, psg_apikey)
+    
+    user = psg.getUser('j6PYZBq3GwUjeRHLqmgR')
+    assert user.email == "fae@ar"
+    user.activate()
+    assert user.active == True
+
+def testDeactivateUser():
+    psg_apikey = os.environ.get("PASSAGE_API_KEY")
+    psg_id = os.environ.get("PASSAGE_APP_ID")
+    psg = Passage(psg_id, psg_apikey)
+    
+    user = psg.getUser('j6PYZBq3GwUjeRHLqmgR')
+    assert user.email == "fae@ar"
+    user.deactivate()
+    assert user.active == False 
 
 def testGetUserInfoUserDoesNotExist():
     pass
