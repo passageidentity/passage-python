@@ -8,7 +8,7 @@ from passageidentity.errors import PassageError
 
 PUBKEY_CACHE = {}
 
-class Passage(Enum):
+class Passage():
     COOKIEAUTH = 1
     HEADERAUTH = 2
 
@@ -67,11 +67,56 @@ class Passage(Enum):
             raise PassageError("Could not fetch user data")
 
 
+
     """
     Get instance of Passage User
     """
     def getUser(self, user_id):
         return Passage.PassageUser(self, user_id)
+
+    """
+    Deactivate Passage User
+    """
+
+    def activateUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/activate"  
+            r = requests.patch(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["message"]
+                raise PassageError("Failed request to activate user: " + message)
+            self.active = True 
+        except Exception as e:
+            raise PassageError("Could not activate user")
+    
+    """
+    Deactivate Passage User
+    """
+
+    def deactivateUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/deactivate"  
+            r = requests.patch(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["message"]
+                raise PassageError("Failed request to deactivate user: " + message)
+            self.active = False 
+        except Exception as e:
+            raise PassageError("Could not deactivate user")
 
     """
     Inner class represesnting a Passage User. 
@@ -108,41 +153,13 @@ class Passage(Enum):
 
 
         def activate(self):
-            # if no api key, fail
-            if self.passage_apikey == "":
-                raise PassageError("No Passage API key provided.")
-
-            header = {"Authorization": "Bearer " + self.passage_apikey}
-            try:
-                url = "https://api.passage.id/v1/app/" + self.app_handle + "/users/" + self.handle + "/activate"  
-                r = requests.get(url, headers=header)
-
-                if r.status_code != 200:
-                    # get error message
-                    message = r.json()["message"]
-                    raise PassageError("Failed request to activate user: " + message)
-                self.active = True 
-            except Exception as e:
-                raise PassageError("Could not activate user")
+            self.psg.activateUser(self.id)
+            self.active = True
             
 
         def deactivate(self):
-            # if no api key, fail
-            if self.passage_apikey == "":
-                raise PassageError("No Passage API key provided.")
-
-            header = {"Authorization": "Bearer " + self.passage_apikey}
-            try:
-                url = "https://api.passage.id/v1/app/" + self.app_handle + "/users/" + self.handle + "/deactivate"  
-                r = requests.get(url, headers=header)
-
-                if r.status_code != 200:
-                    # get error message
-                    message = r.json()["message"]
-                    raise PassageError("Failed request to deactivate user: " + message)
-                self.active = False 
-            except Exception as e:
-                raise PassageError("Could not deactivate user")
+            self.psg.deactivateUser(self.id)
+            self.active = False
 
 
 class PassageEvent:

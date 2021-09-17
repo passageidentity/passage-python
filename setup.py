@@ -22,7 +22,7 @@ setuptools.setup(
     ],
     #package_dir={"": "passage"},
     packages=["passageidentity"],
-    install_requires=['pyjwt','cryptography','requests'],
+    install_requires=['pyjwt','cryptography==3.3.2','requests'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests',

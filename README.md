@@ -8,6 +8,15 @@ Install this package using [pip](https://pypi.org/project/passage-identity/).
 pip install passage-identity
 ```
 
+## Instantiating the Passage Class
+
+Passage has three arguments that can be used for initialization: `app_id`, `api_key`, and `auth_strategy`. 
+ - `app_id` has no default value and needs to be set upon initialization
+ - `api_key` is set by default to an emptry string (the `api_key` is not required for authenticating requests)
+ - `auth_strategy` is set by default to `Passage.COOKIEAUTH`, but can be changed to `Passage.HEADERAUTH` (the `auth_strategy` tells the Passage class where to find a JWT in an incoming request)
+
+
+
 ## Authenticating a Request
 
 To authenticate an HTTP request in a Flask application, you can use the Passage library in a middleware function. 
@@ -58,3 +67,24 @@ The information available in the Passage User object is as
 | webauthn  | boolean  | 
 | webauthn_devices | array |
 |recent_events| array of PassageEvents |
+
+
+## Activate/Deactivate User
+After retrieving information about a user, using the `getPassageUser` method, you will be able to activate/deactivate a user. 
+
+```python
+from passageidentity import Passage
+import os
+
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+user_id = psg.authenticateRequest(request)
+
+user = psg.getPassageUser(user_id)
+
+#activate or deactivate this user
+user.activate()
+user.deactivate()
+```

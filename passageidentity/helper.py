@@ -2,7 +2,6 @@ import os
 import re
 from base64 import b64decode
 import requests
-from passageidentity.passage import Passage 
 
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
@@ -27,7 +26,7 @@ Helper funtion to get the auth token from a request.
 Checks the Authorization header first, then the psg_auth_token cookie
 """
 def getAuthTokenFromRequest(request, auth_strategy):
-    if auth_strategy == Passage.HEADERAUTH:
+    if auth_strategy == 2:
         authHeader = request.headers["Authorization"]
         expression = re.escape(TOKEN_TYPE) + r" ([^\s,]+)"
         match = re.search(expression, authHeader)
