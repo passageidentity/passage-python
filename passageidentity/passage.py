@@ -9,13 +9,13 @@ from passageidentity.errors import PassageError
 PUBKEY_CACHE = {}
 
 class Passage():
-    COOKIEAUTH = 1
-    HEADERAUTH = 2
+    COOKIE_AUTH = 1
+    HEADER_AUTH = 2
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
     """
-    def __init__(self, app_id, api_key="", auth_strategy=COOKIEAUTH):
+    def __init__(self, app_id, api_key="", auth_strategy=COOKIE_AUTH):
         self.app_id = app_id
         self.passage_apikey = api_key
         self.auth_strategy = auth_strategy
@@ -90,7 +90,7 @@ class Passage():
 
             if r.status_code != 200:
                 # get error message
-                message = r.json()["message"]
+                message = r.json()["status"]
                 raise PassageError("Failed request to activate user: " + message)
             self.active = True 
         except Exception as e:
@@ -112,7 +112,7 @@ class Passage():
 
             if r.status_code != 200:
                 # get error message
-                message = r.json()["message"]
+                message = r.json()["status"]
                 raise PassageError("Failed request to deactivate user: " + message)
             self.active = False 
         except Exception as e:

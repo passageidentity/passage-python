@@ -13,7 +13,7 @@ pip install passage-identity
 Passage has three arguments that can be used for initialization: `app_id`, `api_key`, and `auth_strategy`. 
  - `app_id` has no default value and needs to be set upon initialization
  - `api_key` is set by default to an emptry string (the `api_key` is not required for authenticating requests)
- - `auth_strategy` is set by default to `Passage.COOKIEAUTH`, but can be changed to `Passage.HEADERAUTH` (the `auth_strategy` tells the Passage class where to find a JWT in an incoming request)
+ - `auth_strategy` is set by default to `Passage.COOKIE_AUTH`, but can be changed to `Passage.HEADER_AUTH` (the `auth_strategy` tells the Passage class where to find a JWT in an incoming request)
 
 
 
