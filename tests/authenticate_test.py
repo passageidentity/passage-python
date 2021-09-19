@@ -1,4 +1,4 @@
-from passageidentity import Passage
+from passageidentity import Passage, PassageUser
 from passageidentity import PassageError
 import pytest
 import os
@@ -38,15 +38,13 @@ def testGetUserInfoValid():
     
     user = psg.getUser('TguJZxPXuc2owkpeIDvX0LeP')
     assert user.email == "dylan.brookes10+31@gmail.com"
-    
+
 def testActivateUser():
     psg_apikey = os.environ.get("PASSAGE_API_KEY")
     psg_id = os.environ.get("PASSAGE_APP_ID")
     psg = Passage(psg_id, psg_apikey)
     
-    user = psg.getUser('TguJZxPXuc2owkpeIDvX0LeP')
-    assert user.email == "dylan.brookes10+31@gmail.com"
-    user.activate()
+    user = psg.activateUser('TguJZxPXuc2owkpeIDvX0LeP')
     assert user.active == True
 
 def testDeactivateUser():
@@ -56,7 +54,7 @@ def testDeactivateUser():
     
     user = psg.getUser('TguJZxPXuc2owkpeIDvX0LeP')
     assert user.email == "dylan.brookes10+31@gmail.com"
-    user.deactivate()
+    user = psg.deactivateUser(user.id)
     assert user.active == False 
 
 def testGetUserInfoUserDoesNotExist():

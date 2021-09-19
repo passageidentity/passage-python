@@ -48,7 +48,7 @@ class Passage():
     """
     Use Passage API to get info for a user, look up by user ID
     """ 
-    def getUserInfo(self, user_id):
+    def getUser(self, user_id):
         # if no api key, fail
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
@@ -62,7 +62,7 @@ class Passage():
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to get user data: " + message)
-            return r.json()["user"]
+            return PassageUser(user_id, r.json()["user"])
         except Exception as e:
             raise PassageError("Could not fetch user data")
 
@@ -71,7 +71,7 @@ class Passage():
     """
     Get instance of Passage User
     """
-    def getUser(self, user_id):
+    def getUserOld(self, user_id):
         return Passage.PassageUser(self, user_id)
 
     """
@@ -92,7 +92,8 @@ class Passage():
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to activate user: " + message)
-            self.active = True 
+            print(r.json())
+            return PassageUser(user_id, r.json()["user"] )
         except Exception as e:
             raise PassageError("Could not activate user")
     
@@ -114,54 +115,37 @@ class Passage():
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to deactivate user: " + message)
-            self.active = False 
+            return PassageUser(user_id, r.json()["user"])
         except Exception as e:
             raise PassageError("Could not deactivate user")
 
-    """
-    Inner class represesnting a Passage User. 
-    """
-    class PassageUser:
+class PassageUser:
 
-        def __init__(self, psg, user_id):
-            self.psg = psg
-            self.id = user_id
+    def __init__(self, user_id, fields={}):
+        self.id = user_id
+        self.email = fields["email"]
+        self.active = fields["active"]
+        self.email_verified = fields["email_verified"]
 
-            data = self.psg.getUserInfo(self.id)
-            # set the individual fields 
-            self.email = data["email"]
-            self.active = data["active"]
-            self.email_verified = data["email_verified"]
+        try:
+            self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%SZ")
 
-            try:
-                self.created_at = datetime.strptime(data["created_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
-            except:
-                self.created_at = datetime.strptime(data["created_at"],"%Y-%m-%dT%H:%M:%SZ")
+        try:
+            self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
 
-            try:
-                self.last_login_at = datetime.strptime(data["last_login_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
-            except:
-                self.last_login_at = datetime.strptime(data["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
-
-            self.webauthn = data["webauthn"]
-            self.webauthn_devices = data["webauthn_devices"]
-            events = data["recent_events"]
+        self.webauthn = fields["webauthn"]
+        self.webauthn_devices = fields["webauthn_devices"]
+        if fields["recent_events"] != None:
+            events = fields["recent_events"]
             self.recent_events = []
             for e in events:    
                 pe = PassageEvent(e)
                 self.recent_events.append(pe)
-
-
-        def activate(self):
-            self.psg.activateUser(self.id)
-            self.active = True
             
-
-        def deactivate(self):
-            self.psg.deactivateUser(self.id)
-            self.active = False
-
-
 class PassageEvent:
 
     def __init__(self, event):
