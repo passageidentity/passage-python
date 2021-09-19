@@ -2,19 +2,23 @@
 import jwt
 import requests
 from datetime import datetime
+from enum import Enum
 from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
 from passageidentity.errors import PassageError
 
 PUBKEY_CACHE = {}
 
-class Passage:
+class Passage():
+    COOKIE_AUTH = 1
+    HEADER_AUTH = 2
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
     """
-    def __init__(self, app_id, api_key=""):
+    def __init__(self, app_id, api_key="", auth_strategy=COOKIE_AUTH):
         self.app_id = app_id
         self.passage_apikey = api_key
+        self.auth_strategy = auth_strategy
 
         # if the pubkey exists in the cache, use that to avoid making requests
         if app_id in PUBKEY_CACHE.keys():
@@ -30,7 +34,7 @@ class Passage:
     """ 
     def authenticateRequest(self, request):
         # check for authorization header
-        token = getAuthTokenFromRequest(request)
+        token = getAuthTokenFromRequest(request, self.auth_strategy)
         if not token:
             raise PassageError("Could not find JWT.")
 
@@ -63,11 +67,56 @@ class Passage:
             raise PassageError("Could not fetch user data")
 
 
+
     """
     Get instance of Passage User
     """
     def getUser(self, user_id):
         return Passage.PassageUser(self, user_id)
+
+    """
+    Deactivate Passage User
+    """
+
+    def activateUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/activate"  
+            r = requests.patch(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to activate user: " + message)
+            self.active = True 
+        except Exception as e:
+            raise PassageError("Could not activate user")
+    
+    """
+    Deactivate Passage User
+    """
+
+    def deactivateUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/deactivate"  
+            r = requests.patch(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to deactivate user: " + message)
+            self.active = False 
+        except Exception as e:
+            raise PassageError("Could not deactivate user")
 
     """
     Inner class represesnting a Passage User. 
@@ -101,6 +150,16 @@ class Passage:
             for e in events:    
                 pe = PassageEvent(e)
                 self.recent_events.append(pe)
+
+
+        def activate(self):
+            self.psg.activateUser(self.id)
+            self.active = True
+            
+
+        def deactivate(self):
+            self.psg.deactivateUser(self.id)
+            self.active = False
 
 
 class PassageEvent:
