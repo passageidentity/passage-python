@@ -68,7 +68,8 @@ The information available in the Passage User object is as
 
 
 ## Activate/Deactivate User
-After retrieving information about a user, using the `getPassageUser` method, you will be able to activate/deactivate a user. 
+You can also activate or deactivate a user using the Passage SDK. These actions require an API Key and deactivating a user will prevent them from logging into your application
+with Passage.
 
 ```python
 from passageidentity import Passage
@@ -78,11 +79,9 @@ PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
 psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-user_id = psg.authenticateRequest(request)
-
-user = psg.getPassageUser(user_id)
+# Get Passage User ID from database
+# ...
 
 #activate or deactivate this user
-user.activate()
-user.deactivate()
+psg.deactivateUser(userId)
 ```
