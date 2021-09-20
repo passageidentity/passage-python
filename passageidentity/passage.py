@@ -92,7 +92,6 @@ class Passage():
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to activate user: " + message)
-            print(r.json())
             return PassageUser(user_id, r.json()["user"] )
         except Exception as e:
             raise PassageError("Could not activate user")
