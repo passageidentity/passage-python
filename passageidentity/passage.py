@@ -118,6 +118,9 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not deactivate user")
 
+    """
+    Update Passage User's Email
+    """
     def updateUserEmail(self, user_id, email):
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
