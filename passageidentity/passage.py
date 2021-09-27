@@ -118,6 +118,24 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not deactivate user")
 
+    def updateUserEmail(self, user_id, email):
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+        
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
+            r = requests.patch(url, headers=header, data={"email": email})
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to update user email: " + message)
+            return PassageUser(user_id, r.json()["user"])
+        except Exception as e:
+            raise PassageError("Could not update user email")
+
+
 class PassageUser:
 
     def __init__(self, user_id, fields={}):
