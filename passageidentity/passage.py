@@ -66,14 +66,6 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not fetch user data")
 
-
-
-    """
-    Get instance of Passage User
-    """
-    def getUserOld(self, user_id):
-        return Passage.PassageUser(self, user_id)
-
     """
     Deactivate Passage User
     """
