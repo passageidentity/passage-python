@@ -1,5 +1,6 @@
 
 import jwt
+import json
 import requests
 from datetime import datetime
 from enum import Enum
@@ -19,6 +20,10 @@ class Passage():
         self.app_id = app_id
         self.passage_apikey = api_key
         self.auth_strategy = auth_strategy
+
+        # if no app id provided, error
+        if not app_id:
+            raise PassageError("Passage App ID must be provided")
 
         # if the pubkey exists in the cache, use that to avoid making requests
         if app_id in PUBKEY_CACHE.keys():
@@ -91,7 +96,6 @@ class Passage():
     """
     Deactivate Passage User
     """
-
     def deactivateUser(self, user_id):
         # if no api key, fail
         if self.passage_apikey == "":
@@ -111,24 +115,24 @@ class Passage():
             raise PassageError("Could not deactivate user")
 
     """
-    Update Passage User's Email
+    Update Passage User
     """
-    def updateUserEmail(self, user_id, email):
+    def updateUser(self, user_id, attributes):
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
         
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
-            r = requests.patch(url, headers=header, data={"email": email})
-
+            r = requests.patch(url, headers=header, data=json.dumps(attributes))
+            
             if r.status_code != 200:
                 # get error message
                 message = r.json()["status"]
-                raise PassageError("Failed request to update user email: " + message)
+                raise PassageError("Failed request to update user: " + message)
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
-            raise PassageError("Could not update user email")
+            raise PassageError("Could not update user: " + str(e))
 
 
 class PassageUser:
