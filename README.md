@@ -60,6 +60,7 @@ The information available in the Passage User object is as
 | ---------------- | ---------------------- |
 | id               | string                 |
 | email            | string                 |
+| phone            | string                 |
 | active           | boolean                |
 | email_verified   | boolean                |
 | created_at       | Datetime               |
@@ -88,9 +89,9 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 psg.deactivateUser(user_id)
 ```
 
-## Update User Email
+## Update User Attributes
 
-You can also update a user's email using the Passage SDK. This will require a Passage API Key.
+You can also update a user's attributes using the Passage SDK. This will require a Passage API Key.
 
 ```python
 from passageidentity import Passage
@@ -103,6 +104,9 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 # Get Passage User ID from database
 # ...
 
-#activate or deactivate this user
-psg.updateUserEmail(user_id, "newEmail@domain.com")
+# update a user's email
+psg.updateUser(user_id, {
+    "email": "newEmail@domain.com",
+    "phone": "15005550006"
+})
 ```
