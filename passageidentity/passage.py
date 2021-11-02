@@ -1,6 +1,7 @@
 
 import jwt
 import requests
+import json
 from datetime import datetime
 from enum import Enum
 from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
@@ -75,9 +76,8 @@ class Passage():
         return Passage.PassageUser(self, user_id)
 
     """
-    Deactivate Passage User
+    Activate Passage User
     """
-
     def activateUser(self, user_id):
         # if no api key, fail
         if self.passage_apikey == "":
@@ -99,7 +99,6 @@ class Passage():
     """
     Deactivate Passage User
     """
-
     def deactivateUser(self, user_id):
         # if no api key, fail
         if self.passage_apikey == "":
@@ -119,24 +118,25 @@ class Passage():
             raise PassageError("Could not deactivate user")
 
     """
-    Update Passage User's Email
+    Update Passage User's Attributes
     """
-    def updateUserEmail(self, user_id, email):
+    def updateUser(self, user_id, attributes):
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
         
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
-            r = requests.patch(url, headers=header, data={"email": email})
+            r = requests.patch(url, headers=header, data=json.dumps(attributes))
 
             if r.status_code != 200:
                 # get error message
+                attributeKeys = ", ".join(attribute for attribute in attributes.keys())
                 message = r.json()["status"]
-                raise PassageError("Failed request to update user email: " + message)
+                raise PassageError(f"Failed request to update user attributes ({attributeKeys}): {message}")
             return PassageUser(user_id, r.json()["user"])
-        except Exception as e:
-            raise PassageError("Could not update user email")
+        except Exception:
+            raise PassageError(f"Could not update user attributes")
 
 
 class PassageUser:
@@ -144,6 +144,7 @@ class PassageUser:
     def __init__(self, user_id, fields={}):
         self.id = user_id
         self.email = fields["email"]
+        self.phone = fields["phone"]
         self.active = fields["active"]
         self.email_verified = fields["email_verified"]
 
