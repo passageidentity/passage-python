@@ -1,5 +1,6 @@
 
 import jwt
+import json
 import requests
 import json
 from datetime import datetime
@@ -20,6 +21,10 @@ class Passage():
         self.app_id = app_id
         self.passage_apikey = api_key
         self.auth_strategy = auth_strategy
+
+        # if no app id provided, error
+        if not app_id:
+            raise PassageError("Passage App ID must be provided")
 
         # if the pubkey exists in the cache, use that to avoid making requests
         if app_id in PUBKEY_CACHE.keys():
@@ -66,14 +71,6 @@ class Passage():
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
             raise PassageError("Could not fetch user data")
-
-
-
-    """
-    Get instance of Passage User
-    """
-    def getUserOld(self, user_id):
-        return Passage.PassageUser(self, user_id)
 
     """
     Activate Passage User
@@ -128,7 +125,6 @@ class Passage():
         try:
             url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
             r = requests.patch(url, headers=header, data=json.dumps(attributes))
-
             if r.status_code != 200:
                 # get error message
                 attributeKeys = ", ".join(attribute for attribute in attributes.keys())

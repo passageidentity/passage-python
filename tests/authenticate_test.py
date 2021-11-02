@@ -78,5 +78,15 @@ def testUpdatePhone():
     user = psg.getUser(PASSAGE_USER_ID)
     assert user.phone == "+15005550006"
 
+def testUpdateUser():
+    psg_apikey = os.environ.get("PASSAGE_API_KEY")
+    psg_id = os.environ.get("PASSAGE_APP_ID")
+    psg = Passage(psg_id, psg_apikey)
+    
+    user = psg.getUser('TguJZxPXuc2owkpeIDvX0LeP')
+    assert user.email == "dylan.brookes10+31@gmail.com"
+    user = psg.updateUser(user.id, {"email":"testingemail@passage.id"})
+    assert user.email ==  "testingemail@passage.id"
+
 def testGetUserInfoUserDoesNotExist():
     pass
