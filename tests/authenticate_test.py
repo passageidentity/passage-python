@@ -1,4 +1,4 @@
-from passageidentity import Passage, PassageUser
+from passageidentity import Passage
 from passageidentity import PassageError
 import pytest
 import os
