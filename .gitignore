@@ -1,8 +1,22 @@
-tests/__pycache__/
+*/__pycache__/
 .pypirc
-passageidentity/passage_identity.egg-info/
-passage_identity.egg-info/
 dist/
 build/
-.eggs/
-venv
+venv/
+lib/
+.env
+.pytest_cache
+
+
+# Distribution / packaging
+bin/
+develop-eggs/
+eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+*.eggs

@@ -1,20 +1,30 @@
 
 import jwt
+import json
 import requests
+import json
 from datetime import datetime
+from enum import Enum
 from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
 from passageidentity.errors import PassageError
 
 PUBKEY_CACHE = {}
 
-class Passage:
+class Passage():
+    COOKIE_AUTH = 1
+    HEADER_AUTH = 2
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
     """
-    def __init__(self, app_id, api_key=""):
+    def __init__(self, app_id, api_key="", auth_strategy=COOKIE_AUTH):
         self.app_id = app_id
         self.passage_apikey = api_key
+        self.auth_strategy = auth_strategy
+
+        # if no app id provided, error
+        if not app_id:
+            raise PassageError("Passage App ID must be provided")
 
         # if the pubkey exists in the cache, use that to avoid making requests
         if app_id in PUBKEY_CACHE.keys():
@@ -30,7 +40,7 @@ class Passage:
     """ 
     def authenticateRequest(self, request):
         # check for authorization header
-        token = getAuthTokenFromRequest(request)
+        token = getAuthTokenFromRequest(request, self.auth_strategy)
         if not token:
             raise PassageError("Could not find JWT.")
 
@@ -44,7 +54,7 @@ class Passage:
     """
     Use Passage API to get info for a user, look up by user ID
     """ 
-    def getUserInfo(self, user_id):
+    def getUser(self, user_id):
         # if no api key, fail
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
@@ -58,51 +68,101 @@ class Passage:
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to get user data: " + message)
-            return r.json()["user"]
+            return PassageUser(user_id, r.json()["user"])
         except Exception as e:
             raise PassageError("Could not fetch user data")
 
+    """
+    Activate Passage User
+    """
+    def activateUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/activate"  
+            r = requests.patch(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to activate user: " + message)
+            return PassageUser(user_id, r.json()["user"] )
+        except Exception as e:
+            raise PassageError("Could not activate user")
+    
+    """
+    Deactivate Passage User
+    """
+    def deactivateUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/deactivate"  
+            r = requests.patch(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to deactivate user: " + message)
+            return PassageUser(user_id, r.json()["user"])
+        except Exception as e:
+            raise PassageError("Could not deactivate user")
 
     """
-    Get instance of Passage User
+    Update Passage User's Attributes
     """
-    def getUser(self, user_id):
-        return Passage.PassageUser(self, user_id)
+    def updateUser(self, user_id, attributes):
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+        
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
+            r = requests.patch(url, headers=header, data=json.dumps(attributes))
+            if r.status_code != 200:
+                # get error message
+                attributeKeys = ", ".join(attribute for attribute in attributes.keys())
+                message = r.json()["status"]
+                raise PassageError(f"Failed request to update user attributes ({attributeKeys}): {message}")
+            return PassageUser(user_id, r.json()["user"])
+        except Exception:
+            raise PassageError(f"Could not update user attributes")
 
-    """
-    Inner class represesnting a Passage User. 
-    """
-    class PassageUser:
 
-        def __init__(self, psg, user_id):
-            self.psg = psg
-            self.id = user_id
+class PassageUser:
 
-            data = self.psg.getUserInfo(self.id)
-            # set the individual fields 
-            self.email = data["email"]
-            self.active = data["active"]
-            self.email_verified = data["email_verified"]
+    def __init__(self, user_id, fields={}):
+        self.id = user_id
+        self.email = fields["email"]
+        self.phone = fields["phone"]
+        self.active = fields["active"]
+        self.email_verified = fields["email_verified"]
 
-            try:
-                self.created_at = datetime.strptime(data["created_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
-            except:
-                self.created_at = datetime.strptime(data["created_at"],"%Y-%m-%dT%H:%M:%SZ")
+        try:
+            self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%SZ")
 
-            try:
-                self.last_login_at = datetime.strptime(data["last_login_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
-            except:
-                self.last_login_at = datetime.strptime(data["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
+        try:
+            self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
 
-            self.webauthn = data["webauthn"]
-            self.webauthn_devices = data["webauthn_devices"]
-            events = data["recent_events"]
+        self.webauthn = fields["webauthn"]
+        self.webauthn_devices = fields["webauthn_devices"]
+        if fields["recent_events"] != None:
+            events = fields["recent_events"]
             self.recent_events = []
             for e in events:    
                 pe = PassageEvent(e)
                 self.recent_events.append(pe)
-
-
+            
 class PassageEvent:
 
     def __init__(self, event):

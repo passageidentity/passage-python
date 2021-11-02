@@ -25,8 +25,8 @@ def extractToken(authHeader):
 Helper funtion to get the auth token from a request.
 Checks the Authorization header first, then the psg_auth_token cookie
 """
-def getAuthTokenFromRequest(request):
-    try:
+def getAuthTokenFromRequest(request, auth_strategy):
+    if auth_strategy == 2:
         authHeader = request.headers["Authorization"]
         expression = re.escape(TOKEN_TYPE) + r" ([^\s,]+)"
         match = re.search(expression, authHeader)
@@ -34,8 +34,7 @@ def getAuthTokenFromRequest(request):
             return match.group(1)
         except (AttributeError, IndexError):
             return None
-    except Exception as e:
-        # No auth header, try cookies
+    else:
         if 'psg_auth_token' not in request.cookies.keys():
             raise PassageError("No Passage authentication token.")
         return request.cookies['psg_auth_token']

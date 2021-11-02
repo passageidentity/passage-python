@@ -3,41 +3,80 @@ from passageidentity import PassageError
 import pytest
 import os
 from flask import Flask, request
+from dotenv import load_dotenv
 from werkzeug.http import dump_cookie
 
 app = Flask(__name__)
 
+load_dotenv()
+PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+PASSAGE_AUTH_TOKEN = os.environ.get("PASSAGE_AUTH_TOKEN")
 
 def testFlaskValidTokenInHeader():
-    psg = Passage(os.environ.get("PASSAGE_APP_ID"))
+    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     # flask request context
-    with app.test_request_context("thisisaurl.com",headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzA0Mjc2NjgsImlzcyI6IlRyV1NVYkREVFBDS1RRRHRMQTlNTzhFZSIsInN1YiI6IldXTXhOeVpkZUJGUmhhcFJ5MHlraFR2SSJ9.TganXdRVM_d__oAyWpWXGh0lDJ2N74b941hJaj2bg0-M2OAK_3nlmxA-351pXkwpAU6lccNB66SNc-KZE-sOxCJLMfK84ipIDZL3EPR40Mx1FM0ZvpgkYxIUL9nezVHy--9vIIXN7qpM9uWmOOhHZc9p0Tihkq7ZuhsQP5Q5Uo8LzEIy3Rd0vky1IDqtro065h3qhjxkf8eu6WZ32Bgie-ckg9VZZvBhxKkhZkrXKYrc4kazca135MitTj71V7ecCqxa1j-e157FQMGhMkoIasoEFZVvictc2yeZs-qEih0rVejYdHNwi90EtY3VokvkQG22Ma8rWNb118_MmHduqQ'}):
+    with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer {PASSAGE_AUTH_TOKEN}'}):
         user = psg.authenticateRequest(request)
-        assert user == 'WWMxNyZdeBFRhapRy0ykhTvI'
+        assert user == PASSAGE_USER_ID
 
 def testFlaskTokenInCookie():
-    psg = Passage(os.environ.get("PASSAGE_APP_ID"))
+    psg = Passage(PASSAGE_APP_ID)
     # flask request context
-    cookie = dump_cookie('psg_auth_token','eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzA0Mjc2NjgsImlzcyI6IlRyV1NVYkREVFBDS1RRRHRMQTlNTzhFZSIsInN1YiI6IldXTXhOeVpkZUJGUmhhcFJ5MHlraFR2SSJ9.TganXdRVM_d__oAyWpWXGh0lDJ2N74b941hJaj2bg0-M2OAK_3nlmxA-351pXkwpAU6lccNB66SNc-KZE-sOxCJLMfK84ipIDZL3EPR40Mx1FM0ZvpgkYxIUL9nezVHy--9vIIXN7qpM9uWmOOhHZc9p0Tihkq7ZuhsQP5Q5Uo8LzEIy3Rd0vky1IDqtro065h3qhjxkf8eu6WZ32Bgie-ckg9VZZvBhxKkhZkrXKYrc4kazca135MitTj71V7ecCqxa1j-e157FQMGhMkoIasoEFZVvictc2yeZs-qEih0rVejYdHNwi90EtY3VokvkQG22Ma8rWNb118_MmHduqQ')
+    cookie = dump_cookie('psg_auth_token', PASSAGE_AUTH_TOKEN)
     with app.test_request_context("thisisaurl.com",environ_base={'HTTP_COOKIE':cookie}):
         user = psg.authenticateRequest(request)
-        assert user == 'WWMxNyZdeBFRhapRy0ykhTvI'
-
+        assert user == PASSAGE_USER_ID
 
 def testFlaskInValidToken():
-    psg = Passage(os.environ.get("PASSAGE_APP_ID"))
+    psg = Passage(PASSAGE_APP_ID)
     # flask request context
-    with app.test_request_context("thisisaurl.com",headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzA0Mjc2NjgsImlzcyI6IlRyV1NVYkREVFBDS1RRRHRMQTlNTzhFZSIsInN1YiI6IldXTXhOeVpkZUJGUmhhcFJ5MHlraFR2SSJ9.TganXdRVM_d__oAyWpWXGh0lDJ2N74b941hJaj2bg0-M2OAK_3nlmxA-351pXkwpAU6lccNB66SNc-KZE-sOxCJLMfK84ipIDZL3EPR40Mx1FM0ZvpgkYxIUL9nezVHy--9vIIXN7qpM9uWmOOhHZc9p0Tihkq7ZuhsQP5Q5Uo8LzEIy3Rd0vky1IDqtro065h3qhjxkf8eu6WZ32Bgie-ckg9VZZvBhxKkhZkrXKYrc4kazca135MitTj71V7ecCqxa1j-e157FQMGhMkoIasoEFZVvictc2yeZs-qEih0rVejYdHNwi90EtY3VokvkQG22Ma8rWNb118_MmHduqQ123'}):
+    with app.test_request_context("thisisaurl.com",headers={'Authorization':'Bearer invalidToken'}):
         with pytest.raises(PassageError) as e:
             user = psg.authenticateRequest(request)
 
 def testGetUserInfoValid():
-    psg_apikey = os.environ.get("PASSAGE_API_KEY")
-    psg_id = os.environ.get("PASSAGE_APP_ID")
-    psg = Passage(psg_id, psg_apikey)
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+    user = psg.getUser(PASSAGE_USER_ID)
+    assert user.email == "testEmail@domain.com"
+
+def testActivateUser():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+    user = psg.activateUser(PASSAGE_USER_ID)
+    assert user.active == True
+
+def testDeactivateUser():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     
-    user = psg.getUser('WWMxNyZdeBFRhapRy0ykhTvI')
-    assert user.email == "testuser@passage.id"
+    user = psg.getUser(PASSAGE_USER_ID)
+    assert user.email == "testEmail@domain.com"
+    user = psg.deactivateUser(user.id)
+    assert user.active == False
+
+def testUpdateEmail():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    user = psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail2@domain.com"})
+    assert user.email == "testEmail2@domain.com"
+    user = psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail@domain.com"})
+    assert user.email == "testEmail@domain.com"
+
+def testUpdateUserPhone():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    user = psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550001"})
+    assert user.phone == "+15005550001"
+    user = psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550008"})
+    assert user.phone == "+15005550008"
+
+def testUpdateUserEmail():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    user = psg.updateUser(PASSAGE_USER_ID, {"email":"testEmail2@domain.com"})
+    assert user.email ==  "testEmail2@domain.com"
+    user = psg.updateUser(PASSAGE_USER_ID, {"email":"testEmail@domain.com"})
+    assert user.email ==  "testEmail@domain.com"
 
 def testGetUserInfoUserDoesNotExist():
     pass
