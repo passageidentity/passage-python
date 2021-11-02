@@ -9,7 +9,6 @@ from werkzeug.http import dump_cookie
 app = Flask(__name__)
 
 load_dotenv()
-
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
 PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
@@ -57,36 +56,27 @@ def testDeactivateUser():
 
 def testUpdateEmail():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail2@domain.com"})
 
-    user = psg.getUser(PASSAGE_USER_ID)
+    user = psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail2@domain.com"})
     assert user.email == "testEmail2@domain.com"
-
-    psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail@domain.com"})
-    user = psg.getUser(PASSAGE_USER_ID)
+    user = psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail@domain.com"})
     assert user.email == "testEmail@domain.com"
 
-
-def testUpdatePhone():
+def testUpdateUserPhone():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550001"})
 
-    user = psg.getUser(PASSAGE_USER_ID)
-    assert user.email == "+15005550001"
+    user = psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550001"})
+    assert user.phone == "+15005550001"
+    user = psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550008"})
+    assert user.phone == "+15005550008"
 
-    psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550006"})
-    user = psg.getUser(PASSAGE_USER_ID)
-    assert user.phone == "+15005550006"
+def testUpdateUserEmail():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-def testUpdateUser():
-    psg_apikey = os.environ.get("PASSAGE_API_KEY")
-    psg_id = os.environ.get("PASSAGE_APP_ID")
-    psg = Passage(psg_id, psg_apikey)
-    
-    user = psg.getUser('TguJZxPXuc2owkpeIDvX0LeP')
-    assert user.email == "dylan.brookes10+31@gmail.com"
-    user = psg.updateUser(user.id, {"email":"testingemail@passage.id"})
-    assert user.email ==  "testingemail@passage.id"
+    user = psg.updateUser(PASSAGE_USER_ID, {"email":"testEmail2@domain.com"})
+    assert user.email ==  "testEmail2@domain.com"
+    user = psg.updateUser(PASSAGE_USER_ID, {"email":"testEmail@domain.com"})
+    assert user.email ==  "testEmail@domain.com"
 
 def testGetUserInfoUserDoesNotExist():
     pass
