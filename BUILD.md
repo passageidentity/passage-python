@@ -7,7 +7,7 @@ Use a virtual environment and install dependencies
 ```
 > python3 -m venv venv
 > source venv/bin/activate
-> pip install twine build
+> pip install twine build python-dotenv
 ```
 
 ### Build the project
