@@ -26,4 +26,5 @@ jobs:
           pip install wheel
           pip install twine build python-dotenv
           python setup.py sdist bdist_wheel
+          pip list
           python setup.py pytest
