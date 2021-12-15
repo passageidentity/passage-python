@@ -2,7 +2,10 @@
 # For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
 name: Run Tests
-on: [pull_request]
+on:
+  workflow_dispatch:
+  push:
+    branches: [users/db/create-user]
 
 jobs:
   deploy:
