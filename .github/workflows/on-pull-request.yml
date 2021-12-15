@@ -1,0 +1,29 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+# name: Run Tests
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches: [users/db/create-delete-user]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Set up Python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: "3.x"
+#       - name: Run Tests
+#         run: |
+#           python3 -m venv venv
+#           source venv/bin/activate
+#           pip install twine build python-dotenv
+#           pip install wheel
+#           pip install pytest
+#           python setup.py sdist bdist_wheel
+#           pip list
+#           python setup.py pytest
