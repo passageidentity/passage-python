@@ -23,6 +23,7 @@ jobs:
           pip install build
       - name: Build Project
         run: |
+          /home/runner/work/passage-python/passage-python/venv/bin/python3 -m pip install --upgrade pip
           python3 -m venv venv
           source venv/bin/activate
           pip install wheel
