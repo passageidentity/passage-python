@@ -17,17 +17,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.x"
-      - name: Install dependencies
+      - name: Run Tests
         run: |
           python -m pip install --upgrade pip
           pip install build
-      - name: Build Project
-        run: |
-          /home/runner/work/passage-python/passage-python/venv/bin/python3 -m pip install --upgrade pip
           python3 -m venv venv
           source venv/bin/activate
           pip install wheel
           pip install twine build python-dotenv
           python setup.py sdist bdist_wheel
-      - name: Run Tests
-        run: python setup.py pytest
+          python setup.py pytest
