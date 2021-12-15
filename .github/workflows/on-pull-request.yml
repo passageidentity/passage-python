@@ -5,7 +5,7 @@ name: Run Tests
 on:
   workflow_dispatch:
   push:
-    branches: [users/db/create-user]
+    branches: [users/db/create-delete-user]
 
 jobs:
   deploy:
