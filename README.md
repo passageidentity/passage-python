@@ -107,6 +107,47 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 # update a user's email
 psg.updateUser(user_id, {
     "email": "newEmail@domain.com",
-    "phone": "15005550006"
+    "phone": "+15005550006"
 })
+```
+
+## Create User
+
+You can also create users using their email address or phone number. Note that their phone number must be in E164 format (example shown below).
+
+```python
+from passageidentity import Passage
+import os
+
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+# Get Passage User ID from database
+# ...
+
+# create a user via their email
+psg.createUser({"email": "exampleEmail@domain.com"})
+
+# create a user via their phone number
+psg.createUser({"phone": "+15005550007"})
+```
+
+## Delete User
+
+```python
+from passageidentity import Passage
+import os
+
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+# Get Passage User ID from database
+# ...
+
+# delete a user via their userID
+deleted_user = psg.deleteUser(user_id)
+if deleted_user:
+    print("User has been deleted")
 ```
