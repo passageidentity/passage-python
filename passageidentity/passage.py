@@ -10,6 +10,20 @@ from passageidentity.errors import PassageError
 
 PUBKEY_CACHE = {}
 
+def time_to_milliseconds(timeString):
+	# see if decimal exists; if not, return
+	time = timeString.split(".")
+	if len(time) < 2:
+		return timeString
+	
+	# grab the digits; if milliseconds (6 digits) return
+	decimalNumbers = time[1][:-1]
+	if len(decimalNumbers) == 6:
+		return timeString
+	
+	# ensure 6 decimal places, add back '.' and 'Z' to string
+	return time[0] + "." + decimalNumbers[:6] + "Z"
+
 class Passage():
     COOKIE_AUTH = 1
     HEADER_AUTH = 2
@@ -134,6 +148,54 @@ class Passage():
         except Exception:
             raise PassageError(f"Could not update user attributes")
 
+    """
+    Delete Passage User
+    """
+    def deleteUser(self, user_id):
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
+            r = requests.delete(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to delete user: " + message)
+            
+            return True
+        except Exception as e:
+            raise PassageError("Could not delete user")
+
+    """
+    Create Passage User
+    """
+    def createUser(self, userAttributes):
+        if not ("phone" in userAttributes or "email" in userAttributes):
+            raise PassageError("either phone or email must be provided to create the user")
+
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users"  
+            r = requests.post(url, data=json.dumps(userAttributes), headers=header)
+            if r.status_code != 201:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to create user: " + message)
+
+            parsedResponse = r.json()["user"]
+            print(parsedResponse)
+            return PassageUser(parsedResponse["id"], parsedResponse)
+        except Exception as e:
+            raise PassageError("Could not create user")
+
 
 class PassageUser:
 
@@ -143,14 +205,12 @@ class PassageUser:
         self.phone = fields["phone"]
         self.active = fields["active"]
         self.email_verified = fields["email_verified"]
-
         try:
-            self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+            self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
         except:
             self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%SZ")
-
         try:
-            self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+            self.last_login_at = datetime.strptime(time_to_milliseconds(fields["last_login_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
         except:
             self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
 
@@ -162,7 +222,9 @@ class PassageUser:
             for e in events:    
                 pe = PassageEvent(e)
                 self.recent_events.append(pe)
-            
+
+
+
 class PassageEvent:
 
     def __init__(self, event):
@@ -170,7 +232,6 @@ class PassageEvent:
         self.id = event["id"]
 
         try:
-            self.timestamp = datetime.strptime(event["created_at"],"%Y-%m-%dT%H:%M:%S.%fZ")
+            self.timestamp = datetime.strptime(time_to_milliseconds(event["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
         except:
              self.timestamp = datetime.strptime(event["created_at"],"%Y-%m-%dT%H:%M:%SZ")
-           

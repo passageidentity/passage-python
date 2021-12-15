@@ -2,6 +2,8 @@ from passageidentity import Passage
 from passageidentity import PassageError
 import pytest
 import os
+import random
+import string
 from flask import Flask, request
 from dotenv import load_dotenv
 from werkzeug.http import dump_cookie
@@ -13,6 +15,7 @@ PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
 PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
 PASSAGE_AUTH_TOKEN = os.environ.get("PASSAGE_AUTH_TOKEN")
+RANDOM_EMAIL = ''.join(random.choice(string.ascii_letters) for _ in range(14)) + "@email.com"
 
 def testFlaskValidTokenInHeader():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
@@ -80,3 +83,12 @@ def testUpdateUserEmail():
 
 def testGetUserInfoUserDoesNotExist():
     pass
+
+def testCreateAndDeleteUser():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    newUser = psg.createUser({"email": RANDOM_EMAIL})
+    assert newUser.email == RANDOM_EMAIL
+
+    deletedUser = psg.deleteUser(newUser.id)
+    assert deletedUser == True
