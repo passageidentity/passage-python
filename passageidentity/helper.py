@@ -36,12 +36,13 @@ def getAuthTokenFromRequest(request, auth_strategy):
         except (AttributeError, IndexError):
             return None
     else:
-        # this means its django
-        if isinstance(request,WSGIRequest):
+        # check if the request is from Django
+        is_django = isinstance(request,WSGIRequest)
+        if is_django:
             if 'psg_auth_token' not in request.COOKIES.keys():
                 raise PassageError("No Passage authentication token.")
             return request.COOKIES['psg_auth_token']
-        else:
+        else: # assume its Flask in this case
             if 'psg_auth_token' not in request.cookies.keys():
                 raise PassageError("No Passage authentication token.")
             return request.cookies['psg_auth_token']
