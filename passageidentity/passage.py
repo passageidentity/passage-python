@@ -1,6 +1,12 @@
 import jwt, json, requests
 from datetime import datetime
-from typing import Union, TypedDict
+
+import sys
+
+if sys.version_info >= (3, 8):
+    from typing import TypedDict, Union
+else:
+    from typing_extensions import TypeDict, Union
 
 from requests.sessions import Request
 from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
