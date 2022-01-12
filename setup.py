@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="passage-identity",
-    version="1.1.4",
+    version="1.1.5",
     author="Passage Identity, Inc",
     author_email="support@passage.id",
     description="Python library to help manage your Passage application and users",
@@ -20,9 +20,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    #package_dir={"": "passage"},
     packages=["passageidentity"],
-    install_requires=['pyjwt','cryptography','requests', 'Flask'],
+    install_requires=['pyjwt','cryptography','requests', 'Flask', 'django'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests',
