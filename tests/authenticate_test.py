@@ -24,6 +24,11 @@ def testFlaskValidTokenInHeader():
         user = psg.authenticateRequest(request)
         assert user == PASSAGE_USER_ID
 
+def testValidJWT():
+    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
+    user = psg.authenticateJWT(PASSAGE_AUTH_TOKEN)
+    assert user == PASSAGE_USER_ID
+
 def testFlaskTokenInCookie():
     psg = Passage(PASSAGE_APP_ID)
     # flask request context

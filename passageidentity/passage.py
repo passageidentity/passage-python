@@ -46,7 +46,7 @@ class Passage():
     
 
     """
-    Authenticate a Flask request that uses Passage for authentication.
+    Authenticate a Flask or Django request that uses Passage for authentication.
     This function will verify the JWT and return the user ID for the authenticated user, or throw
     a PassageError
     """ 
@@ -63,6 +63,19 @@ class Passage():
         except Exception as e:
             raise PassageError("JWT is not valid: " + str(e))
 
+    """
+    Authenticate a JWT from Passage. This function will verify the JWT and return the user ID 
+    for the authenticated user, or throw a PassageError. 
+    This function can be used to authenticate JWTs from Passage if they are not sent in a typical cookie or 
+    authorization header.
+    """ 
+    def authenticateJWT(self, token:str) -> Union[str, PassageError]:
+        # load and parse the JWT
+        try:
+            claims = jwt.decode(token, self.passage_pubkey, algorithms=["RS256"])
+            return claims["sub"]
+        except Exception as e:
+            raise PassageError("JWT is not valid: " + str(e)) 
 
     """
     Use Passage API to get info for a user, look up by user ID
