@@ -16,9 +16,9 @@ jobs:
           python-version: "3.x"
       - name: Run Tests
         run: |
-          python3 -m venv venv
+          python -m venv venv
           source venv/bin/activate
+          python -m pip install --upgrade pip
           pip install pytest
           pip list
-          python --version
           python setup.py pytest
