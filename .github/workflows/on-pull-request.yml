@@ -5,7 +5,7 @@ name: Run Tests
 on: [pull_request]
 
 jobs:
-  deploy:
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,8 +18,7 @@ jobs:
         run: |
           python3 -m venv venv
           source venv/bin/activate
-          pip install twine build python-dotenv
-          pip install wheel
           pip install pytest
-          python setup.py sdist bdist_wheel
+          pip list
+          python --version
           python setup.py pytest
