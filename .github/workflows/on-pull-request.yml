@@ -16,6 +16,6 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           python -m pip install --upgrade pip
-          pip install pytest
+          pip install pytest python-dotenv
           pip list
           python setup.py pytest
