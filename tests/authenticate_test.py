@@ -52,7 +52,7 @@ def testGetUserInfoValid():
 def testActivateUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     user = psg.activateUser(PASSAGE_USER_ID)
-    assert user.active == True
+    assert user.status == "active"
 
 def testDeactivateUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -60,7 +60,7 @@ def testDeactivateUser():
     user = psg.getUser(PASSAGE_USER_ID)
     assert user.email == "testEmail@domain.com"
     user = psg.deactivateUser(user.id)
-    assert user.active == False
+    assert user.status == "inactive"
 
 def testUpdateEmail():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)

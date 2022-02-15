@@ -10,6 +10,7 @@ from cryptography.hazmat.backends import default_backend
 from passageidentity.errors import PassageError
 
 TOKEN_TYPE = "Bearer"
+BASE_URL = "https://api.passage.id/v1/apps/"
 
 """
 Helper function to extract the JWT from an Authorization header. 
@@ -52,7 +53,7 @@ Helper function to fetch the public key for the given app id from Passage
 """
 def fetchPublicKey(app_id):
     # unauthenticated request to get the public key
-    r = requests.get("https://api.passage.id/v1/apps/" + app_id)
+    r = requests.get(BASE_URL + app_id)
 
     # check response code
     if r.status_code != 200:
