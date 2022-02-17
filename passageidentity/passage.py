@@ -17,9 +17,9 @@ PUBKEY_CACHE = {}
 BASE_URL = "https://api.passage.id/v1/apps/"
 
 class UserStatus(Enum):
-    STATUS_ACTIVE = "active"
-    STATUS_INACTIVE = "inactive"
-    STATUS_PENDING = "pending"
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    PENDING = "pending"
 
 
 class Passage():
