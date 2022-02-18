@@ -11,8 +11,16 @@ else:
 from requests.sessions import Request
 from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
 from passageidentity.errors import PassageError
+from enum import Enum
 
 PUBKEY_CACHE = {}
+BASE_URL = "https://api.passage.id/v1/apps/"
+
+class UserStatus(Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    PENDING = "pending"
+
 
 class Passage():
     COOKIE_AUTH = 1
@@ -21,7 +29,7 @@ class Passage():
     class PassageUserType(TypedDict):
         created_at: str
         updated_at: str
-        active: bool
+        status: UserStatus
         email_verified: bool
         email: str
         phone: str
@@ -92,7 +100,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id
+            url = BASE_URL + self.app_id + "/users/" + user_id
             r = requests.get(url, headers=header)
 
             if r.status_code != 200:
@@ -113,7 +121,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/activate"  
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/activate"  
             r = requests.patch(url, headers=header)
 
             if r.status_code != 200:
@@ -134,7 +142,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id + "/deactivate"  
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/deactivate"  
             r = requests.patch(url, headers=header)
 
             if r.status_code != 200:
@@ -159,7 +167,7 @@ class Passage():
         
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
+            url = BASE_URL + self.app_id + "/users/" + user_id  
             r = requests.patch(url, headers=header, data=json.dumps(attributes))
             if r.status_code != 200:
                 # get error message
@@ -180,7 +188,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users/" + user_id  
+            url = BASE_URL + self.app_id + "/users/" + user_id  
             r = requests.delete(url, headers=header)
 
             if r.status_code != 200:
@@ -210,7 +218,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = "https://api.passage.id/v1/apps/" + self.app_id + "/users"  
+            url = BASE_URL + self.app_id + "/users"  
             r = requests.post(url, data=json.dumps(userAttributes), headers=header)
             if r.status_code != 201:
                 # get error message
@@ -228,7 +236,7 @@ class PassageUser:
         self.id = user_id
         self.email = fields["email"]
         self.phone = fields["phone"]
-        self.active = fields["active"]
+        self.status = fields["status"]
         self.email_verified = fields["email_verified"]
         try:
             self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
