@@ -61,7 +61,7 @@ The information available in the Passage User object is as
 | id               | string                 |
 | email            | string                 |
 | phone            | string                 |
-| active           | boolean                |
+| status           | string                 |
 | email_verified   | boolean                |
 | created_at       | Datetime               |
 | last_login_at    | Datetime               |
