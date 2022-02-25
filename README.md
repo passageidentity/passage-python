@@ -31,7 +31,6 @@ def exampleFlaskMiddleware(request):
     psg = Passage(PASSAGE_APP_ID)
     user = psg.authenticateRequest(request)
 ```
-
 ## Retrieve User Info
 
 To retrieve information about a user, you should use the `getPassageUser` method. You will need to use a Passage API key, which can be created in the Passage Console under your Application Settings. This API key grants your web server access to the Passage management APIs to get and update information about users.
@@ -150,4 +149,49 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 deleted_user = psg.deleteUser(user_id)
 if deleted_user:
     print("User has been deleted")
+```
+
+## Create an Embeddable Magic Link
+
+To create a magic link, you should use the `createMagicLink` method. The method takes in `MagicLinkAttributes`, which is in this structure:
+
+| Field            | Type                   |
+| ---------------- | ---------------------- |
+| user_id          | string                 |
+| email            | string                 |
+| phone            | string                 |
+| channel          | ChannelType            |
+| send             | boolean                |
+| magic_link_path  | string                 |
+| redirect_url     | string                 |
+
+The information it returns is in a PassageMagicLink object with this structure:
+
+| Field            | Type                   |
+| ---------------- | ---------------------- |
+| id               | string                 |
+| secret           | string                 |
+| activated        | boolean                |
+| user_id          | string                 |
+| app_id           | string                 |
+| identifier       | string                 |
+| type             | Datetime               |
+| webauthn         | boolean                |
+| webauthn_devices | array                  |
+| recent_events    | array of PassageEvents |
+
+```python
+
+from passageidentity import Passage
+import os
+
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+# Get Passage User ID from database
+# ...
+
+# create a magic link
+magicLink = psg.createMagicLink(magicLinkAttributes={"email": "<example@email.com>", "channel": "email"})
 ```
