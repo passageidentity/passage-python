@@ -189,9 +189,6 @@ PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
 psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-# Get Passage User ID from database
-# ...
-
 # create a magic link
 magicLink = psg.createMagicLink(magicLinkAttributes={"email": "<example@email.com>", "channel": "email"})
 ```
