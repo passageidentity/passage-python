@@ -127,7 +127,7 @@ class Passage():
         try:
             url = BASE_URL + self.app_id + "/magic-link"  
             r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
-            if r.status_code != 200:
+            if r.status_code != 201:
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to create magic link: " + message)
