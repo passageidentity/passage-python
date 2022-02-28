@@ -125,7 +125,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/magic-link"  
+            url = BASE_URL + self.app_id + "/magic-links"  
             r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
             if r.status_code != 201:
                 # get error message
