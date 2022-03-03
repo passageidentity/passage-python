@@ -17,6 +17,12 @@ PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
 PASSAGE_AUTH_TOKEN = os.environ.get("PASSAGE_AUTH_TOKEN")
 RANDOM_EMAIL = ''.join(random.choice(string.ascii_letters) for _ in range(14)) + "@email.com"
 
+def randomEmail():
+    return ''.join(random.choice(string.ascii_letters) for _ in range(14)) + "@email.com"
+
+def randomPhone():
+    return  "+1512" + ''.join(random.choice('1234567890') for _ in range(7))
+
 def testFlaskValidTokenInHeader():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     # flask request context
@@ -52,7 +58,7 @@ def testCreateMagicLink():
 def testGetUserInfoValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     user = psg.getUser(PASSAGE_USER_ID)
-    assert user.email == "testEmail@domain.com"
+    assert user.id == PASSAGE_USER_ID
 
 def testActivateUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -63,33 +69,23 @@ def testDeactivateUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     
     user = psg.getUser(PASSAGE_USER_ID)
-    assert user.email == "testEmail@domain.com"
     user = psg.deactivateUser(user.id)
     assert user.status == "inactive"
-
-def testUpdateEmail():
-    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-
-    user = psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail2@domain.com"})
-    assert user.email == "testEmail2@domain.com"
-    user = psg.updateUser(PASSAGE_USER_ID, {"email": "testEmail@domain.com"})
-    assert user.email == "testEmail@domain.com"
 
 def testUpdateUserPhone():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    user = psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550001"})
-    assert user.phone == "+15005550001"
-    user = psg.updateUser(PASSAGE_USER_ID, {"phone": "+15005550008"})
-    assert user.phone == "+15005550008"
+    phone1 = randomPhone()
+    print(phone1)
+    user = psg.updateUser(PASSAGE_USER_ID, {"phone": phone1})
+    assert user.phone == phone1
 
 def testUpdateUserEmail():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    user = psg.updateUser(PASSAGE_USER_ID, {"email":"testEmail2@domain.com"})
-    assert user.email ==  "testEmail2@domain.com"
-    user = psg.updateUser(PASSAGE_USER_ID, {"email":"testEmail@domain.com"})
-    assert user.email ==  "testEmail@domain.com"
+    email1 = randomEmail()
+    user = psg.updateUser(PASSAGE_USER_ID, {"email":email1})
+    assert user.email ==  email1
 
 def testGetUserInfoUserDoesNotExist():
     pass
@@ -97,8 +93,9 @@ def testGetUserInfoUserDoesNotExist():
 def testCreateAndDeleteUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    newUser = psg.createUser({"email": RANDOM_EMAIL})
-    assert newUser.email == RANDOM_EMAIL
+    email = randomEmail()
+    newUser = psg.createUser({"email": email})
+    assert newUser.email == email
 
     deletedUser = psg.deleteUser(newUser.id)
     assert deletedUser == True
