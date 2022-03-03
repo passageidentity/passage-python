@@ -125,7 +125,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/magic-link"  
+            url = BASE_URL + self.app_id + "/magic-links"  
             r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
             if r.status_code != 201:
                 # get error message
@@ -194,11 +194,11 @@ class Passage():
 
             if r.status_code != 200:
                 # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to deactivate user: " + message)
+                message = r.json()["error"]
+                raise PassageError(f"{message}")
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
-            raise PassageError("Could not deactivate user")
+            raise PassageError("Could not deactivate user: {e}")
 
 
     """
@@ -219,11 +219,11 @@ class Passage():
             if r.status_code != 200:
                 # get error message
                 attributeKeys = ", ".join(attribute for attribute in attributes.keys())
-                message = r.json()["status"]
-                raise PassageError(f"Failed request to update user attributes ({attributeKeys}): {message}")
+                message = r.json()["error"]
+                raise PassageError(f"{message}")
             return PassageUser(user_id, r.json()["user"])
-        except Exception:
-            raise PassageError(f"Could not update user attributes")
+        except Exception as e:
+            raise PassageError(f"Could not update user attributes: {e}")
 
 
     """
