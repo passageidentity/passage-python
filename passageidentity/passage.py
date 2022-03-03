@@ -21,10 +21,24 @@ class UserStatus(Enum):
     INACTIVE = "inactive"
     PENDING = "pending"
 
+class ChannelType(Enum):
+    EMAIL = "email"
+    PHONE = "phone"
 
 class Passage():
     COOKIE_AUTH = 1
     HEADER_AUTH = 2
+
+    class PassageMagicLinkType(TypedDict, total=False):
+        id: str
+        secret: str
+        activated: bool
+        user_id: str
+        app_id: str
+        identifier: str
+        type: str
+        redirect_url: str
+        url: str
 
     class PassageUserType(TypedDict):
         created_at: str
@@ -90,6 +104,39 @@ class Passage():
             return claims["sub"]
         except Exception as e:
             raise PassageError("JWT is not valid: " + str(e)) 
+   
+    
+    class MagicLinkAttributes(TypedDict, total=False):
+        user_id: str
+        email: str
+        phone: str
+        channel: ChannelType
+        send: bool
+        magic_link_path: str
+        redirect_url: str
+
+    """
+    Create Passage MagicLink
+    """
+    def createMagicLink(self, magicLinkAttributes: MagicLinkAttributes) -> Union[PassageMagicLinkType, PassageError]:
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = BASE_URL + self.app_id + "/magic-links"  
+            r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
+            if r.status_code != 201:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to create magic link: " + message)
+
+            parsedResponse = r.json()["magic_link"]
+            return PassageMagicLink(parsedResponse["id"], parsedResponse)
+        except Exception as e:
+            raise PassageError("Could not create magic link")
+
 
     """
     Use Passage API to get info for a user, look up by user ID
@@ -147,11 +194,11 @@ class Passage():
 
             if r.status_code != 200:
                 # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to deactivate user: " + message)
+                message = r.json()["error"]
+                raise PassageError(f"{message}")
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
-            raise PassageError("Could not deactivate user")
+            raise PassageError("Could not deactivate user: {e}")
 
 
     """
@@ -172,11 +219,11 @@ class Passage():
             if r.status_code != 200:
                 # get error message
                 attributeKeys = ", ".join(attribute for attribute in attributes.keys())
-                message = r.json()["status"]
-                raise PassageError(f"Failed request to update user attributes ({attributeKeys}): {message}")
+                message = r.json()["error"]
+                raise PassageError(f"{message}")
             return PassageUser(user_id, r.json()["user"])
-        except Exception:
-            raise PassageError(f"Could not update user attributes")
+        except Exception as e:
+            raise PassageError(f"Could not update user attributes: {e}")
 
 
     """
@@ -230,7 +277,17 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not create user")
 
-
+class PassageMagicLink:
+    def __init__(self, magic_link_id, fields={}):
+        self.id = magic_link_id
+        self.secret = fields["secret"]
+        self.activated = fields["secret"]
+        self.user_id = fields["user_id"]
+        self.app_id = fields["app_id"]
+        self.identifier = fields["identifier"]
+        self.type = fields["type"]
+        self.redirect_url = fields["redirect_url"]
+        self.url = fields["url"]
 class PassageUser:
     def __init__(self, user_id, fields={}):
         self.id = user_id
