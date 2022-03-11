@@ -52,8 +52,9 @@ def testFlaskInValidToken():
 
 def testCreateMagicLink():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    magicLink = psg.createMagicLink(magicLinkAttributes={"email": "chris@passage.id", "channel": "email"})
+    magicLink = psg.createMagicLink(magicLinkAttributes={"email": "chris@passage.id", "channel": "email", "ttl": 12})
     assert magicLink.identifier == "chris@passage.id"
+    assert magicLink.ttl == 12
 
 def testGetUserInfoValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
