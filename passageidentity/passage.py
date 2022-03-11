@@ -39,6 +39,7 @@ class Passage():
         type: str
         redirect_url: str
         url: str
+        ttl: int
 
     class PassageUserType(TypedDict):
         created_at: str
@@ -114,6 +115,7 @@ class Passage():
         send: bool
         magic_link_path: str
         redirect_url: str
+        ttl: int
 
     """
     Create Passage MagicLink
@@ -288,6 +290,7 @@ class PassageMagicLink:
         self.type = fields["type"]
         self.redirect_url = fields["redirect_url"]
         self.url = fields["url"]
+        self.ttl = fields["ttl"]
 class PassageUser:
     def __init__(self, user_id, fields={}):
         self.id = user_id
