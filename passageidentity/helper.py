@@ -61,9 +61,10 @@ def fetchPublicKey(app_id):
 
     try:
         public_key = r.json()["app"]["rsa_public_key"]
+        origin = r.json()["app"]["auth_origin"]
         keyBytes = b64decode(public_key)
         pubKey = load_pem_public_key(keyBytes, default_backend())
-        return pubKey
+        return pubKey, origin
     except Exception as e:
         raise PassageError("Could not fetch public key for app id " + app_id)
 
