@@ -68,10 +68,11 @@ class Passage():
 
         # if the pubkey exists in the cache, use that to avoid making requests
         if app_id in PUBKEY_CACHE.keys():
-            self.passage_pubkey: str = PUBKEY_CACHE[app_id]
+            self.passage_pubkey: str = PUBKEY_CACHE[app_id]["public_key"]
+            self.auth_origin: str = PUBKEY_CACHE[app_id]["auth_origin"]
         else:
-            self.passage_pubkey: str = fetchPublicKey(app_id)
-            PUBKEY_CACHE[app_id] = self.passage_pubkey
+            self.passage_pubkey, self.auth_origin = fetchPublicKey(app_id)
+            PUBKEY_CACHE[app_id] = {"public_key": self.passage_pubkey, "auth_origin": self.auth_origin}
     
 
     """
@@ -87,7 +88,7 @@ class Passage():
 
         # load and parse the JWT
         try:
-            claims = jwt.decode(token, self.passage_pubkey, algorithms=["RS256"])
+            claims = jwt.decode(token, self.passage_pubkey, audience=self.auth_origin, algorithms=["RS256"])
             return claims["sub"]
         except Exception as e:
             raise PassageError("JWT is not valid: " + str(e))
@@ -101,7 +102,7 @@ class Passage():
     def authenticateJWT(self, token:str) -> Union[str, PassageError]:
         # load and parse the JWT
         try:
-            claims = jwt.decode(token, self.passage_pubkey, algorithms=["RS256"])
+            claims = jwt.decode(token, self.passage_pubkey, audience=self.auth_origin, algorithms=["RS256"])
             return claims["sub"]
         except Exception as e:
             raise PassageError("JWT is not valid: " + str(e)) 
