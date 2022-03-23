@@ -185,7 +185,7 @@ class Passage():
             if r.status_code != 200:
                 # get error message
                 message = r.json()["status"]
-                raise PassageError("Failed request to list user devices: " + message)
+                raise PassageError(f"{message}")
             device_list = list()
             devices = r.json()["devices"]
             if devices != None:
@@ -193,7 +193,7 @@ class Passage():
                     device_list.append(PassageDevice(d))
             return device_list 
         except Exception as e:
-            raise PassageError("Could not list user's devices")
+            raise PassageError("Could not list user's devices: {e}")
 
     """
     Use Passage API to list user devices, look up by user ID
@@ -210,10 +210,10 @@ class Passage():
             if r.status_code != 200:
                 # get error message
                 message = r.json()["status"]
-                raise PassageError("Failed request to revoke user device: " + message)
+                raise PassageError(f"{message}")
             return True 
         except Exception as e:
-            raise PassageError("Could not revoke user device")
+            raise PassageError("Could not revoke user device: {e}")
 
 
 
