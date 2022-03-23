@@ -73,6 +73,14 @@ def testDeactivateUser():
     user = psg.deactivateUser(user.id)
     assert user.status == "inactive"
 
+def testListUserDevices():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+    
+    devices = psg.listUserDevices(PASSAGE_USER_ID)
+    assert len(devices) == 0 
+
+# revokeUserDevice is not tested because it is impossible to spoof webauthn to create a device to then revoke
+
 def testUpdateUserPhone():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 

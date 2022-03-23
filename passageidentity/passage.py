@@ -54,6 +54,15 @@ class Passage():
         recent_events: Union[None, list]
         webauthn: bool
         webauthn_devices: Union[None, list]
+    class PassageDeviceType(TypedDict):
+        created_at: str
+        updated_at: str
+        id: str
+        cred_id: str
+        friendly_name: str
+        usage_count: int
+    
+        
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
@@ -160,6 +169,52 @@ class Passage():
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
             raise PassageError("Could not fetch user data")
+    
+    """
+    Use Passage API to list user devices, look up by user ID
+    """ 
+    def listUserDevices(self, user_id: str) -> Union[list, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/devices"
+            r = requests.get(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to list user devices: " + message)
+            device_list = list()
+            devices = r.json()["devices"]
+            if devices != None:
+                for d in devices:
+                    device_list.append(PassageDevice(d))
+            return device_list 
+        except Exception as e:
+            raise PassageError("Could not list user's devices")
+
+    """
+    Use Passage API to list user devices, look up by user ID
+    """ 
+    def revokeUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/devices/" + device_id
+            r = requests.delete(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError("Failed request to revoke user device: " + message)
+            return True 
+        except Exception as e:
+            raise PassageError("Could not revoke user device")
+
 
 
     """
@@ -280,6 +335,19 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not create user")
 
+class PassageDevice:
+    def __init__(self, fields={}):
+        self.id = fields["id"]
+        try:
+            self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%SZ")
+        try:
+            self.updated_at = datetime.strptime(time_to_milliseconds(fields["updated_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.updated_at = datetime.strptime(fields["updated_at"],"%Y-%m-%dT%H:%M:%SZ")
+        self.friendly_name = fields["friendly_name"]
+        self.usage_count = fields["usage_count"]
 class PassageMagicLink:
     def __init__(self, magic_link_id, fields={}):
         self.id = magic_link_id
