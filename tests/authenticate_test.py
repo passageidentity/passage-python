@@ -108,3 +108,11 @@ def testCreateAndDeleteUser():
 
     deletedUser = psg.deleteUser(newUser.id)
     assert deletedUser == True
+
+def testSmartLinkValid():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    email = randomEmail()
+    magicLink = psg.createMagicLink({"email": email})
+    assert magicLink.identifier == email
+    assert magicLink.activated == False
