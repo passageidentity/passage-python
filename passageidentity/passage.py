@@ -348,11 +348,12 @@ class PassageDevice:
             self.updated_at = datetime.strptime(fields["updated_at"],"%Y-%m-%dT%H:%M:%SZ")
         self.friendly_name = fields["friendly_name"]
         self.usage_count = fields["usage_count"]
+
 class PassageMagicLink:
     def __init__(self, magic_link_id, fields={}):
         self.id = magic_link_id
         self.secret = fields["secret"]
-        self.activated = fields["secret"]
+        self.activated = fields["activated"]
         self.user_id = fields["user_id"]
         self.app_id = fields["app_id"]
         self.identifier = fields["identifier"]
@@ -360,6 +361,7 @@ class PassageMagicLink:
         self.redirect_url = fields["redirect_url"]
         self.url = fields["url"]
         self.ttl = fields["ttl"]
+
 class PassageUser:
     def __init__(self, user_id, fields={}):
         self.id = user_id
