@@ -96,6 +96,26 @@ def testUpdateUserEmail():
     user = psg.updateUser(PASSAGE_USER_ID, {"email":email1})
     assert user.email ==  email1
 
+def testUpdateUserWithMetadata():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+    
+    email = randomEmail()
+    user = psg.updateUser(PASSAGE_USER_ID, {"email": email, "user_metadata": { "example1": "qwe"}})
+    assert user.email ==  email
+    assert user.user_metadata["example1"] == "qwe"
+
+    user = psg.updateUser(PASSAGE_USER_ID, {"email": email,  "user_metadata": { "example1": "asd"}})
+    assert user.email ==  email
+    assert user.user_metadata["example1"] == "asd"
+
+def testCreateUserWithMetadata():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+    
+    email = randomEmail()
+    user = psg.createUser({"email": email, "user_metadata": { "example1": "qwe"}})
+    assert user.email ==  email
+    assert user.user_metadata["example1"] == "qwe"
+
 def testGetUserInfoUserDoesNotExist():
     pass
 

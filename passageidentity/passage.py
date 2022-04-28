@@ -54,6 +54,7 @@ class Passage():
         recent_events: Union[None, list]
         webauthn: bool
         webauthn_devices: Union[None, list]
+        user_metadata: dict
     class PassageDeviceType(TypedDict):
         created_at: str
         updated_at: str
@@ -262,11 +263,12 @@ class Passage():
     """
     Update Passage User's Attributes
     """
-    class UpdateUserAttributes(TypedDict):
+    class UserAttributes(TypedDict):
         phone: str
         email: str
+        user_metadata: dict
 
-    def updateUser(self, user_id: str, attributes: UpdateUserAttributes) -> Union[PassageUserType, PassageError]:
+    def updateUser(self, user_id: str, attributes: UserAttributes) -> Union[PassageUserType, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
         
@@ -306,14 +308,15 @@ class Passage():
             raise PassageError("Could not delete user")
 
 
-    class UpdateUserAttributes(TypedDict, total=False):
+    class UserAttributes(TypedDict, total=False):
         email: str
         phone: str
+        user_updates: dict
 
     """
     Create Passage User
     """
-    def createUser(self, userAttributes: UpdateUserAttributes) -> Union[PassageUserType, PassageError]:
+    def createUser(self, userAttributes: UserAttributes) -> Union[PassageUserType, PassageError]:
         if not ("phone" in userAttributes or "email" in userAttributes):
             raise PassageError("either phone or email must be provided to create the user")
 
@@ -369,6 +372,7 @@ class PassageUser:
         self.phone = fields["phone"]
         self.status = fields["status"]
         self.email_verified = fields["email_verified"]
+        self.user_metadata = fields["user_metadata"]
         try:
             self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
         except:
