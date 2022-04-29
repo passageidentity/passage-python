@@ -263,10 +263,10 @@ class Passage():
     """
     Update Passage User's Attributes
     """
-    class UserAttributes(TypedDict):
-        phone: str
+    class UserAttributes(TypedDict, total=False):
         email: str
-        user_metadata: dict
+        phone: str
+        user_updates: dict
 
     def updateUser(self, user_id: str, attributes: UserAttributes) -> Union[PassageUserType, PassageError]:
         if self.passage_apikey == "":
@@ -307,11 +307,6 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not delete user")
 
-
-    class UserAttributes(TypedDict, total=False):
-        email: str
-        phone: str
-        user_updates: dict
 
     """
     Create Passage User
