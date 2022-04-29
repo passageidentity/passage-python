@@ -1,3 +1,6 @@
+<img src="https://storage.googleapis.com/passage-docs/passage-logo-gradient.svg" alt="Passage logo" style="width:250px;"/>
+
+[![PyPI version](https://badge.fury.io/py/passage-identity.svg)](https://badge.fury.io/py/passage-identity)
 # passage-python
 
 This Python SDK allows for verification of server-side authentication for applications using [Passage](https://passage.id)
