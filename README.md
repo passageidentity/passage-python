@@ -1,3 +1,6 @@
+<img src="https://storage.googleapis.com/passage-docs/passage-logo-gradient.svg" alt="Passage logo" style="width:250px;"/>
+
+[![PyPI version](https://badge.fury.io/py/passage-identity.svg)](https://badge.fury.io/py/passage-identity)
 # passage-python
 
 This Python SDK allows for verification of server-side authentication for applications using [Passage](https://passage.id)
@@ -103,10 +106,13 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 # Get Passage User ID from database
 # ...
 
-# update a user's email
+# update a user (note that user_metadata is optional)
 psg.updateUser(user_id, {
     "email": "newEmail@domain.com",
-    "phone": "+15005550006"
+    "phone": "+15005550006",
+    "user_metadata": {
+        "example1": "example metadata"
+    }
 })
 ```
 
@@ -125,8 +131,13 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 # Get Passage User ID from database
 # ...
 
-# create a user via their email
-psg.createUser({"email": "exampleEmail@domain.com"})
+# create a user via their email (note that user_metadata is optional)
+psg.createUser({
+    "email": "exampleEmail@domain.com",
+    "user_metadata": {
+        "example1": "example metadata"
+    }
+})
 
 # create a user via their phone number
 psg.createUser({"phone": "+15005550007"})
