@@ -51,7 +51,7 @@ def getAuthTokenFromRequest(request, auth_strategy):
 """
 Helper function to fetch the public key for the given app id from Passage
 """
-def fetchPublicKey(app_id):
+def fetchApp(app_id):
     # unauthenticated request to get the public key
     r = requests.get(BASE_URL + app_id)
 
@@ -59,12 +59,5 @@ def fetchPublicKey(app_id):
     if r.status_code != 200:
         raise PassageError("Could not fetch public key for app id " + app_id)
 
-    try:
-        public_key = r.json()["app"]["rsa_public_key"]
-        origin = r.json()["app"]["auth_origin"]
-        keyBytes = b64decode(public_key)
-        pubKey = load_pem_public_key(keyBytes, default_backend())
-        return pubKey, origin
-    except Exception as e:
-        raise PassageError("Could not fetch public key for app id " + app_id)
+    return r.json()["app"]
 
