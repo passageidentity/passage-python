@@ -57,7 +57,7 @@ def fetchApp(app_id):
 
     # check response code
     if r.status_code != 200:
-        raise PassageError("Could not fetch public key for app id " + app_id)
+        raise PassageError("Could not fetch app information for app id " + app_id)
 
     return r.json()["app"]
 
