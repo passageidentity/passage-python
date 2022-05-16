@@ -103,9 +103,9 @@ class Passage():
         return jwkItems
 
     def __refreshAuthCache(self):
-        self.auth_origin = fetchApp(app_id)["auth_origin"]
+        self.auth_origin = fetchApp(self.app_id)["auth_origin"]
         self.jwks = self.__fetchJWKS()
-        AUTH_CACHE[app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
+        AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
 
     """
     Authenticate a Flask or Django request that uses Passage for authentication.
