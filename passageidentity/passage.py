@@ -81,9 +81,7 @@ class Passage():
             self.jwks: str = AUTH_CACHE[app_id]["jwks"]
             self.auth_origin: str = AUTH_CACHE[app_id]["auth_origin"]
         else:
-            self.auth_origin = fetchApp(app_id)["auth_origin"]
-            self.jwks = self.__fetchJWKS()
-            AUTH_CACHE[app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
+            self.__refreshAuthCache()
     
 
     """
@@ -103,6 +101,11 @@ class Passage():
             jwkItems[jwk["kid"]] = jwk
 
         return jwkItems
+
+    def __refreshAuthCache(self):
+        self.auth_origin = fetchApp(app_id)["auth_origin"]
+        self.jwks = self.__fetchJWKS()
+        AUTH_CACHE[app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
 
     """
     Authenticate a Flask or Django request that uses Passage for authentication.
@@ -137,9 +140,7 @@ class Passage():
             # if the JWK can't be found, they might need to udpate the JWKS for this Passage intance
             # re-fetch the JWKS and try again
             if not jwk:
-                self.auth_origin = fetchApp(self.app_id)["auth_origin"]
-                self.jwks = self.__fetchJWKS()
-                AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
+                self.__refreshAuthCache
                 kid = jwt.get_unverified_header(token)["kid"]
                 jwk = AUTH_CACHE[self.app_id]["jwks"][kid]
 
