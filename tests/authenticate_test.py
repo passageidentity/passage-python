@@ -35,6 +35,10 @@ def testValidJWT():
     user = psg.authenticateJWT(PASSAGE_AUTH_TOKEN)
     assert user == PASSAGE_USER_ID
 
+def testFetchJWKS():
+    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
+    assert len(psg.jwks) > 0
+
 def testFlaskTokenInCookie():
     psg = Passage(PASSAGE_APP_ID)
     # flask request context
@@ -77,7 +81,7 @@ def testListUserDevices():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     
     devices = psg.listUserDevices(PASSAGE_USER_ID)
-    assert len(devices) == 0 
+    assert len(devices) == 2
 
 # revokeUserDevice is not tested because it is impossible to spoof webauthn to create a device to then revoke
 

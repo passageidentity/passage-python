@@ -9,11 +9,11 @@ else:
     from typing_extensions import TypeDict, Union
 
 from requests.sessions import Request
-from passageidentity.helper import extractToken, getAuthTokenFromRequest, fetchPublicKey
+from passageidentity.helper import fetchApp, getAuthTokenFromRequest
 from passageidentity.errors import PassageError
 from enum import Enum
 
-PUBKEY_CACHE = {}
+AUTH_CACHE = {}
 BASE_URL = "https://api.passage.id/v1/apps/"
 
 class UserStatus(Enum):
@@ -77,13 +77,35 @@ class Passage():
             raise PassageError("Passage App ID must be provided")
 
         # if the pubkey exists in the cache, use that to avoid making requests
-        if app_id in PUBKEY_CACHE.keys():
-            self.passage_pubkey: str = PUBKEY_CACHE[app_id]["public_key"]
-            self.auth_origin: str = PUBKEY_CACHE[app_id]["auth_origin"]
+        if app_id in AUTH_CACHE.keys():
+            self.jwks: str = AUTH_CACHE[app_id]["jwks"]
+            self.auth_origin: str = AUTH_CACHE[app_id]["auth_origin"]
         else:
-            self.passage_pubkey, self.auth_origin = fetchPublicKey(app_id)
-            PUBKEY_CACHE[app_id] = {"public_key": self.passage_pubkey, "auth_origin": self.auth_origin}
+            self.__refreshAuthCache()
     
+
+    """
+    Fetch JWKs for the app
+    """
+    def __fetchJWKS(self):
+        r = requests.get(f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json")
+
+        if r.status_code != 200:
+            raise PassageError("Could not fetch JWKs for app id " + self.app_id)
+
+        jwks = r.json()["keys"]
+
+        # translate the JWKS into map for O(1) access
+        jwkItems = {}
+        for jwk in jwks:
+            jwkItems[jwk["kid"]] = jwk
+
+        return jwkItems
+
+    def __refreshAuthCache(self):
+        self.auth_origin = fetchApp(self.app_id)["auth_origin"]
+        self.jwks = self.__fetchJWKS()
+        AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
 
     """
     Authenticate a Flask or Django request that uses Passage for authentication.
@@ -98,8 +120,8 @@ class Passage():
 
         # load and parse the JWT
         try:
-            claims = jwt.decode(token, self.passage_pubkey, audience=self.auth_origin, algorithms=["RS256"])
-            return claims["sub"]
+            userID = self.authenticateJWT(token)
+            return userID
         except Exception as e:
             raise PassageError("JWT is not valid: " + str(e))
 
@@ -112,7 +134,18 @@ class Passage():
     def authenticateJWT(self, token:str) -> Union[str, PassageError]:
         # load and parse the JWT
         try:
-            claims = jwt.decode(token, self.passage_pubkey, audience=self.auth_origin, algorithms=["RS256"])
+            kid = jwt.get_unverified_header(token)["kid"]
+            jwk = AUTH_CACHE[self.app_id]["jwks"][kid]
+
+            # if the JWK can't be found, they might need to udpate the JWKS for this Passage intance
+            # re-fetch the JWKS and try again
+            if not jwk:
+                self.__refreshAuthCache
+                kid = jwt.get_unverified_header(token)["kid"]
+                jwk = AUTH_CACHE[self.app_id]["jwks"][kid]
+
+            public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
+            claims = jwt.decode(token, public_key, audience=self.auth_origin, algorithms=["RS256"])
             return claims["sub"]
         except Exception as e:
             raise PassageError("JWT is not valid: " + str(e)) 
