@@ -37,16 +37,19 @@ def getAuthTokenFromRequest(request, auth_strategy):
         except (AttributeError, IndexError):
             return None
     else:
-        # check if the request is from Django
-        is_django = isinstance(request,WSGIRequest)
-        if is_django:
-            if 'psg_auth_token' not in request.COOKIES.keys():
+        try:
+            cookies = request.COOKIES
+            if 'psg_auth_token' not in cookies.keys():
                 raise PassageError("No Passage authentication token.")
-            return request.COOKIES['psg_auth_token']
-        else: # assume its Flask in this case
-            if 'psg_auth_token' not in request.cookies.keys():
-                raise PassageError("No Passage authentication token.")
-            return request.cookies['psg_auth_token']
+            return cookies['psg_auth_token']
+        except:
+            try:
+                cookies = request.cookies
+                if 'psg_auth_token' not in cookies.keys():
+                    raise PassageError("No Passage authentication token.")
+                return cookies['psg_auth_token']
+            except:
+                raise PassageError("No passage authentication token")
 
 """
 Helper function to fetch the public key for the given app id from Passage
