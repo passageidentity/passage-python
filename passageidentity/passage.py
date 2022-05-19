@@ -41,6 +41,20 @@ class Passage():
         url: str
         ttl: int
 
+    class PassageAppType(TypedDict):
+        name: str
+        id: str
+        auth_origin: str
+        redirect_url: str
+        login_url: str
+        rsa_public_key: str
+        allowed_identifier: str
+        required_identifier: str
+        require_email_verification: bool
+        session_timeout_length: int
+        user_metadata_schema: list
+        layouts: list
+
     class PassageUserType(TypedDict):
         created_at: str
         updated_at: str
@@ -182,6 +196,14 @@ class Passage():
             return PassageMagicLink(parsedResponse["id"], parsedResponse)
         except Exception as e:
             raise PassageError("Could not create magic link")
+
+    """
+    Use Passage API to get info for their app.
+    """
+
+    def getApp(self) -> Union[PassageAppType, PassageError]:
+        app_info = fetchApp(self.app_id)
+        return PassageApp(app_info)
 
 
     """
@@ -366,6 +388,20 @@ class Passage():
         except Exception as e:
             raise PassageError("Could not create user")
 
+class PassageApp:
+    def __init__(self, fields={}):
+        self.name = fields["name"]
+        self.id = fields["id"]
+        self.auth_origin = fields["auth_origin"]
+        self.redirect_url = fields["redirect_url"]
+        self.login_url = fields["login_url"]
+        self.rsa_public_key = fields["rsa_public_key"]
+        self.allowed_identifier = fields["allowed_identifier"]
+        self.required_identifier = fields["required_identifier"]
+        self.require_email_verification = fields["require_email_verification"]
+        self.session_timeout_length = fields["session_timeout_length"]
+        self.user_metadata_schema = fields["user_metadata_schema"]
+        self.layouts = fields["layouts"]
 class PassageDevice:
     def __init__(self, fields={}):
         self.id = fields["id"]
