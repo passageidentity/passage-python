@@ -54,6 +54,12 @@ def testFlaskInValidToken():
         with pytest.raises(PassageError) as e:
             user = psg.authenticateRequest(request)
 
+def testGetApp():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+    app = psg.getApp()
+    assert PASSAGE_APP_ID == app.id
+
+
 def testCreateMagicLink():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     magicLink = psg.createMagicLink(magicLinkAttributes={"email": "chris@passage.id", "channel": "email", "ttl": 12})
