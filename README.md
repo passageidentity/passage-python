@@ -36,7 +36,7 @@ def exampleFlaskMiddleware(request):
 ```
 ## Retrieve App Info
 
-To retrieve information about an app , you should use the `get_app` method.
+To retrieve information about an app , you should use the `getApp` method.
 
 ```python
 from passageidentity import Passage
