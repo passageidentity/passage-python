@@ -34,6 +34,37 @@ def exampleFlaskMiddleware(request):
     psg = Passage(PASSAGE_APP_ID)
     user = psg.authenticateRequest(request)
 ```
+## Retrieve App Info
+
+To retrieve information about an app , you should use the `get_app` method.
+
+```python
+from passageidentity import Passage
+import os
+
+PASSAGE_APP_ID_ = os.environ.get("PASSAGE_APP_ID")
+
+psg = Passage(PASSAGE_APP_ID)
+app_info = psg.getApp()
+```
+
+The information available in the Passage App object is as
+
+| Field                      | Type                   |
+| ---------------------------| ---------------------- |
+| name                       | string                 |
+| id                         | string                 |
+| auth_origin                | string                 |
+| redirect_url               | string                 |
+| login_url                  | string                 |
+| rsa_public_key             | boolean                |
+| allowed_identifier         | string                 |
+| required_identifier        | string                 |
+| require_email_verification | boolean                |
+| session_timeout_length     | int                    |
+| user_metadata_schema       | list                   |
+| layouts                    | list                   |
+
 ## Retrieve User Info
 
 To retrieve information about a user, you should use the `getPassageUser` method. You will need to use a Passage API key, which can be created in the Passage Console under your Application Settings. This API key grants your web server access to the Passage management APIs to get and update information about users.
