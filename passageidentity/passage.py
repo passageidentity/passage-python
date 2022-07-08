@@ -72,6 +72,7 @@ class Passage():
     class PassageDeviceType(TypedDict):
         created_at: str
         updated_at: str
+        last_login_at: str
         id: str
         cred_id: str
         friendly_name: str
@@ -413,6 +414,10 @@ class PassageDevice:
             self.updated_at = datetime.strptime(time_to_milliseconds(fields["updated_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
         except:
             self.updated_at = datetime.strptime(fields["updated_at"],"%Y-%m-%dT%H:%M:%SZ")
+        try:
+            self.last_login_at = datetime.strptime(time_to_milliseconds(fields["last_login_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
+        except:
+            self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
         self.friendly_name = fields["friendly_name"]
         self.usage_count = fields["usage_count"]
 
