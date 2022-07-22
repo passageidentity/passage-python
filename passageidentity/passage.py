@@ -59,6 +59,7 @@ class Passage():
         updated_at: str
         status: UserStatus
         email_verified: bool
+        phone_verified: bool
         email: str
         phone: str
         id: str
@@ -439,6 +440,7 @@ class PassageUser:
         self.phone = fields["phone"]
         self.status = fields["status"]
         self.email_verified = fields["email_verified"]
+        self.phone_verified = fields["phone_verified"]
         self.user_metadata = fields["user_metadata"]
         try:
             self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")

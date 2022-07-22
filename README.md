@@ -95,6 +95,7 @@ The information available in the Passage User object is as
 | phone            | string                 |
 | status           | string                 |
 | email_verified   | boolean                |
+| phone_verified   | boolean                |
 | created_at       | Datetime               |
 | last_login_at    | Datetime               |
 | webauthn         | boolean                |
