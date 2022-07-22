@@ -49,8 +49,7 @@ class Passage():
         login_url: str
         rsa_public_key: str
         allowed_identifier: str
-        required_identifier: str
-        require_email_verification: bool
+        require_identifier_verification: bool
         session_timeout_length: int
         user_metadata_schema: list
         layouts: list
@@ -60,6 +59,7 @@ class Passage():
         updated_at: str
         status: UserStatus
         email_verified: bool
+        phone_verified: bool
         email: str
         phone: str
         id: str
@@ -398,8 +398,7 @@ class PassageApp:
         self.login_url = fields["login_url"]
         self.rsa_public_key = fields["rsa_public_key"]
         self.allowed_identifier = fields["allowed_identifier"]
-        self.required_identifier = fields["required_identifier"]
-        self.require_email_verification = fields["require_email_verification"]
+        self.require_identifier_verification = fields["require_identifier_verification"]
         self.session_timeout_length = fields["session_timeout_length"]
         self.user_metadata_schema = fields["user_metadata_schema"]
         self.layouts = fields["layouts"]
@@ -441,6 +440,7 @@ class PassageUser:
         self.phone = fields["phone"]
         self.status = fields["status"]
         self.email_verified = fields["email_verified"]
+        self.phone_verified = fields["phone_verified"]
         self.user_metadata = fields["user_metadata"]
         try:
             self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
