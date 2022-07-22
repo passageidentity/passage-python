@@ -50,20 +50,19 @@ app_info = psg.getApp()
 
 The information available in the Passage App object is as
 
-| Field                      | Type                   |
-| ---------------------------| ---------------------- |
-| name                       | string                 |
-| id                         | string                 |
-| auth_origin                | string                 |
-| redirect_url               | string                 |
-| login_url                  | string                 |
-| rsa_public_key             | boolean                |
-| allowed_identifier         | string                 |
-| required_identifier        | string                 |
-| require_email_verification | boolean                |
-| session_timeout_length     | int                    |
-| user_metadata_schema       | list                   |
-| layouts                    | list                   |
+| Field                           | Type                   |
+| ------------------------------- | ---------------------- |
+| name                            | string                 |
+| id                              | string                 |
+| auth_origin                     | string                 |
+| redirect_url                    | string                 |
+| login_url                       | string                 |
+| rsa_public_key                  | boolean                |
+| allowed_identifier              | string                 |
+| require_identifier_verification | boolean                |
+| session_timeout_length          | int                    |
+| user_metadata_schema            | list                   |
+| layouts                         | list                   |
 
 ## Retrieve User Info
 

@@ -49,8 +49,7 @@ class Passage():
         login_url: str
         rsa_public_key: str
         allowed_identifier: str
-        required_identifier: str
-        require_email_verification: bool
+        require_identifier_verification: bool
         session_timeout_length: int
         user_metadata_schema: list
         layouts: list
@@ -398,8 +397,7 @@ class PassageApp:
         self.login_url = fields["login_url"]
         self.rsa_public_key = fields["rsa_public_key"]
         self.allowed_identifier = fields["allowed_identifier"]
-        self.required_identifier = fields["required_identifier"]
-        self.require_email_verification = fields["require_email_verification"]
+        self.require_identifier_verification = fields["require_identifier_verification"]
         self.session_timeout_length = fields["session_timeout_length"]
         self.user_metadata_schema = fields["user_metadata_schema"]
         self.layouts = fields["layouts"]
