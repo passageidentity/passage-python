@@ -6,7 +6,8 @@ import sys
 if sys.version_info >= (3, 8):
     from typing import TypedDict, Union
 else:
-    from typing_extensions import TypeDict, Union
+    from typing_extensions import TypedDict
+    from typing import Union
 
 from requests.sessions import Request
 from passageidentity.helper import fetchApp, getAuthTokenFromRequest
