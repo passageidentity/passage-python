@@ -20,7 +20,7 @@ def randomEmail():
     return ''.join(random.choice(string.ascii_lowercase) for _ in range(14)) + "@email.com"
 
 def randomPhone():
-    return  "+1512" + ''.join(random.choice('1234567890') for _ in range(7))
+    return  "+1512" + ''.join(random.choice('23456789') for _ in range(7))
 
 def testFlaskValidTokenInHeader():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
