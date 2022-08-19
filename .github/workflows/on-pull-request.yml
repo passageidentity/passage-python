@@ -1,6 +1,12 @@
 name: Run Tests
 on: [pull_request]
 
+env:
+  PASSAGE_USER_ID: ${{ secrets.USER_ID }}
+  PASSAGE_APP_ID: ${{ secrets.APP_ID }}
+  PASSAGE_API_KEY: ${{ secrets.API_KEY }}
+  PASSAGE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
