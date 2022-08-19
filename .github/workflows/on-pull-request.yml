@@ -2,10 +2,10 @@ name: Run Tests
 on: [pull_request]
 
 env:
-  PASSAGE_USER_ID: ${{ secrets.USER_ID }}
-  PASSAGE_APP_ID: ${{ secrets.APP_ID }}
-  PASSAGE_API_KEY: ${{ secrets.API_KEY }}
-  PASSAGE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+  PASSAGE_USER_ID: ${{ secrets.PASSAGE_USER_ID }}
+  PASSAGE_APP_ID: ${{ secrets.PASSAGE_APP_ID }}
+  PASSAGE_API_KEY: ${{ secrets.PASSAGE_API_KEY }}
+  PASSAGE_AUTH_TOKEN: ${{ secrets.PASSAGE_AUTH_TOKEN }}
 
 jobs:
   run-tests:
