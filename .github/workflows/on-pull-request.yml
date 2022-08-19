@@ -1,0 +1,29 @@
+name: Run Tests
+on: 
+  workflow_dispatch:
+  pull_request:
+
+env:
+  PASSAGE_USER_ID: ${{ secrets.PASSAGE_USER_ID }}
+  PASSAGE_APP_ID: ${{ secrets.PASSAGE_APP_ID }}
+  PASSAGE_API_KEY: ${{ secrets.PASSAGE_API_KEY }}
+  PASSAGE_AUTH_TOKEN: ${{ secrets.PASSAGE_AUTH_TOKEN }}
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Run Tests
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install pytest python-dotenv
+          pip list
+          python setup.py pytest
