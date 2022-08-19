@@ -15,10 +15,9 @@ PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
 PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
 PASSAGE_AUTH_TOKEN = os.environ.get("PASSAGE_AUTH_TOKEN")
-RANDOM_EMAIL = ''.join(random.choice(string.ascii_letters) for _ in range(14)) + "@email.com"
 
 def randomEmail():
-    return ''.join(random.choice(string.ascii_letters) for _ in range(14)) + "@email.com"
+    return ''.join(random.choice(string.ascii_lowercase) for _ in range(14)) + "@email.com"
 
 def randomPhone():
     return  "+1512" + ''.join(random.choice('1234567890') for _ in range(7))
