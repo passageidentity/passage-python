@@ -282,7 +282,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/users/" + user_id
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/tokens/"
             r = requests.delete(url, headers=header)
 
             if r.status_code != 200:
