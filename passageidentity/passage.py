@@ -78,8 +78,8 @@ class Passage():
         cred_id: str
         friendly_name: str
         usage_count: int
-    
-        
+
+
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
@@ -98,7 +98,7 @@ class Passage():
             self.auth_origin: str = AUTH_CACHE[app_id]["auth_origin"]
         else:
             self.__refreshAuthCache()
-    
+
 
     """
     Fetch JWKs for the app
@@ -127,7 +127,7 @@ class Passage():
     Authenticate a Flask or Django request that uses Passage for authentication.
     This function will verify the JWT and return the user ID for the authenticated user, or throw
     a PassageError
-    """ 
+    """
     def authenticateRequest(self, request: Request) -> Union[str, PassageError]:
         # check for authorization header
         token = getAuthTokenFromRequest(request, self.auth_strategy)
@@ -142,11 +142,11 @@ class Passage():
             raise PassageError("JWT is not valid: " + str(e))
 
     """
-    Authenticate a JWT from Passage. This function will verify the JWT and return the user ID 
-    for the authenticated user, or throw a PassageError. 
-    This function can be used to authenticate JWTs from Passage if they are not sent in a typical cookie or 
+    Authenticate a JWT from Passage. This function will verify the JWT and return the user ID
+    for the authenticated user, or throw a PassageError.
+    This function can be used to authenticate JWTs from Passage if they are not sent in a typical cookie or
     authorization header.
-    """ 
+    """
     def authenticateJWT(self, token:str) -> Union[str, PassageError]:
         # load and parse the JWT
         try:
@@ -164,9 +164,9 @@ class Passage():
             claims = jwt.decode(token, public_key, audience=self.auth_origin, algorithms=["RS256"])
             return claims["sub"]
         except Exception as e:
-            raise PassageError("JWT is not valid: " + str(e)) 
-   
-    
+            raise PassageError("JWT is not valid: " + str(e))
+
+
     class MagicLinkAttributes(TypedDict, total=False):
         user_id: str
         email: str
@@ -187,7 +187,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/magic-links"  
+            url = BASE_URL + self.app_id + "/magic-links"
             r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
             if r.status_code != 201:
                 # get error message
@@ -210,7 +210,7 @@ class Passage():
 
     """
     Use Passage API to get info for a user, look up by user ID
-    """ 
+    """
     def getUser(self, user_id: str) -> Union[PassageUserType, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
@@ -227,10 +227,10 @@ class Passage():
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
             raise PassageError("Could not fetch user data")
-    
+
     """
     Use Passage API to list user devices, look up by user ID
-    """ 
+    """
     def listUserDevices(self, user_id: str) -> Union[list, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
@@ -249,13 +249,13 @@ class Passage():
             if devices != None:
                 for d in devices:
                     device_list.append(PassageDevice(d))
-            return device_list 
+            return device_list
         except Exception as e:
             raise PassageError("Could not list user's devices: {e}")
 
     """
     Use Passage API to list user devices, look up by user ID
-    """ 
+    """
     def revokeUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
@@ -269,11 +269,29 @@ class Passage():
                 # get error message
                 message = r.json()["status"]
                 raise PassageError(f"{message}")
-            return True 
+            return True
         except Exception as e:
             raise PassageError("Could not revoke user device: {e}")
 
+    """
+    Use Passage API to revoke all of a user's refresh tokens, look up by user ID
+    """
+    def signOut(self, user_id: str, ) -> Union[bool, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
+        header = {"Authorization": "Bearer " + self.passage_apikey}
+        try:
+            url = BASE_URL + self.app_id + "/users/" + user_id
+            r = requests.delete(url, headers=header)
+
+            if r.status_code != 200:
+                # get error message
+                message = r.json()["status"]
+                raise PassageError(f"{message}")
+            return True
+        except Exception as e:
+            raise PassageError("Could not revoke user's refresh tokens: {e}")
 
     """
     Activate Passage User
@@ -284,7 +302,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/users/" + user_id + "/activate"  
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/activate"
             r = requests.patch(url, headers=header)
 
             if r.status_code != 200:
@@ -294,7 +312,7 @@ class Passage():
             return PassageUser(user_id, r.json()["user"] )
         except Exception as e:
             raise PassageError("Could not activate user")
-    
+
 
     """
     Deactivate Passage User
@@ -305,7 +323,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/users/" + user_id + "/deactivate"  
+            url = BASE_URL + self.app_id + "/users/" + user_id + "/deactivate"
             r = requests.patch(url, headers=header)
 
             if r.status_code != 200:
@@ -328,10 +346,10 @@ class Passage():
     def updateUser(self, user_id: str, attributes: UserAttributes) -> Union[PassageUserType, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
-        
+
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/users/" + user_id  
+            url = BASE_URL + self.app_id + "/users/" + user_id
             r = requests.patch(url, headers=header, data=json.dumps(attributes))
             if r.status_code != 200:
                 # get error message
@@ -352,14 +370,14 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/users/" + user_id  
+            url = BASE_URL + self.app_id + "/users/" + user_id
             r = requests.delete(url, headers=header)
 
             if r.status_code != 200:
                 # get error message
                 message = r.json()["status"]
                 raise PassageError("Failed request to delete user: " + message)
-            
+
             return True
         except Exception as e:
             raise PassageError("Could not delete user")
@@ -378,7 +396,7 @@ class Passage():
 
         header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
-            url = BASE_URL + self.app_id + "/users"  
+            url = BASE_URL + self.app_id + "/users"
             r = requests.post(url, data=json.dumps(userAttributes), headers=header)
             if r.status_code != 201:
                 # get error message
@@ -457,7 +475,7 @@ class PassageUser:
         if fields["recent_events"] != None:
             events = fields["recent_events"]
             self.recent_events = []
-            for e in events:    
+            for e in events:
                 pe = PassageEvent(e)
                 self.recent_events.append(pe)
 
@@ -478,11 +496,11 @@ def time_to_milliseconds(timeString: str) -> str:
 	time = timeString.split(".")
 	if len(time) < 2:
 		return timeString
-	
+
 	# grab the digits; if milliseconds (6 digits) return
 	decimalNumbers = time[1][:-1]
 	if len(decimalNumbers) == 6:
 		return timeString
-	
+
 	# ensure 6 decimal places, add back '.' and 'Z' to string
 	return time[0] + "." + decimalNumbers[:6] + "Z"
