@@ -52,6 +52,9 @@ class Passage():
         allowed_identifier: str
         require_identifier_verification: bool
         session_timeout_length: int
+        refresh_enabled: bool
+        refresh_absolute_lifetime: int
+        refresh_inactivity_lifetime: int
         user_metadata_schema: list
         layouts: list
 
@@ -419,6 +422,9 @@ class PassageApp:
         self.allowed_identifier = fields["allowed_identifier"]
         self.require_identifier_verification = fields["require_identifier_verification"]
         self.session_timeout_length = fields["session_timeout_length"]
+        self.refresh_enabled = fields["refresh_enabled"]
+        self.refresh_absolute_lifetime = fields["refresh_absolute_lifetime"]
+        self.refresh_inactivity_lifetime = fields["refresh_inactivity_lifetime"]
         self.user_metadata_schema = fields["user_metadata_schema"]
         self.layouts = fields["layouts"]
 class PassageDevice:
