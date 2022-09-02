@@ -77,14 +77,14 @@ def testActivateUser():
 
 def testDeactivateUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    
+
     user = psg.getUser(PASSAGE_USER_ID)
     user = psg.deactivateUser(user.id)
     assert user.status == "inactive"
 
 def testListUserDevices():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    
+
     devices = psg.listUserDevices(PASSAGE_USER_ID)
     assert len(devices) == 2
 
@@ -107,7 +107,7 @@ def testUpdateUserEmail():
 
 def testUpdateUserWithMetadata():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    
+
     email = randomEmail()
     user = psg.updateUser(PASSAGE_USER_ID, {"email": email, "user_metadata": { "example1": "qwe"}})
     assert user.email ==  email
@@ -119,7 +119,7 @@ def testUpdateUserWithMetadata():
 
 def testCreateUserWithMetadata():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    
+
     email = randomEmail()
     user = psg.createUser({"email": email, "user_metadata": { "example1": "qwe"}})
     assert user.email ==  email
@@ -145,3 +145,9 @@ def testSmartLinkValid():
     magicLink = psg.createMagicLink({"email": email})
     assert magicLink.identifier == email
     assert magicLink.activated == False
+
+def testsignOut():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    success = psg.signOut(PASSAGE_USER_ID)
+    assert success == True
