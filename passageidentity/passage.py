@@ -57,6 +57,7 @@ class Passage():
         refresh_inactivity_lifetime: int
         user_metadata_schema: list
         layouts: list
+        default_language: str
 
     class PassageUserType(TypedDict):
         created_at: str
@@ -179,6 +180,7 @@ class Passage():
         magic_link_path: str
         redirect_url: str
         ttl: int
+        language: str
 
     """
     Create Passage MagicLink
@@ -427,6 +429,7 @@ class PassageApp:
         self.refresh_inactivity_lifetime = fields["refresh_inactivity_lifetime"]
         self.user_metadata_schema = fields["user_metadata_schema"]
         self.layouts = fields["layouts"]
+        self.default_language = fields["default_language"]
 class PassageDevice:
     def __init__(self, fields={}):
         self.id = fields["id"]
