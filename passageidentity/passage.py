@@ -111,7 +111,7 @@ class Passage():
         r = requests.get(f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json")
 
         if r.status_code != 200:
-            raise PassageError("Could not fetch JWKs for app id " + self.app_id)
+            raise PassageError("Could not fetch JWKs for app id " + self.app_id, r.status_code, r.reason, r.json()["error"])
 
         jwks = r.json()["keys"]
 
@@ -143,7 +143,7 @@ class Passage():
             userID = self.authenticateJWT(token)
             return userID
         except Exception as e:
-            raise PassageError("JWT is not valid: " + str(e))
+            raise PassageError(f"JWT is not valid: {e}")
 
     """
     Authenticate a JWT from Passage. This function will verify the JWT and return the user ID
@@ -168,7 +168,7 @@ class Passage():
             claims = jwt.decode(token, public_key, audience=self.auth_origin, algorithms=["RS256"])
             return claims["sub"]
         except Exception as e:
-            raise PassageError("JWT is not valid: " + str(e))
+            raise PassageError(f"JWT is not valid: {e}")
 
 
     class MagicLinkAttributes(TypedDict, total=False):
@@ -195,14 +195,12 @@ class Passage():
             url = BASE_URL + self.app_id + "/magic-links"
             r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
             if r.status_code != 201:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to create magic link: " + message)
+                raise PassageError("Failed to create magic link", r.status_code, r.reason, r.json()["error"])
 
             parsedResponse = r.json()["magic_link"]
             return PassageMagicLink(parsedResponse["id"], parsedResponse)
         except Exception as e:
-            raise PassageError("Could not create magic link")
+            raise PassageError(f"Failed to create magic link: {e}")
 
     """
     Use Passage API to get info for their app.
@@ -226,12 +224,10 @@ class Passage():
             r = requests.get(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to get user data: " + message)
+                raise PassageError("Failed to fetch user data", r.status_code, r.reason, r.json()["error"])
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
-            raise PassageError("Could not fetch user data")
+            raise PassageError(f"Failed to fetch user data: {e}")
 
     """
     Use Passage API to list user devices, look up by user ID
@@ -246,9 +242,7 @@ class Passage():
             r = requests.get(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError(f"{message}")
+                raise PassageError("Failed to list user's devices", r.status_code, r.reason, r.json()["error"])
             device_list = list()
             devices = r.json()["devices"]
             if devices != None:
@@ -256,7 +250,7 @@ class Passage():
                     device_list.append(PassageDevice(d))
             return device_list
         except Exception as e:
-            raise PassageError("Could not list user's devices: {e}")
+            raise PassageError(f"Failed to list user's devices: {e}")
 
     """
     Use Passage API to list user devices, look up by user ID
@@ -271,12 +265,10 @@ class Passage():
             r = requests.delete(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError(f"{message}")
+                raise PassageError("Failed to revoke user's device", r.status_code, r.reason, r.json()["Error"])
             return True
         except Exception as e:
-            raise PassageError("Could not revoke user device: {e}")
+            raise PassageError(f"Failed to revoke user device: {e}")
 
     """
     Use Passage API to revoke all of a user's refresh tokens, look up by user ID
@@ -291,12 +283,10 @@ class Passage():
             r = requests.delete(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError(f"{message}")
+                raise PassageError("Failed to revoke user's refresh tokens:", r.status_code, r.reason, r.json()["error"])
             return True
         except Exception as e:
-            raise PassageError("Could not revoke user's refresh tokens: {e}")
+            raise PassageError(f"Failed to revoke user's refresh tokens: {e}")
 
     """
     Activate Passage User
@@ -311,12 +301,10 @@ class Passage():
             r = requests.patch(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to activate user: " + message)
+                raise PassageError("Failed to activate user", r.status_code, r.reason, r.json()["error"])
             return PassageUser(user_id, r.json()["user"] )
         except Exception as e:
-            raise PassageError("Could not activate user")
+            raise PassageError(f"Failed activate user: {e}")
 
 
     """
@@ -332,12 +320,10 @@ class Passage():
             r = requests.patch(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["error"]
-                raise PassageError(f"{message}")
+                raise PassageError("Failed to deactivate user", r.status_code, r.reason, r.json()["error"])
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
-            raise PassageError("Could not deactivate user: {e}")
+            raise PassageError(f"Failed deactivate user: {e}")
 
 
     """
@@ -357,13 +343,10 @@ class Passage():
             url = BASE_URL + self.app_id + "/users/" + user_id
             r = requests.patch(url, headers=header, data=json.dumps(attributes))
             if r.status_code != 200:
-                # get error message
-                attributeKeys = ", ".join(attribute for attribute in attributes.keys())
-                message = r.json()["error"]
-                raise PassageError(f"{message}")
+                raise PassageError("Failed to update user attributes", r.status_code, r.reason, r.json()["error"])
             return PassageUser(user_id, r.json()["user"])
         except Exception as e:
-            raise PassageError(f"Could not update user attributes: {e}")
+            raise PassageError(f"Failed to update user attributes: {e}")
 
 
     """
@@ -379,13 +362,11 @@ class Passage():
             r = requests.delete(url, headers=header)
 
             if r.status_code != 200:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to delete user: " + message)
+                raise PassageError("Failed to delete user", r.status_code, r.reason, r.json()["error"])
 
             return True
         except Exception as e:
-            raise PassageError("Could not delete user")
+            raise PassageError(f"Failed to  delete user: {e}")
 
 
     """
@@ -404,14 +385,12 @@ class Passage():
             url = BASE_URL + self.app_id + "/users"
             r = requests.post(url, data=json.dumps(userAttributes), headers=header)
             if r.status_code != 201:
-                # get error message
-                message = r.json()["status"]
-                raise PassageError("Failed request to create user: " + message)
+                raise PassageError("Failed to create user", r.status_code, r.reason, r.json()["error"])
 
             parsedResponse = r.json()["user"]
             return PassageUser(parsedResponse["id"], parsedResponse)
         except Exception as e:
-            raise PassageError("Could not create user")
+            raise PassageError(f"Failed to create user: {e}")
 
 class PassageApp:
     def __init__(self, fields={}):
