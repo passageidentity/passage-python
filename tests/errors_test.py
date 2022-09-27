@@ -1,4 +1,3 @@
-from ast import Pass
 from passageidentity import PassageError
 import pytest
 
