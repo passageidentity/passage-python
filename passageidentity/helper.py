@@ -1,12 +1,12 @@
 import os
 import re
 from base64 import b64decode
-import requests
 from django.core.handlers.wsgi import WSGIRequest
 
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
 
+from passageidentity import requests
 from passageidentity.errors import PassageError
 
 TOKEN_TYPE = "Bearer"

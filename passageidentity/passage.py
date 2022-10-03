@@ -1,4 +1,4 @@
-import jwt, json, requests
+import jwt, json
 from datetime import datetime
 
 import sys
@@ -10,6 +10,7 @@ else:
     from typing import Union
 
 from requests.sessions import Request
+from passageidentity import requests
 from passageidentity.helper import fetchApp, getAuthTokenFromRequest
 from passageidentity.errors import PassageError
 from enum import Enum
@@ -190,10 +191,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/magic-links"
-            r = requests.post(url, data=json.dumps(magicLinkAttributes), headers=header)
+            r = requests.post(url, data=magicLinkAttributes, api_key=self.passage_apikey)
             if r.status_code != 201:
                 raise PassageError("Failed to create magic link", r.status_code, r.reason, r.json())
 
@@ -218,10 +218,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id
-            r = requests.get(url, headers=header)
+            r = requests.get(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to fetch user data", r.status_code, r.reason, r.json())
@@ -236,10 +235,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id + "/devices"
-            r = requests.get(url, headers=header)
+            r = requests.get(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to list user's devices", r.status_code, r.reason, r.json())
@@ -259,10 +257,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id + "/devices/" + device_id
-            r = requests.delete(url, headers=header)
+            r = requests.delete(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to revoke user's device", r.status_code, r.reason, r.json())
@@ -277,10 +274,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id + "/tokens/"
-            r = requests.delete(url, headers=header)
+            r = requests.delete(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to revoke user's refresh tokens:", r.status_code, r.reason, r.json())
@@ -295,10 +291,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id + "/activate"
-            r = requests.patch(url, headers=header)
+            r = requests.patch(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to activate user", r.status_code, r.reason, r.json())
@@ -314,10 +309,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id + "/deactivate"
-            r = requests.patch(url, headers=header)
+            r = requests.patch(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to deactivate user", r.status_code, r.reason, r.json())
@@ -338,10 +332,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id
-            r = requests.patch(url, headers=header, data=json.dumps(attributes))
+            r = requests.patch(url, api_key=self.passage_apikey, data=attributes)
             if r.status_code != 200:
                 raise PassageError("Failed to update user attributes", r.status_code, r.reason, r.json())
             return PassageUser(user_id, r.json()["user"])
@@ -356,10 +349,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users/" + user_id
-            r = requests.delete(url, headers=header)
+            r = requests.delete(url, api_key=self.passage_apikey)
 
             if r.status_code != 200:
                 raise PassageError("Failed to delete user", r.status_code, r.reason, r.json())
@@ -380,10 +372,9 @@ class Passage():
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
-        header = {"Authorization": "Bearer " + self.passage_apikey}
         try:
             url = BASE_URL + self.app_id + "/users"
-            r = requests.post(url, data=json.dumps(userAttributes), headers=header)
+            r = requests.post(url, data=userAttributes, api_key=self.passage_apikey)
             if r.status_code != 201:
                 raise PassageError("Failed to create user", r.status_code, r.reason, r.json())
 
