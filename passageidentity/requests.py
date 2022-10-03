@@ -14,7 +14,7 @@ def get_headers():
     :returns: dict
 
     """
-    return {"Passage-Version": f'passage-python {PACKAGE_VERSION}')}
+    return {"Passage-Version": f'passage-python {PACKAGE_VERSION}'}
 
 def get(url, api_key=None):
     """Creates GET request, with API key in Authorization header if provided.
