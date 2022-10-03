@@ -6,7 +6,7 @@ if sys.version_info >= (3, 8):
 else:
     import importlib_metadata as metadata
 
-PACKAGE_VERSION = metadata.version("passageidentity")
+PACKAGE_VERSION = metadata.version("passage-identity")
 
 
 def get_headers(api_key=None):
