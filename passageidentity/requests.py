@@ -8,13 +8,19 @@ else:
 
 PACKAGE_VERSION = metadata.version("passageidentity")
 
-def get_headers():
+
+def get_headers(api_key=None):
     """Creates a new headers dict, with the package version included.
 
     :returns: dict
 
     """
-    return {"Passage-Version": f'passage-python {PACKAGE_VERSION}'}
+    headers = {"Passage-Version": f"passage-python {PACKAGE_VERSION}"}
+    if api_key:
+        headers["Authorization"] = "Bearer " + api_key
+
+    return headers
+
 
 def get(url, api_key=None):
     """Creates GET request, with API key in Authorization header if provided.
@@ -24,11 +30,8 @@ def get(url, api_key=None):
     :returns: requests.Response
 
     """
-    headers = get_headers()
-    if api_key:
-        headers["Authorization"] = "Bearer " + api_key
+    return requests.get(url, headers=get_headers(api_key))
 
-    return requests.get(url, headers=headers)
 
 def post(url, api_key=None, data=None):
     """Creates POST request, with API key in Authorization header if provided, and the JSON-encoded data in the body.
@@ -39,11 +42,10 @@ def post(url, api_key=None, data=None):
     :returns: requests.Response
 
     """
-    headers = get_headers()
-    if api_key:
-        headers["Authorization"] = "Bearer " + api_key
+    return requests.post(
+        url, headers=get_headers(api_key), data=json.dumps(data) if data else None
+    )
 
-    return requests.post(url, headers=headers, data=json.dumps(data) if data else None)
 
 def patch(url, api_key=None, data=None):
     """Creates PATCH request, with API key in Authorization header if provided, and the JSON-encoded data in the body.
@@ -54,11 +56,10 @@ def patch(url, api_key=None, data=None):
     :returns: requests.Response
 
     """
-    headers = get_headers()
-    if api_key:
-        headers["Authorization"] = "Bearer " + api_key
+    return requests.patch(
+        url, headers=get_headers(api_key), data=json.dumps(data) if data else None
+    )
 
-    return requests.patch(url, headers=headers, data=json.dumps(data) if data else None)
 
 def delete(url, api_key=None):
     """Creates DELETE request, with API key in Authorization header if provided.
@@ -68,8 +69,4 @@ def delete(url, api_key=None):
     :returns: requests.Response
 
     """
-    headers = get_headers()
-    if api_key:
-        headers["Authorization"] = "Bearer " + api_key
-
-    return requests.delete(url, headers=headers)
+    return requests.delete(url, headers=get_headers(api_key))
