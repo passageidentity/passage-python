@@ -29,16 +29,28 @@ def testFlaskValidTokenInHeader():
         user = psg.authenticateRequest(request)
         assert user == PASSAGE_USER_ID
 
+def testFlaskInvalidTokenInHeader():
+    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
+    # flask request context
+    with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer invalid_toke'}):
+        with pytest.raises(PassageError) as e:
+            user = psg.authenticateRequest(request)
+
 def testValidJWT():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     user = psg.authenticateJWT(PASSAGE_AUTH_TOKEN)
     assert user == PASSAGE_USER_ID
 
+def testInvalidJWT():
+    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
+    with pytest.raises(PassageError) as e:
+        psg.authenticateJWT("invalid_token")
+  
 def testFetchJWKS():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     assert len(psg.jwks) > 0
 
-def testFlaskTokenInCookie():
+def testFlaskValidTokenInCookie():
     psg = Passage(PASSAGE_APP_ID)
     # flask request context
     cookie = dump_cookie('psg_auth_token', PASSAGE_AUTH_TOKEN)
@@ -46,10 +58,11 @@ def testFlaskTokenInCookie():
         user = psg.authenticateRequest(request)
         assert user == PASSAGE_USER_ID
 
-def testFlaskInValidToken():
+def testFlaskInvalidTokenInCookie():
     psg = Passage(PASSAGE_APP_ID)
     # flask request context
-    with app.test_request_context("thisisaurl.com",headers={'Authorization':'Bearer invalidToken'}):
+    cookie = dump_cookie('psg_auth_token', "invalid_token")
+    with app.test_request_context("thisisaurl.com",environ_base={'HTTP_COOKIE':cookie}):
         with pytest.raises(PassageError) as e:
             user = psg.authenticateRequest(request)
 
