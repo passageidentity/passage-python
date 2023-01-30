@@ -64,7 +64,7 @@ def testFlaskInvalidTokenInCookie():
     cookie = dump_cookie('psg_auth_token', "invalid_token")
     with app.test_request_context("thisisaurl.com",environ_base={'HTTP_COOKIE':cookie}):
         with pytest.raises(PassageError):
-            user = psg.authenticateRequest(request)
+            psg.authenticateRequest(request)
 
 def testGetApp():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
