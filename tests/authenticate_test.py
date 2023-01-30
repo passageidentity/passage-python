@@ -33,7 +33,7 @@ def testFlaskInvalidTokenInHeader():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     # flask request context
     with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer invalid_toke'}):
-        with pytest.raises(PassageError) as e:
+        with pytest.raises(PassageError):
             user = psg.authenticateRequest(request)
 
 def testValidJWT():
@@ -43,7 +43,7 @@ def testValidJWT():
 
 def testInvalidJWT():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
-    with pytest.raises(PassageError) as e:
+    with pytest.raises(PassageError):
         psg.authenticateJWT("invalid_token")
   
 def testFetchJWKS():
@@ -63,7 +63,7 @@ def testFlaskInvalidTokenInCookie():
     # flask request context
     cookie = dump_cookie('psg_auth_token', "invalid_token")
     with app.test_request_context("thisisaurl.com",environ_base={'HTTP_COOKIE':cookie}):
-        with pytest.raises(PassageError) as e:
+        with pytest.raises(PassageError):
             user = psg.authenticateRequest(request)
 
 def testGetApp():
