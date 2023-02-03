@@ -32,7 +32,7 @@ def testFlaskValidTokenInHeader():
 def testFlaskInvalidTokenInHeader():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     # flask request context
-    with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer invalid_toke'}):
+    with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer invalid_token'}):
         with pytest.raises(PassageError):
             user = psg.authenticateRequest(request)
 
