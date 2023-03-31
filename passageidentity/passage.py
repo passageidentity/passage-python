@@ -59,6 +59,8 @@ class Passage():
         user_metadata_schema: list
         layouts: list
         default_language: str
+        auth_fallback_method: str
+        auth_fallback_method_ttl: int
 
     class PassageUserType(TypedDict):
         created_at: str
@@ -400,6 +402,8 @@ class PassageApp:
         self.user_metadata_schema = fields["user_metadata_schema"]
         self.layouts = fields["layouts"]
         self.default_language = fields["default_language"]
+        self.auth_fallback_method = fields["auth_fallback_method"]
+        self.auth_fallback_method_ttl = fields["auth_fallback_method_ttl"]
 class PassageDevice:
     def __init__(self, fields={}):
         self.id = fields["id"]
