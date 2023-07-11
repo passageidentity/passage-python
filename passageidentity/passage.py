@@ -184,6 +184,7 @@ class Passage():
         redirect_url: str
         ttl: int
         language: str
+        type: str
 
     """
     Create Passage MagicLink
