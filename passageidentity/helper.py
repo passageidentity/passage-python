@@ -21,7 +21,7 @@ def extractToken(authHeader):
     try:
         return match.group(1)
     except (AttributeError, IndexError):
-        return None
+        raise PassageError("No Passage authorization header.")
 
 """
 Helper funtion to get the auth token from a request.
@@ -35,7 +35,7 @@ def getAuthTokenFromRequest(request, auth_strategy):
         try:
             return match.group(1)
         except (AttributeError, IndexError):
-            return None
+            raise PassageError("No Passage authorization header.")
     else:
         try:
             cookies = request.COOKIES
