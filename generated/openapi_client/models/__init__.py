@@ -22,6 +22,8 @@ from openapi_client.models.create_magic_link_request import CreateMagicLinkReque
 from openapi_client.models.create_user_request import CreateUserRequest
 from openapi_client.models.element_customization import ElementCustomization
 from openapi_client.models.font_family import FontFamily
+from openapi_client.models.github_social_connection import GithubSocialConnection
+from openapi_client.models.google_social_connection import GoogleSocialConnection
 from openapi_client.models.layout_config import LayoutConfig
 from openapi_client.models.layouts import Layouts
 from openapi_client.models.list_devices_response import ListDevicesResponse
@@ -47,6 +49,7 @@ from openapi_client.models.user_info import UserInfo
 from openapi_client.models.user_metadata_field import UserMetadataField
 from openapi_client.models.user_metadata_field_type import UserMetadataFieldType
 from openapi_client.models.user_response import UserResponse
+from openapi_client.models.user_social_connections import UserSocialConnections
 from openapi_client.models.user_status import UserStatus
 from openapi_client.models.web_authn_devices import WebAuthnDevices
 from openapi_client.models.web_authn_icons import WebAuthnIcons

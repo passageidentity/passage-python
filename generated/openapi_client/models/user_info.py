@@ -23,6 +23,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
 from pydantic import Field
 from openapi_client.models.user_event_info import UserEventInfo
+from openapi_client.models.user_social_connections import UserSocialConnections
 from openapi_client.models.user_status import UserStatus
 from openapi_client.models.web_authn_devices import WebAuthnDevices
 from openapi_client.models.web_authn_type import WebAuthnType
@@ -44,13 +45,14 @@ class UserInfo(BaseModel):
     phone: StrictStr
     phone_verified: StrictBool
     recent_events: List[UserEventInfo]
+    social_connections: UserSocialConnections
     status: UserStatus
     updated_at: datetime
     user_metadata: Optional[Union[str, Any]]
     webauthn: StrictBool
     webauthn_devices: List[WebAuthnDevices]
     webauthn_types: List[WebAuthnType] = Field(description="List of credential types that have been used for authentication")
-    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "recent_events", "status", "updated_at", "user_metadata", "webauthn", "webauthn_devices", "webauthn_types"]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "recent_events", "social_connections", "status", "updated_at", "user_metadata", "webauthn", "webauthn_devices", "webauthn_types"]
 
     model_config = {
         "populate_by_name": True,
@@ -95,6 +97,9 @@ class UserInfo(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['recent_events'] = _items
+        # override the default output from pydantic by calling `to_dict()` of social_connections
+        if self.social_connections:
+            _dict['social_connections'] = self.social_connections.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in webauthn_devices (list)
         _items = []
         if self.webauthn_devices:
@@ -128,6 +133,7 @@ class UserInfo(BaseModel):
             "phone": obj.get("phone"),
             "phone_verified": obj.get("phone_verified"),
             "recent_events": [UserEventInfo.from_dict(_item) for _item in obj.get("recent_events")] if obj.get("recent_events") is not None else None,
+            "social_connections": UserSocialConnections.from_dict(obj.get("social_connections")) if obj.get("social_connections") is not None else None,
             "status": obj.get("status"),
             "updated_at": obj.get("updated_at"),
             "user_metadata": obj.get("user_metadata"),

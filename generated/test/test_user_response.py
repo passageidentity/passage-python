@@ -54,6 +54,15 @@ class TestUserResponse(unittest.TestCase):
                             type = '', 
                             user_agent = '', )
                         ], 
+                    social_connections = openapi_client.models.user_social_connections.UserSocialConnections(
+                        google = openapi_client.models.google_social_connection.GoogleSocialConnection(
+                            provider_id = '', 
+                            created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                            updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ), 
+                        github = openapi_client.models.github_social_connection.GithubSocialConnection(
+                            provider_id = '', 
+                            created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                            updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ), ), 
                     status = 'active', 
                     updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     user_metadata = openapi_client.models.user_metadata.user_metadata(), 
@@ -95,6 +104,15 @@ class TestUserResponse(unittest.TestCase):
                             type = '', 
                             user_agent = '', )
                         ], 
+                    social_connections = openapi_client.models.user_social_connections.UserSocialConnections(
+                        google = openapi_client.models.google_social_connection.GoogleSocialConnection(
+                            provider_id = '', 
+                            created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                            updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ), 
+                        github = openapi_client.models.github_social_connection.GithubSocialConnection(
+                            provider_id = '', 
+                            created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                            updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ), ), 
                     status = 'active', 
                     updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     user_metadata = openapi_client.models.user_metadata.user_metadata(), 
