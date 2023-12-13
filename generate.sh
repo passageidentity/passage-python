@@ -23,7 +23,7 @@ openapi-generator-cli generate \
 mv ./temp/docs ./docs/generated
 mv ./temp/README.md ./docs/generated
 
-mv ./temp/openapi_client ./generated
+mv ./temp/openapi_client ./
 
 rm -rf ./temp
 
