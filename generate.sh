@@ -19,14 +19,11 @@ openapi-generator-cli generate \
   -o ./temp \
   --additional-properties=modelPropertyNaming=original
 
-mkdir generated
-
 rm -rf ./docs/generated
 mv ./temp/docs ./docs/generated
 mv ./temp/README.md ./docs/generated
 
 mv ./temp/openapi_client ./generated
-mv ./temp/test ./generated
 
 rm -rf ./temp
 

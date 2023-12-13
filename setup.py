@@ -21,9 +21,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     packages=["passageidentity"],
-    install_requires=['pyjwt','cryptography','requests', 'Flask', 'django < 5', 'importlib-metadata >= 1.0 ; python_version < "3.8"'],
+    install_requires=['pyjwt','cryptography','requests', 'Flask', 'django < 5', 'importlib-metadata >= 1.0 ; python_version < "3.6.8"'],
     setup_requires=['pytest-runner'],
-    tests_require=['pytest==4.4.1'],
+    tests_require=['pytest==4.6.3'],
     test_suite='tests',
-    python_requires=">=3.6",
+    python_requires=">=3.6.8",
 )
