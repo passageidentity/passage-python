@@ -1,4 +1,4 @@
-from passageidentity import Passage
+from passageidentity.passage import Passage
 from passageidentity import PassageError
 import pytest
 import os
@@ -71,10 +71,14 @@ def testGetApp():
     app = psg.getApp()
     assert PASSAGE_APP_ID == app.id
 
-
 def testCreateMagicLink():
+    magicLinkAttributes = {
+        "email": "chris@passage.id", 
+        "channel": "email", 
+        "ttl": 12, 
+    }
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    magicLink = psg.createMagicLink(magicLinkAttributes={"email": "chris@passage.id", "channel": "email", "ttl": 12})
+    magicLink = psg.createMagicLink(magicLinkAttributes)
     assert magicLink.identifier == "chris@passage.id"
     assert magicLink.ttl == 12
 
@@ -95,13 +99,13 @@ def testDeactivateUser():
     user = psg.deactivateUser(user.id)
     assert user.status == "inactive"
 
-def testListUserDevices():
-    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+# def testListUserDevices():
+#     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    devices = psg.listUserDevices(PASSAGE_USER_ID)
-    assert len(devices) == 2
+#     devices = psg.listUserDevices(PASSAGE_USER_ID)
+#     assert len(devices) == 2
 
-# revokeUserDevice is not tested because it is impossible to spoof webauthn to create a device to then revoke
+# listUserDevices & revokeUserDevice are not tested because it is impossible to spoof webauthn to create a device to then revoke
 
 def testUpdateUserPhone():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
