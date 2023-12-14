@@ -264,6 +264,9 @@ class ApiClient:
         :return: RESTResponse
         """
 
+        print("body")
+        print(body)
+
         try:
             # perform request and return response
             response_data = self.rest_client.request(
