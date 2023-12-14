@@ -4,7 +4,7 @@ from datetime import datetime
 import sys
 
 if sys.version_info >= (3, 8):
-    from typing import List, TypedDict, Union
+    from typing import List, Union
 else:
     from typing_extensions import TypedDict
     from typing import List
@@ -14,52 +14,16 @@ from requests.sessions import Request
 from passageidentity import requests
 from passageidentity.helper import fetchApp, getAuthTokenFromRequest
 from passageidentity.errors import PassageError
-from enum import Enum
 
-from openapi_client.api import AppsApi, MagicLinksApi, UsersApi, UserDevicesApi
-from openapi_client.models import AppInfo, CreateMagicLinkRequest, CreateUserRequest, MagicLink, MagicLinkType, UpdateUserRequest, UserInfo, WebAuthnDevices
+from openapi_client.api import AppsApi, MagicLinksApi, TokensApi, UsersApi, UserDevicesApi
+from openapi_client.models import AppInfo, CreateMagicLinkRequest, CreateUserRequest, MagicLinkType, UpdateUserRequest, UserInfo, WebAuthnDevices
 
 AUTH_CACHE = {}
 BASE_URL = "https://api.passage.id/v1/apps/"
 
-# class UserStatus(Enum):
-#     ACTIVE = "active"
-#     INACTIVE = "inactive"
-#     PENDING = "pending"
-
-# class ChannelType(Enum):
-#     EMAIL = "email"
-#     PHONE = "phone"
-
 class Passage():
     COOKIE_AUTH = 1
     HEADER_AUTH = 2
-
-    # class PassageUserType(TypedDict):
-    #     created_at: str
-    #     updated_at: str
-    #     status: UserStatus
-    #     email_verified: bool
-    #     phone_verified: bool
-    #     email: str
-    #     phone: str
-    #     id: str
-    #     last_login_at: str
-    #     login_count: int
-    #     recent_events: Union[None, list]
-    #     webauthn: bool
-    #     webauthn_devices: Union[None, list]
-    #     user_metadata: dict
-    # class PassageDeviceType(TypedDict):
-    #     created_at: str
-    #     updated_at: str
-    #     last_login_at: str
-    #     id: str
-    #     cred_id: str
-    #     friendly_name: str
-    #     usage_count: int
-
-
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
@@ -150,23 +114,34 @@ class Passage():
     """
     Create Passage MagicLink
     """
-    # def createMagicLink(self, magicLinkAttributes: CreateMagicLinkRequest) -> Union[MagicLinkType, PassageError]:
-    #     # if no api key, fail
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def createMagicLink(self, magicLinkAttributes: CreateMagicLinkRequest) -> Union[MagicLinkType, PassageError]:
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+        
+        magic_link_req = {}
+        
+        magic_link_req["user_id"] = magicLinkAttributes.get("user_id") or ""
+        magic_link_req["email"] = magicLinkAttributes.get("email") or ""
+        magic_link_req["phone"] = magicLinkAttributes.get("phone") or ""
 
-    #     try:
-    #         client = MagicLinksApi()
-    #         return client.create_magic_link(self.app_id, create_magic_link_request=magicLinkAttributes, _headers=self.request_headers)
-    #         # url = BASE_URL + self.app_id + "/magic-links"
-    #         # r = requests.post(url, data=magicLinkAttributes, api_key=self.passage_apikey)
-    #         # if r.status_code != 201:
-    #         #     raise PassageError("Failed to create magic link", r.status_code, r.reason, r.json())
+        magic_link_req["language"] = magicLinkAttributes.get("language") or ""
+        magic_link_req["magic_link_path"] = magicLinkAttributes.get("magic_link_path") or ""
+        magic_link_req["redirect_url"] = magicLinkAttributes.get("redirect_url") or ""
+        magic_link_req["send"] = magicLinkAttributes.get("send") or False
+        magic_link_req["ttl"] = magicLinkAttributes.get("ttl") or 0
+        magic_link_req["type"] = magicLinkAttributes.get("type") or "login"
 
-    #         # parsedResponse = r.json()["magic_link"]
-    #         # return MagicLink(parsedResponse["id"], parsedResponse)
-    #     except Exception as e:
-    #         raise PassageError(f"Failed to create magic link: {e}")
+        if magicLinkAttributes.get("email"):
+            magic_link_req["channel"] = magicLinkAttributes.get("channel") or "email"
+        elif magicLinkAttributes.get("phone"):
+            magic_link_req["channel"] = magicLinkAttributes.get("channel") or "phone"
+
+        try:
+            client = MagicLinksApi()
+            return client.create_magic_link(self.app_id, magic_link_req, _headers=self.request_headers).magic_link
+        except Exception as e:
+            raise PassageError(f"Failed to create magic link: {e}")
 
     """
     Use Passage API to get info for their app.
@@ -201,245 +176,101 @@ class Passage():
         try:
             client = UserDevicesApi()
             return client.list_user_devices(self.app_id, user_id, _headers=self.request_headers).devices
-
-            # url = BASE_URL + self.app_id + "/users/" + user_id + "/devices"
-            # r = requests.get(url, api_key=self.passage_apikey)
-
-            # if r.status_code != 200:
-            #     raise PassageError("Failed to list user's devices", r.status_code, r.reason, r.json())
-            # device_list = list()
-            # devices = r.json()["devices"]
-            # if devices != None:
-            #     for d in devices:
-            #         device_list.append(PassageDevice(d))
-            # return device_list
         except Exception as e:
             raise PassageError(f"Failed to list user's devices: {e}")
 
     """
-    Use Passage API to list user devices, look up by user ID
+    Use Passage API to revoke user devices, look up by user ID
     """
-    # def revokeUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def revokeUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users/" + user_id + "/devices/" + device_id
-    #         r = requests.delete(url, api_key=self.passage_apikey)
-
-    #         if r.status_code != 200:
-    #             raise PassageError("Failed to revoke user's device", r.status_code, r.reason, r.json())
-    #         return True
-    #     except Exception as e:
-    #         raise PassageError(f"Failed to revoke user device: {e}")
+        try:
+            client = UserDevicesApi()
+            client.delete_user_devices(self.app_id, user_id, device_id, _headers=self.request_headers)
+            return True
+        except Exception as e:
+            raise PassageError(f"Failed to revoke user device: {e}")
 
     """
     Use Passage API to revoke all of a user's refresh tokens, look up by user ID
     """
-    # def signOut(self, user_id: str, ) -> Union[bool, PassageError]:
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def signOut(self, user_id: str, ) -> Union[bool, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users/" + user_id + "/tokens/"
-    #         r = requests.delete(url, api_key=self.passage_apikey)
-
-    #         if r.status_code != 200:
-    #             raise PassageError("Failed to revoke user's refresh tokens:", r.status_code, r.reason, r.json())
-    #         return True
-    #     except Exception as e:
-    #         raise PassageError(f"Failed to revoke user's refresh tokens: {e}")
+        try:
+            client = TokensApi()
+            client.revoke_user_refresh_tokens(self.app_id, user_id, _headers=self.request_headers)
+            return True
+        except Exception as e:
+            raise PassageError(f"Failed to revoke user's refresh tokens: {e}")
 
     """
     Activate Passage User
     """
-    # def activateUser(self, user_id: str) -> Union[UserInfo, PassageError]:
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def activateUser(self, user_id: str) -> Union[UserInfo, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users/" + user_id + "/activate"
-    #         r = requests.patch(url, api_key=self.passage_apikey)
-
-    #         if r.status_code != 200:
-    #             raise PassageError("Failed to activate user", r.status_code, r.reason, r.json())
-    #         return PassageUser(user_id, r.json()["user"] )
-    #     except Exception as e:
-    #         raise PassageError(f"Failed activate user: {e}")
-
+        try:
+            client = UsersApi()
+            return client.activate_user(self.app_id, user_id, _headers=self.request_headers).user
+        except Exception as e:
+            raise PassageError(f"Failed activate user: {e}")
 
     """
     Deactivate Passage User
     """
-    # def deactivateUser(self, user_id: str) -> Union[UserInfo, PassageError]:
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def deactivateUser(self, user_id: str) -> Union[UserInfo, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users/" + user_id + "/deactivate"
-    #         r = requests.patch(url, api_key=self.passage_apikey)
-
-    #         if r.status_code != 200:
-    #             raise PassageError("Failed to deactivate user", r.status_code, r.reason, r.json())
-    #         return PassageUser(user_id, r.json()["user"])
-    #     except Exception as e:
-    #         raise PassageError(f"Failed deactivate user: {e}")
+        try:
+            client = UsersApi()
+            return client.deactivate_user(self.app_id, user_id, _headers=self.request_headers).user
+        except Exception as e:
+            raise PassageError(f"Failed deactivate user: {e}")
 
 
-    # def updateUser(self, user_id: str, attributes: UpdateUserRequest) -> Union[UserInfo, PassageError]:
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def updateUser(self, user_id: str, attributes: UpdateUserRequest) -> Union[UserInfo, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users/" + user_id
-    #         r = requests.patch(url, api_key=self.passage_apikey, data=attributes)
-    #         if r.status_code != 200:
-    #             raise PassageError("Failed to update user attributes", r.status_code, r.reason, r.json())
-    #         return PassageUser(user_id, r.json()["user"])
-    #     except Exception as e:
-    #         raise PassageError(f"Failed to update user attributes: {e}")
-
+        try:
+            client = UsersApi()
+            return client.update_user(self.app_id, user_id, attributes, _headers=self.request_headers).user
+        except Exception as e:
+            raise PassageError(f"Failed to update user attributes: {e}")
 
     """
     Delete Passage User
     """
-    # def deleteUser(self, user_id: str) -> Union[bool, PassageError]:
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+    def deleteUser(self, user_id: str) -> Union[bool, PassageError]:
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users/" + user_id
-    #         r = requests.delete(url, api_key=self.passage_apikey)
-
-    #         if r.status_code != 200:
-    #             raise PassageError("Failed to delete user", r.status_code, r.reason, r.json())
-
-    #         return True
-    #     except Exception as e:
-            # raise PassageError(f"Failed to  delete user: {e}")
-
+        try:
+            client = UsersApi()
+            client.delete_user(self.app_id, user_id, _headers=self.request_headers)
+            return True
+        except Exception as e:
+            raise PassageError(f"Failed to  delete user: {e}")
 
     """
     Create Passage User
     """
-    # def createUser(self, userAttributes: CreateUserRequest) -> Union[UserInfo, PassageError]:
-    #     if not ("phone" in userAttributes or "email" in userAttributes):
-    #         raise PassageError("either phone or email must be provided to create the user")
+    def createUser(self, userAttributes: CreateUserRequest) -> Union[UserInfo, PassageError]:
+        if not ("phone" in userAttributes or "email" in userAttributes):
+            raise PassageError("either phone or email must be provided to create the user")
 
-    #     # if no api key, fail
-    #     if self.passage_apikey == "":
-    #         raise PassageError("No Passage API key provided.")
+        # if no api key, fail
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
 
-    #     try:
-    #         url = BASE_URL + self.app_id + "/users"
-    #         r = requests.post(url, data=userAttributes, api_key=self.passage_apikey)
-    #         if r.status_code != 201:
-    #             raise PassageError("Failed to create user", r.status_code, r.reason, r.json())
-
-    #         parsedResponse = r.json()["user"]
-    #         return PassageUser(parsedResponse["id"], parsedResponse)
-    #     except Exception as e:
-    #         raise PassageError(f"Failed to create user: {e}")
-
-# class PassageApp:
-#     def __init__(self, fields={}):
-#         self.name = fields["name"]
-#         self.id = fields["id"]
-#         self.auth_origin = fields["auth_origin"]
-#         self.redirect_url = fields["redirect_url"]
-#         self.login_url = fields["login_url"]
-#         self.rsa_public_key = fields["rsa_public_key"]
-#         self.allowed_identifier = fields["allowed_identifier"]
-#         self.require_identifier_verification = fields["require_identifier_verification"]
-#         self.session_timeout_length = fields["session_timeout_length"]
-#         self.refresh_enabled = fields["refresh_enabled"]
-#         self.refresh_absolute_lifetime = fields["refresh_absolute_lifetime"]
-#         self.refresh_inactivity_lifetime = fields["refresh_inactivity_lifetime"]
-#         self.user_metadata_schema = fields["user_metadata_schema"]
-#         self.layouts = fields["layouts"]
-#         self.default_language = fields["default_language"]
-#         self.auth_fallback_method = fields["auth_fallback_method"]
-#         self.auth_fallback_method_ttl = fields["auth_fallback_method_ttl"]
-# class PassageDevice:
-#     def __init__(self, fields={}):
-#         self.id = fields["id"]
-#         try:
-#             self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
-#         except:
-#             self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%SZ")
-#         try:
-#             self.updated_at = datetime.strptime(time_to_milliseconds(fields["updated_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
-#         except:
-#             self.updated_at = datetime.strptime(fields["updated_at"],"%Y-%m-%dT%H:%M:%SZ")
-#         try:
-#             self.last_login_at = datetime.strptime(time_to_milliseconds(fields["last_login_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
-#         except:
-#             self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
-#         self.friendly_name = fields["friendly_name"]
-#         self.usage_count = fields["usage_count"]
-
-# class PassageMagicLink:
-#     def __init__(self, magic_link_id, fields={}):
-#         self.id = magic_link_id
-#         self.secret = fields["secret"]
-#         self.activated = fields["activated"]
-#         self.user_id = fields["user_id"]
-#         self.app_id = fields["app_id"]
-#         self.identifier = fields["identifier"]
-#         self.type = fields["type"]
-#         self.redirect_url = fields["redirect_url"]
-#         self.url = fields["url"]
-#         self.ttl = fields["ttl"]
-
-# class PassageUser:
-#     def __init__(self, user_id, fields={}):
-#         self.id = user_id
-#         self.email = fields["email"]
-#         self.phone = fields["phone"]
-#         self.status = fields["status"]
-#         self.email_verified = fields["email_verified"]
-#         self.phone_verified = fields["phone_verified"]
-#         self.user_metadata = fields["user_metadata"]
-#         try:
-#             self.created_at = datetime.strptime(time_to_milliseconds(fields["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
-#         except:
-#             self.created_at = datetime.strptime(fields["created_at"],"%Y-%m-%dT%H:%M:%SZ")
-#         try:
-#             self.last_login_at = datetime.strptime(time_to_milliseconds(fields["last_login_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
-#         except:
-#             self.last_login_at = datetime.strptime(fields["last_login_at"],"%Y-%m-%dT%H:%M:%SZ")
-
-#         self.webauthn = fields["webauthn"]
-#         self.webauthn_devices = fields["webauthn_devices"]
-#         if fields["recent_events"] != None:
-#             events = fields["recent_events"]
-#             self.recent_events = []
-#             for e in events:
-#                 pe = PassageEvent(e)
-#                 self.recent_events.append(pe)
-
-
-# class PassageEvent:
-#     def __init__(self, event):
-#         self.event_type = event["type"]
-#         self.id = event["id"]
-
-#         try:
-#             self.timestamp = datetime.strptime(time_to_milliseconds(event["created_at"]),"%Y-%m-%dT%H:%M:%S.%fZ")
-#         except:
-#              self.timestamp = datetime.strptime(event["created_at"],"%Y-%m-%dT%H:%M:%SZ")
-
-
-# def time_to_milliseconds(timeString: str) -> str:
-# 	# see if decimal exists; if not, return
-# 	time = timeString.split(".")
-# 	if len(time) < 2:
-# 		return timeString
-
-# 	# grab the digits; if milliseconds (6 digits) return
-# 	decimalNumbers = time[1][:-1]
-# 	if len(decimalNumbers) == 6:
-# 		return timeString
-
-# 	# ensure 6 decimal places, add back '.' and 'Z' to string
-# 	return time[0] + "." + decimalNumbers[:6] + "Z"
+        try:
+            client = UsersApi()
+            return client.create_user(self.app_id, userAttributes, _headers=self.request_headers).user
+        except Exception as e:
+            raise PassageError(f"Failed to create user: {e}")
