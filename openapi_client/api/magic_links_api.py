@@ -106,9 +106,6 @@ class MagicLinksApi:
             _host_index=_host_index
         )
 
-        print("PRRRRIIINNNTTT PARRMAAAMMMSSS")
-        print(_param)
-
         _response_types_map: Dict[str, Optional[str]] = {
             '201': "MagicLinkResponse",
             '400': "Model400Error",

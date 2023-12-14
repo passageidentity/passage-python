@@ -45,6 +45,11 @@ def testInvalidJWT():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     with pytest.raises(PassageError):
         psg.authenticateJWT("invalid_token")
+
+def testValidateJWT():
+    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
+    user = psg.validateJwt(PASSAGE_AUTH_TOKEN)
+    assert user == PASSAGE_USER_ID
   
 def testFetchJWKS():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
@@ -111,7 +116,6 @@ def testUpdateUserPhone():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     phone1 = randomPhone()
-    print(phone1)
     user = psg.updateUser(PASSAGE_USER_ID, {"phone": phone1})
     assert user.phone == phone1
 
