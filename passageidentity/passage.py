@@ -1,4 +1,4 @@
-import jwt, json
+import jwt, json, warnings
 from datetime import datetime
 
 import sys
@@ -63,6 +63,13 @@ class Passage():
 
         return jwkItems
 
+    """
+    This function will verify the JWT and return the user ID for the authenticated user, or throw
+    a PassageError. Takes the place of the deprecated authenticateRequest() function.
+    """
+    def validateJwt(self, token):
+        return self.authenticateJWT(token)
+
     def __refreshAuthCache(self):
         self.auth_origin = fetchApp(self.app_id)["auth_origin"]
         self.jwks = self.__fetchJWKS()
@@ -74,6 +81,8 @@ class Passage():
     a PassageError
     """
     def authenticateRequest(self, request: Request) -> Union[str, PassageError]:
+        warnings.warn("Passage.authenticateRequest() is deprecated. Use Passage.authenticateJWT() instead.", DeprecationWarning)
+
         # check for authorization header
         token = getAuthTokenFromRequest(request, self.auth_strategy)
         if not token:
