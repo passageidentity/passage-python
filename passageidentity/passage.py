@@ -201,11 +201,19 @@ class Passage():
             return True
         except Exception as e:
             raise PassageError(f"Failed to revoke user device: {e}")
-
+        
+    """
+    Use Passage API to revoke all of a user's refresh tokens, look up by user ID
+    """
+    def revokeUserRefreshTokens(self, user_id: str) -> Union[bool, PassageError]:
+        return self.signOut(user_id)
+    
     """
     Use Passage API to revoke all of a user's refresh tokens, look up by user ID
     """
     def signOut(self, user_id: str, ) -> Union[bool, PassageError]:
+        warnings.warn("Passage.signOut() is deprecated. Use Passage.revokeUserRefreshTokens() instead.", DeprecationWarning)
+
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 

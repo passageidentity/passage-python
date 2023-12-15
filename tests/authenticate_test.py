@@ -172,3 +172,9 @@ def testsignOut():
 
     success = psg.signOut(PASSAGE_USER_ID)
     assert success == True
+
+def testrevokeUserRefreshTokens():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    success = psg.revokeUserRefreshTokens(PASSAGE_USER_ID)
+    assert success == True
