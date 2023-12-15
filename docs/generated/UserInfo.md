@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **phone** | **str** |  | 
 **phone_verified** | **bool** |  | 
 **recent_events** | [**List[UserEventInfo]**](UserEventInfo.md) |  | 
+**social_connections** | [**UserSocialConnections**](UserSocialConnections.md) |  | 
 **status** | [**UserStatus**](UserStatus.md) |  | 
 **updated_at** | **datetime** |  | 
 **user_metadata** | **object** |  | 
