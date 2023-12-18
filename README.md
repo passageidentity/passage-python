@@ -44,7 +44,7 @@ Method | Description
 [**createMagicLink**](./docs/passageidentity/Client.md#createmagiclink) | Create Embeddable Magic Link
 [**createUser**](./docs/passageidentity/Users.md#createUser) | Create User
 [**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice) | Delete a device for a user
-[**getApp**](./docs/passageidentity/Authentication.md#getApp) |  Get App
+[**getApp**](./docs/passageidentity/Users.md#getApp) |  Get App
 [**getUser**](./docs/passageidentity/Users.md#getUser) | Get User
 [**listUserDevices**](./docs/passageidentity/Users.md#listUserDevices) | List User Devices
 [**revokeUserDevice**](./docs/passageidentity/Users.md#revokeUserDevice) | **Deprecated** Delete User Device
