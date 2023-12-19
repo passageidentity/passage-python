@@ -188,10 +188,19 @@ class Passage():
         except Exception as e:
             raise PassageError(f"Failed to list user's devices: {e}")
 
+    
+    """
+    Use Passage API to revoke user devices, look up by user ID
+    """
+    def deleteUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
+        return self.revokeUserDevice(user_id, device_id)
+    
+    
     """
     Use Passage API to revoke user devices, look up by user ID
     """
     def revokeUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
+        warnings.warn("Passage.revokeUserDevice() is deprecated. Use Passage.deleteUserDevice() instead.", DeprecationWarning)
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
