@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.magic_link_response import MagicLinkResponse
+from passageidentity.openapi_client.models.magic_link_response import MagicLinkResponse
 
 # TODO update the JSON string below
 json = "{}"

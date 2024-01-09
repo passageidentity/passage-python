@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.github_social_connection import GithubSocialConnection
+from passageidentity.openapi_client.models.github_social_connection import GithubSocialConnection
 
 # TODO update the JSON string below
 json = "{}"

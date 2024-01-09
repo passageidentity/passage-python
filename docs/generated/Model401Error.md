@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.model401_error import Model401Error
+from passageidentity.openapi_client.models.model401_error import Model401Error
 
 # TODO update the JSON string below
 json = "{}"

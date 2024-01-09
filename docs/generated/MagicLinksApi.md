@@ -1,4 +1,4 @@
-# openapi_client.MagicLinksApi
+# passageidentity.openapi_client.MagicLinksApi
 
 All URIs are relative to *https://api.passage.id/v1*
 
@@ -20,15 +20,15 @@ Create magic link for a user.
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
-from openapi_client.models.magic_link_response import MagicLinkResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
+from passageidentity.openapi_client.models.magic_link_response import MagicLinkResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -38,16 +38,16 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.MagicLinksApi(api_client)
+    api_instance = passageidentity.openapi_client.MagicLinksApi(api_client)
     app_id = 'app_id_example' # str | App ID
-    create_magic_link_request = openapi_client.CreateMagicLinkRequest() # CreateMagicLinkRequest | magic link request
+    create_magic_link_request = passageidentity.openapi_client.CreateMagicLinkRequest() # CreateMagicLinkRequest | magic link request
 
     try:
         # Create Embeddable Magic Link

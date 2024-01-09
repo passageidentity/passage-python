@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.magic_link_auth_method import MagicLinkAuthMethod
+from passageidentity.openapi_client.models.magic_link_auth_method import MagicLinkAuthMethod
 
 # TODO update the JSON string below
 json = "{}"

@@ -1,4 +1,4 @@
-# openapi_client.AppsApi
+# passageidentity.openapi_client.AppsApi
 
 All URIs are relative to *https://api.passage.id/v1*
 
@@ -20,14 +20,14 @@ Get app information.
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.app_response import AppResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.app_response import AppResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -37,14 +37,14 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.AppsApi(api_client)
+    api_instance = passageidentity.openapi_client.AppsApi(api_client)
     app_id = 'app_id_example' # str | App ID
 
     try:

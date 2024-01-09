@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.layouts import Layouts
+from passageidentity.openapi_client.models.layouts import Layouts
 
 # TODO update the JSON string below
 json = "{}"

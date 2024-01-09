@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.web_authn_devices import WebAuthnDevices
+from passageidentity.openapi_client.models.web_authn_devices import WebAuthnDevices
 
 # TODO update the JSON string below
 json = "{}"

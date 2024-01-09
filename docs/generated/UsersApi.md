@@ -1,4 +1,4 @@
-# openapi_client.UsersApi
+# passageidentity.openapi_client.UsersApi
 
 All URIs are relative to *https://api.passage.id/v1*
 
@@ -25,14 +25,14 @@ Activate a user. They will now be able to login.
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.user_response import UserResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.user_response import UserResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -42,14 +42,14 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsersApi(api_client)
+    api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
 
@@ -107,15 +107,15 @@ Create user for an application. Must provide an email of phone number identifier
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.create_user_request import CreateUserRequest
-from openapi_client.models.user_response import UserResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
+from passageidentity.openapi_client.models.user_response import UserResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -125,16 +125,16 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsersApi(api_client)
+    api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
-    create_user_request = openapi_client.CreateUserRequest() # CreateUserRequest | email, phone, user_metadata
+    create_user_request = passageidentity.openapi_client.CreateUserRequest() # CreateUserRequest | email, phone, user_metadata
 
     try:
         # Create User
@@ -191,14 +191,14 @@ Deactivate a user. Their account will still exist, but they will not be able to 
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.user_response import UserResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.user_response import UserResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -208,14 +208,14 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsersApi(api_client)
+    api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
 
@@ -273,13 +273,13 @@ Delete a user.
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -289,14 +289,14 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsersApi(api_client)
+    api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
 
@@ -352,14 +352,14 @@ Get information about a user.
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.user_response import UserResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.user_response import UserResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -369,14 +369,14 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsersApi(api_client)
+    api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
 
@@ -434,15 +434,15 @@ Update a user's information.
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.models.update_user_request import UpdateUserRequest
-from openapi_client.models.user_response import UserResponse
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
+from passageidentity.openapi_client.models.user_response import UserResponse
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -452,17 +452,17 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsersApi(api_client)
+    api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
-    update_user_request = openapi_client.UpdateUserRequest() # UpdateUserRequest | user settings
+    update_user_request = passageidentity.openapi_client.UpdateUserRequest() # UpdateUserRequest | user settings
 
     try:
         # Update User

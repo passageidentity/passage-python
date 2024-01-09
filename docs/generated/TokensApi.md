@@ -1,4 +1,4 @@
-# openapi_client.TokensApi
+# passageidentity.openapi_client.TokensApi
 
 All URIs are relative to *https://api.passage.id/v1*
 
@@ -20,13 +20,13 @@ Revokes all refresh tokens for a user
 ```python
 import time
 import os
-import openapi_client
-from openapi_client.rest import ApiException
+import passageidentity.openapi_client
+from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://api.passage.id/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     host = "https://api.passage.id/v1"
 )
 
@@ -36,14 +36,14 @@ configuration = openapi_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): bearerAuth
-configuration = openapi_client.Configuration(
+configuration = passageidentity.openapi_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.TokensApi(api_client)
+    api_instance = passageidentity.openapi_client.TokensApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
 

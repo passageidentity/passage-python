@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.auth_methods import AuthMethods
+from passageidentity.openapi_client.models.auth_methods import AuthMethods
 
 # TODO update the JSON string below
 json = "{}"
