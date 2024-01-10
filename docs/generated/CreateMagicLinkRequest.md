@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
+from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 
 # TODO update the JSON string below
 json = "{}"

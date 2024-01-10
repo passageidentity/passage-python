@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.otp_auth_method import OtpAuthMethod
+from passageidentity.openapi_client.models.otp_auth_method import OtpAuthMethod
 
 # TODO update the JSON string below
 json = "{}"

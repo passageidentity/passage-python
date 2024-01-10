@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.update_user_request import UpdateUserRequest
+from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
 
 # TODO update the JSON string below
 json = "{}"

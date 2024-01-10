@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.user_metadata_field import UserMetadataField
+from passageidentity.openapi_client.models.user_metadata_field import UserMetadataField
 
 # TODO update the JSON string below
 json = "{}"

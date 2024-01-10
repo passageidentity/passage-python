@@ -28,7 +28,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.element_customization import ElementCustomization
+from passageidentity.openapi_client.models.element_customization import ElementCustomization
 
 # TODO update the JSON string below
 json = "{}"

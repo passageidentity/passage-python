@@ -22,6 +22,7 @@ setuptools.setup(
     ],
     packages=["passageidentity"],
     install_requires=[
+        'aenum',
         'cryptography',
         'django < 5', 
         'Flask', 

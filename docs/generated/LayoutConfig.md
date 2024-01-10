@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.layout_config import LayoutConfig
+from passageidentity.openapi_client.models.layout_config import LayoutConfig
 
 # TODO update the JSON string below
 json = "{}"

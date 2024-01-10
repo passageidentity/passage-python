@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.create_user_request import CreateUserRequest
+from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
 
 # TODO update the JSON string below
 json = "{}"

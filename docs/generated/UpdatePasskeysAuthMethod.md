@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.update_passkeys_auth_method import UpdatePasskeysAuthMethod
+from passageidentity.openapi_client.models.update_passkeys_auth_method import UpdatePasskeysAuthMethod
 
 # TODO update the JSON string below
 json = "{}"

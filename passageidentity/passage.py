@@ -15,8 +15,8 @@ from passageidentity import requests
 from passageidentity.helper import fetchApp, getAuthTokenFromRequest
 from passageidentity.errors import PassageError
 
-from openapi_client.api import AppsApi, MagicLinksApi, TokensApi, UsersApi, UserDevicesApi
-from openapi_client.models import AppInfo, CreateMagicLinkRequest, CreateUserRequest, MagicLinkType, UpdateUserRequest, UserInfo, WebAuthnDevices
+from .openapi_client.api import AppsApi, MagicLinksApi, TokensApi, UsersApi, UserDevicesApi
+from .openapi_client.models import AppInfo, CreateMagicLinkRequest, CreateUserRequest, MagicLinkType, UpdateUserRequest, UserInfo, WebAuthnDevices
 
 AUTH_CACHE = {}
 BASE_URL = "https://api.passage.id/v1/apps/"
