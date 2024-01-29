@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **login_count** | **int** |  | 
 **phone** | **str** |  | 
 **phone_verified** | **bool** |  | 
-**recent_events** | [**List[UserEventInfo]**](UserEventInfo.md) |  | 
+**recent_events** | [**List[UserEventInfo1]**](UserEventInfo1.md) |  | 
 **social_connections** | [**UserSocialConnections**](UserSocialConnections.md) |  | 
 **status** | [**UserStatus**](UserStatus.md) |  | 
 **updated_at** | **datetime** |  | 
