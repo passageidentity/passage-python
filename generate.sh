@@ -11,7 +11,7 @@ file="$1"
 npm install @openapitools/openapi-generator-cli -g
 
 mkdir temp
-# rm -rf ./passageidentity/openapi_client
+rm -rf ./passageidentity/openapi_client
 rm -rf ./docs/generated
 
 openapi-generator-cli generate \
