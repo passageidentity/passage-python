@@ -1,4 +1,4 @@
-# UserEventInfo
+# UserRecentEvent
 
 
 ## Properties
@@ -13,19 +13,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from passageidentity.openapi_client.models.user_event_info import UserEventInfo
+from passageidentity.openapi_client.models.user_recent_event import UserRecentEvent
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of UserEventInfo from a JSON string
-user_event_info_instance = UserEventInfo.from_json(json)
+# create an instance of UserRecentEvent from a JSON string
+user_recent_event_instance = UserRecentEvent.from_json(json)
 # print the JSON string representation of the object
-print UserEventInfo.to_json()
+print UserRecentEvent.to_json()
 
 # convert the object into a dict
-user_event_info_dict = user_event_info_instance.to_dict()
-# create an instance of UserEventInfo from a dict
-user_event_info_form_dict = user_event_info.from_dict(user_event_info_dict)
+user_recent_event_dict = user_recent_event_instance.to_dict()
+# create an instance of UserRecentEvent from a dict
+user_recent_event_form_dict = user_recent_event.from_dict(user_recent_event_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
