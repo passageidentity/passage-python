@@ -18,28 +18,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from datetime import datetime
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import BaseModel, StrictStr
+from pydantic import Field
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class Model404Error(BaseModel):
+class GithubUserSocialConnection(BaseModel):
     """
-    Model404Error
+    GithubUserSocialConnection
     """ # noqa: E501
-    code: StrictStr
-    error: StrictStr
-    __properties: ClassVar[List[str]] = ["code", "error"]
-
-    @field_validator('code')
-    def code_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('admin_not_found', 'api_key_not_found', 'app_not_found', 'device_not_found', 'domain_not_found', 'email_provider_not_found', 'email_template_not_found', 'event_not_found', 'function_not_found', 'function_secret_key_not_found', 'function_version_not_found', 'metadata_field_not_found', 'oauth2_app_not_found', 'organization_member_not_found', 'sms_provider_not_found', 'sms_template_not_found', 'social_connection_not_found', 'user_not_found'):
-            raise ValueError("must be one of enum values ('admin_not_found', 'api_key_not_found', 'app_not_found', 'device_not_found', 'domain_not_found', 'email_provider_not_found', 'email_template_not_found', 'event_not_found', 'function_not_found', 'function_secret_key_not_found', 'function_version_not_found', 'metadata_field_not_found', 'oauth2_app_not_found', 'organization_member_not_found', 'sms_provider_not_found', 'sms_template_not_found', 'social_connection_not_found', 'user_not_found')")
-        return value
+    provider_id: StrictStr = Field(description="The external ID of the Social Connection.")
+    created_at: datetime
+    last_login_at: datetime
+    provider_identifier: StrictStr = Field(description="The email of connected social user.")
+    __properties: ClassVar[List[str]] = ["provider_id", "created_at", "last_login_at", "provider_identifier"]
 
     model_config = {
         "populate_by_name": True,
@@ -58,7 +54,7 @@ class Model404Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model404Error from a JSON string"""
+        """Create an instance of GithubUserSocialConnection from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,7 +77,7 @@ class Model404Error(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model404Error from a dict"""
+        """Create an instance of GithubUserSocialConnection from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +85,10 @@ class Model404Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "code": obj.get("code"),
-            "error": obj.get("error")
+            "provider_id": obj.get("provider_id"),
+            "created_at": obj.get("created_at"),
+            "last_login_at": obj.get("last_login_at"),
+            "provider_identifier": obj.get("provider_identifier")
         })
         return _obj
 
