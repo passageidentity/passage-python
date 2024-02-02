@@ -21,21 +21,21 @@ import json
 from datetime import datetime
 from typing import Any, ClassVar, Dict, List
 from pydantic import BaseModel, StrictStr
+from pydantic import Field
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UserEventInfo(BaseModel):
+class GoogleUserSocialConnection(BaseModel):
     """
-    UserEventInfo
+    GoogleUserSocialConnection
     """ # noqa: E501
+    provider_id: StrictStr = Field(description="The external ID of the Social Connection.")
     created_at: datetime
-    id: StrictStr
-    ip_addr: StrictStr
-    type: StrictStr
-    user_agent: StrictStr
-    __properties: ClassVar[List[str]] = ["created_at", "id", "ip_addr", "type", "user_agent"]
+    last_login_at: datetime
+    provider_identifier: StrictStr = Field(description="The email of connected social user.")
+    __properties: ClassVar[List[str]] = ["provider_id", "created_at", "last_login_at", "provider_identifier"]
 
     model_config = {
         "populate_by_name": True,
@@ -54,7 +54,7 @@ class UserEventInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UserEventInfo from a JSON string"""
+        """Create an instance of GoogleUserSocialConnection from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,7 +77,7 @@ class UserEventInfo(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UserEventInfo from a dict"""
+        """Create an instance of GoogleUserSocialConnection from a dict"""
         if obj is None:
             return None
 
@@ -85,11 +85,10 @@ class UserEventInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "provider_id": obj.get("provider_id"),
             "created_at": obj.get("created_at"),
-            "id": obj.get("id"),
-            "ip_addr": obj.get("ip_addr"),
-            "type": obj.get("type"),
-            "user_agent": obj.get("user_agent")
+            "last_login_at": obj.get("last_login_at"),
+            "provider_identifier": obj.get("provider_identifier")
         })
         return _obj
 

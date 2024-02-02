@@ -38,13 +38,14 @@ from passageidentity.openapi_client.exceptions import ApiException
 # import models into sdk package
 from passageidentity.openapi_client.models.app_info import AppInfo
 from passageidentity.openapi_client.models.app_response import AppResponse
+from passageidentity.openapi_client.models.apple_user_social_connection import AppleUserSocialConnection
 from passageidentity.openapi_client.models.auth_methods import AuthMethods
 from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
 from passageidentity.openapi_client.models.element_customization import ElementCustomization
 from passageidentity.openapi_client.models.font_family import FontFamily
-from passageidentity.openapi_client.models.github_social_connection import GithubSocialConnection
-from passageidentity.openapi_client.models.google_social_connection import GoogleSocialConnection
+from passageidentity.openapi_client.models.github_user_social_connection import GithubUserSocialConnection
+from passageidentity.openapi_client.models.google_user_social_connection import GoogleUserSocialConnection
 from passageidentity.openapi_client.models.layout_config import LayoutConfig
 from passageidentity.openapi_client.models.layouts import Layouts
 from passageidentity.openapi_client.models.list_devices_response import ListDevicesResponse
@@ -65,10 +66,10 @@ from passageidentity.openapi_client.models.update_magic_link_auth_method import 
 from passageidentity.openapi_client.models.update_otp_auth_method import UpdateOtpAuthMethod
 from passageidentity.openapi_client.models.update_passkeys_auth_method import UpdatePasskeysAuthMethod
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
-from passageidentity.openapi_client.models.user_event_info import UserEventInfo
 from passageidentity.openapi_client.models.user_info import UserInfo
 from passageidentity.openapi_client.models.user_metadata_field import UserMetadataField
 from passageidentity.openapi_client.models.user_metadata_field_type import UserMetadataFieldType
+from passageidentity.openapi_client.models.user_recent_event import UserRecentEvent
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.models.user_social_connections import UserSocialConnections
 from passageidentity.openapi_client.models.user_status import UserStatus

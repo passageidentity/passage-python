@@ -21,8 +21,9 @@ import json
 
 from typing import Any, ClassVar, Dict, List, Optional
 from pydantic import BaseModel
-from passageidentity.openapi_client.models.github_social_connection import GithubSocialConnection
-from passageidentity.openapi_client.models.google_social_connection import GoogleSocialConnection
+from passageidentity.openapi_client.models.apple_user_social_connection import AppleUserSocialConnection
+from passageidentity.openapi_client.models.github_user_social_connection import GithubUserSocialConnection
+from passageidentity.openapi_client.models.google_user_social_connection import GoogleUserSocialConnection
 try:
     from typing import Self
 except ImportError:
@@ -32,9 +33,10 @@ class UserSocialConnections(BaseModel):
     """
     UserSocialConnections
     """ # noqa: E501
-    google: Optional[GoogleSocialConnection] = None
-    github: Optional[GithubSocialConnection] = None
-    __properties: ClassVar[List[str]] = ["google", "github"]
+    apple: Optional[AppleUserSocialConnection] = None
+    github: Optional[GithubUserSocialConnection] = None
+    google: Optional[GoogleUserSocialConnection] = None
+    __properties: ClassVar[List[str]] = ["apple", "github", "google"]
 
     model_config = {
         "populate_by_name": True,
@@ -72,12 +74,15 @@ class UserSocialConnections(BaseModel):
             },
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of google
-        if self.google:
-            _dict['google'] = self.google.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of apple
+        if self.apple:
+            _dict['apple'] = self.apple.to_dict()
         # override the default output from pydantic by calling `to_dict()` of github
         if self.github:
             _dict['github'] = self.github.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of google
+        if self.google:
+            _dict['google'] = self.google.to_dict()
         return _dict
 
     @classmethod
@@ -90,8 +95,9 @@ class UserSocialConnections(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "google": GoogleSocialConnection.from_dict(obj.get("google")) if obj.get("google") is not None else None,
-            "github": GithubSocialConnection.from_dict(obj.get("github")) if obj.get("github") is not None else None
+            "apple": AppleUserSocialConnection.from_dict(obj.get("apple")) if obj.get("apple") is not None else None,
+            "github": GithubUserSocialConnection.from_dict(obj.get("github")) if obj.get("github") is not None else None,
+            "google": GoogleUserSocialConnection.from_dict(obj.get("google")) if obj.get("google") is not None else None
         })
         return _obj
 

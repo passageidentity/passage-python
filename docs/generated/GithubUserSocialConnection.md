@@ -1,4 +1,4 @@
-# GoogleSocialConnection
+# GithubUserSocialConnection
 
 
 ## Properties
@@ -12,19 +12,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from passageidentity.openapi_client.models.google_social_connection import GoogleSocialConnection
+from passageidentity.openapi_client.models.github_user_social_connection import GithubUserSocialConnection
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of GoogleSocialConnection from a JSON string
-google_social_connection_instance = GoogleSocialConnection.from_json(json)
+# create an instance of GithubUserSocialConnection from a JSON string
+github_user_social_connection_instance = GithubUserSocialConnection.from_json(json)
 # print the JSON string representation of the object
-print GoogleSocialConnection.to_json()
+print GithubUserSocialConnection.to_json()
 
 # convert the object into a dict
-google_social_connection_dict = google_social_connection_instance.to_dict()
-# create an instance of GoogleSocialConnection from a dict
-google_social_connection_form_dict = google_social_connection.from_dict(google_social_connection_dict)
+github_user_social_connection_dict = github_user_social_connection_instance.to_dict()
+# create an instance of GithubUserSocialConnection from a dict
+github_user_social_connection_form_dict = github_user_social_connection.from_dict(github_user_social_connection_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

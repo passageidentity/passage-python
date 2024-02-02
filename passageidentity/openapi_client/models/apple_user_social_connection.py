@@ -27,9 +27,9 @@ try:
 except ImportError:
     from typing_extensions import Self
 
-class GoogleSocialConnection(BaseModel):
+class AppleUserSocialConnection(BaseModel):
     """
-    GoogleSocialConnection
+    AppleUserSocialConnection
     """ # noqa: E501
     provider_id: StrictStr = Field(description="The external ID of the Social Connection.")
     created_at: datetime
@@ -54,7 +54,7 @@ class GoogleSocialConnection(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of GoogleSocialConnection from a JSON string"""
+        """Create an instance of AppleUserSocialConnection from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,7 +77,7 @@ class GoogleSocialConnection(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of GoogleSocialConnection from a dict"""
+        """Create an instance of AppleUserSocialConnection from a dict"""
         if obj is None:
             return None
 

@@ -22,7 +22,7 @@ from datetime import datetime
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
 from pydantic import Field
-from passageidentity.openapi_client.models.user_event_info import UserEventInfo
+from passageidentity.openapi_client.models.user_recent_event import UserRecentEvent
 from passageidentity.openapi_client.models.user_social_connections import UserSocialConnections
 from passageidentity.openapi_client.models.user_status import UserStatus
 from passageidentity.openapi_client.models.web_authn_devices import WebAuthnDevices
@@ -44,7 +44,7 @@ class UserInfo(BaseModel):
     login_count: StrictInt
     phone: StrictStr
     phone_verified: StrictBool
-    recent_events: List[UserEventInfo]
+    recent_events: List[UserRecentEvent]
     social_connections: UserSocialConnections
     status: UserStatus
     updated_at: datetime
@@ -132,7 +132,7 @@ class UserInfo(BaseModel):
             "login_count": obj.get("login_count"),
             "phone": obj.get("phone"),
             "phone_verified": obj.get("phone_verified"),
-            "recent_events": [UserEventInfo.from_dict(_item) for _item in obj.get("recent_events")] if obj.get("recent_events") is not None else None,
+            "recent_events": [UserRecentEvent.from_dict(_item) for _item in obj.get("recent_events")] if obj.get("recent_events") is not None else None,
             "social_connections": UserSocialConnections.from_dict(obj.get("social_connections")) if obj.get("social_connections") is not None else None,
             "status": obj.get("status"),
             "updated_at": obj.get("updated_at"),
