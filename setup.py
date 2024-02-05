@@ -20,7 +20,11 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=["passageidentity"],
+    packages = setuptools.find_packages(where='passageidentity'),
+    package_dir = {
+        'passageidentity': 'passageidentity',
+        'openapi_client': 'passageidentity/openapi_client'
+    },
     install_requires=[
         'aenum',
         'cryptography',
