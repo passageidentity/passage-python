@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Fixed an error whichj the package `openapi_client` could not be found
+- Fixed an error where the package `openapi_client` could not be found
 
 ## [2.3.0] - 2024-01-30
 
