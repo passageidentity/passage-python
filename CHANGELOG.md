@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.2] - 2024-02-05
+
+### Fixed
+
+- Fixedd another issue with the package names
+
 ## [2.3.1] - 2024-02-05
 
 ### Fixed
