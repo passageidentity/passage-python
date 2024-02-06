@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Fixedd another issue with the package names
+- Fixed another issue with the package names generating incorrect names
 
 ## [2.3.1] - 2024-02-05
 
