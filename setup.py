@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="passage-identity",
-    version="2.3.0",
+    version="2.3.1",
     author="Passage Identity, Inc",
     author_email="support@passage.id",
     description="Python library to help manage your Passage application and users",
@@ -20,7 +20,11 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=["passageidentity"],
+    packages = setuptools.find_packages(where='passageidentity'),
+    package_dir = {
+        'passageidentity': 'passageidentity',
+        'openapi_client': 'passageidentity/openapi_client'
+    },
     install_requires=[
         'aenum',
         'cryptography',

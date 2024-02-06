@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1] - 2024-02-05
+
+### Fixed
+
+- Fixed an error where the package `openapi_client` could not be found
+
 ## [2.3.0] - 2024-01-30
 
 ### Added
