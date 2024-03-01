@@ -5,8 +5,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **created_at** | **datetime** |  | 
+**completed_at** | **datetime** |  | 
 **id** | **str** |  | 
 **ip_addr** | **str** |  | 
+**status** | [**UserEventStatus**](UserEventStatus.md) |  | 
 **type** | **str** |  | 
 **user_agent** | **str** |  | 
 

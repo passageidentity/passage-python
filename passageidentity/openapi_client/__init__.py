@@ -66,6 +66,7 @@ from passageidentity.openapi_client.models.update_magic_link_auth_method import 
 from passageidentity.openapi_client.models.update_otp_auth_method import UpdateOtpAuthMethod
 from passageidentity.openapi_client.models.update_passkeys_auth_method import UpdatePasskeysAuthMethod
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
+from passageidentity.openapi_client.models.user_event_status import UserEventStatus
 from passageidentity.openapi_client.models.user_info import UserInfo
 from passageidentity.openapi_client.models.user_metadata_field import UserMetadataField
 from passageidentity.openapi_client.models.user_metadata_field_type import UserMetadataFieldType
