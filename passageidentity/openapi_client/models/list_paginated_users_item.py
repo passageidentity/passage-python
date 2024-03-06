@@ -19,26 +19,30 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from passageidentity.openapi_client.models.user_event_status import UserEventStatus
+from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
+from passageidentity.openapi_client.models.user_status import UserStatus
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UserRecentEvent(BaseModel):
+class ListPaginatedUsersItem(BaseModel):
     """
-    UserRecentEvent
+    ListPaginatedUsersItem
     """ # noqa: E501
     created_at: datetime
-    completed_at: Optional[datetime]
+    email: StrictStr
+    email_verified: StrictBool
     id: StrictStr
-    ip_addr: StrictStr
-    status: UserEventStatus
-    type: StrictStr
-    user_agent: StrictStr
-    __properties: ClassVar[List[str]] = ["created_at", "completed_at", "id", "ip_addr", "status", "type", "user_agent"]
+    last_login_at: datetime
+    login_count: StrictInt
+    phone: StrictStr
+    phone_verified: StrictBool
+    status: UserStatus
+    updated_at: datetime
+    user_metadata: Optional[Union[str, Any]]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "status", "updated_at", "user_metadata"]
 
     model_config = {
         "populate_by_name": True,
@@ -57,7 +61,7 @@ class UserRecentEvent(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UserRecentEvent from a JSON string"""
+        """Create an instance of ListPaginatedUsersItem from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,16 +80,16 @@ class UserRecentEvent(BaseModel):
             },
             exclude_none=True,
         )
-        # set to None if completed_at (nullable) is None
+        # set to None if user_metadata (nullable) is None
         # and model_fields_set contains the field
-        if self.completed_at is None and "completed_at" in self.model_fields_set:
-            _dict['completed_at'] = None
+        if self.user_metadata is None and "user_metadata" in self.model_fields_set:
+            _dict['user_metadata'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UserRecentEvent from a dict"""
+        """Create an instance of ListPaginatedUsersItem from a dict"""
         if obj is None:
             return None
 
@@ -94,12 +98,16 @@ class UserRecentEvent(BaseModel):
 
         _obj = cls.model_validate({
             "created_at": obj.get("created_at"),
-            "completed_at": obj.get("completed_at"),
+            "email": obj.get("email"),
+            "email_verified": obj.get("email_verified"),
             "id": obj.get("id"),
-            "ip_addr": obj.get("ip_addr"),
+            "last_login_at": obj.get("last_login_at"),
+            "login_count": obj.get("login_count"),
+            "phone": obj.get("phone"),
+            "phone_verified": obj.get("phone_verified"),
             "status": obj.get("status"),
-            "type": obj.get("type"),
-            "user_agent": obj.get("user_agent")
+            "updated_at": obj.get("updated_at"),
+            "user_metadata": obj.get("user_metadata")
         })
         return _obj
 

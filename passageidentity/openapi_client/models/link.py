@@ -18,27 +18,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional
+
+from typing import Any, ClassVar, Dict, List
 from pydantic import BaseModel, StrictStr
-from passageidentity.openapi_client.models.user_event_status import UserEventStatus
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UserRecentEvent(BaseModel):
+class Link(BaseModel):
     """
-    UserRecentEvent
+    Link
     """ # noqa: E501
-    created_at: datetime
-    completed_at: Optional[datetime]
-    id: StrictStr
-    ip_addr: StrictStr
-    status: UserEventStatus
-    type: StrictStr
-    user_agent: StrictStr
-    __properties: ClassVar[List[str]] = ["created_at", "completed_at", "id", "ip_addr", "status", "type", "user_agent"]
+    href: StrictStr
+    __properties: ClassVar[List[str]] = ["href"]
 
     model_config = {
         "populate_by_name": True,
@@ -57,7 +50,7 @@ class UserRecentEvent(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UserRecentEvent from a JSON string"""
+        """Create an instance of Link from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,16 +69,11 @@ class UserRecentEvent(BaseModel):
             },
             exclude_none=True,
         )
-        # set to None if completed_at (nullable) is None
-        # and model_fields_set contains the field
-        if self.completed_at is None and "completed_at" in self.model_fields_set:
-            _dict['completed_at'] = None
-
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UserRecentEvent from a dict"""
+        """Create an instance of Link from a dict"""
         if obj is None:
             return None
 
@@ -93,13 +81,7 @@ class UserRecentEvent(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "created_at": obj.get("created_at"),
-            "completed_at": obj.get("completed_at"),
-            "id": obj.get("id"),
-            "ip_addr": obj.get("ip_addr"),
-            "status": obj.get("status"),
-            "type": obj.get("type"),
-            "user_agent": obj.get("user_agent")
+            "href": obj.get("href")
         })
         return _obj
 

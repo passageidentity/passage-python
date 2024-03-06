@@ -110,6 +110,7 @@ class MagicLinksApi:
             '201': "MagicLinkResponse",
             '400': "Model400Error",
             '401': "Model401Error",
+            '403': "Model403Error",
             '404': "Model404Error",
             '500': "Model500Error"
             
@@ -186,6 +187,7 @@ class MagicLinksApi:
             '201': "MagicLinkResponse",
             '400': "Model400Error",
             '401': "Model401Error",
+            '403': "Model403Error",
             '404': "Model404Error",
             '500': "Model500Error"
             
@@ -262,6 +264,7 @@ class MagicLinksApi:
             '201': "MagicLinkResponse",
             '400': "Model400Error",
             '401': "Model401Error",
+            '403': "Model403Error",
             '404': "Model404Error",
             '500': "Model500Error"
             
