@@ -18,27 +18,26 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from passageidentity.openapi_client.models.user_event_status import UserEventStatus
+
+from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel
+from pydantic import Field
+from passageidentity.openapi_client.models.link import Link
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UserRecentEvent(BaseModel):
+class PaginatedLinks(BaseModel):
     """
-    UserRecentEvent
+    PaginatedLinks
     """ # noqa: E501
-    created_at: datetime
-    completed_at: Optional[datetime]
-    id: StrictStr
-    ip_addr: StrictStr
-    status: UserEventStatus
-    type: StrictStr
-    user_agent: StrictStr
-    __properties: ClassVar[List[str]] = ["created_at", "completed_at", "id", "ip_addr", "status", "type", "user_agent"]
+    first: Link
+    last: Link
+    next: Link
+    previous: Link
+    var_self: Link = Field(alias="self")
+    __properties: ClassVar[List[str]] = ["first", "last", "next", "previous", "self"]
 
     model_config = {
         "populate_by_name": True,
@@ -57,7 +56,7 @@ class UserRecentEvent(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UserRecentEvent from a JSON string"""
+        """Create an instance of PaginatedLinks from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,16 +75,26 @@ class UserRecentEvent(BaseModel):
             },
             exclude_none=True,
         )
-        # set to None if completed_at (nullable) is None
-        # and model_fields_set contains the field
-        if self.completed_at is None and "completed_at" in self.model_fields_set:
-            _dict['completed_at'] = None
-
+        # override the default output from pydantic by calling `to_dict()` of first
+        if self.first:
+            _dict['first'] = self.first.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of last
+        if self.last:
+            _dict['last'] = self.last.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of next
+        if self.next:
+            _dict['next'] = self.next.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of previous
+        if self.previous:
+            _dict['previous'] = self.previous.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of var_self
+        if self.var_self:
+            _dict['self'] = self.var_self.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UserRecentEvent from a dict"""
+        """Create an instance of PaginatedLinks from a dict"""
         if obj is None:
             return None
 
@@ -93,13 +102,11 @@ class UserRecentEvent(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "created_at": obj.get("created_at"),
-            "completed_at": obj.get("completed_at"),
-            "id": obj.get("id"),
-            "ip_addr": obj.get("ip_addr"),
-            "status": obj.get("status"),
-            "type": obj.get("type"),
-            "user_agent": obj.get("user_agent")
+            "first": Link.from_dict(obj.get("first")) if obj.get("first") is not None else None,
+            "last": Link.from_dict(obj.get("last")) if obj.get("last") is not None else None,
+            "next": Link.from_dict(obj.get("next")) if obj.get("next") is not None else None,
+            "previous": Link.from_dict(obj.get("previous")) if obj.get("previous") is not None else None,
+            "self": Link.from_dict(obj.get("self")) if obj.get("self") is not None else None
         })
         return _obj
 
