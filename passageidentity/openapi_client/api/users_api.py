@@ -26,9 +26,12 @@ except ImportError:
 
 from pydantic import Field
 from typing_extensions import Annotated
-from pydantic import StrictStr
+from pydantic import StrictInt, StrictStr
+
+from typing import Optional
 
 from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
+from passageidentity.openapi_client.models.list_paginated_users_response import ListPaginatedUsersResponse
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
 from passageidentity.openapi_client.models.user_response import UserResponse
 
@@ -1469,6 +1472,467 @@ class UsersApi:
         return self.api_client.param_serialize(
             method='GET',
             resource_path='/apps/{app_id}/users/{user_id}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def list_paginated_users(
+        self,
+        app_id: Annotated[StrictStr, Field(description="App ID")],
+        page: Annotated[Optional[StrictInt], Field(description="page to fetch (min=1)")] = None,
+        limit: Annotated[Optional[StrictInt], Field(description="number of users to fetch per page (max=500)")] = None,
+        created_before: Annotated[Optional[StrictInt], Field(description="Unix timestamp to anchor pagination results (fetches events that were created before the timestamp)")] = None,
+        order_by: Annotated[Optional[StrictStr], Field(description="Comma separated list of <field>:<ASC/DESC> (example: order_by=id:DESC,created_at:ASC) **cannot order_by `identifier`")] = None,
+        identifier: Annotated[Optional[StrictStr], Field(description="search users email OR phone (pagination prepended operators identifier=<val>, identifier=<ne:val>, identifier=<gt:val>, identifier=<lt:val>, identifier=<like:val>, identifier=<not_like:val>)")] = None,
+        id: Annotated[Optional[StrictStr], Field(description="search users id (pagination prepended operators id=<val>, id=<ne:val>, id=<gt:val>, id=<lt:val>, id=<like:val>, id=<not_like:val>)")] = None,
+        login_count: Annotated[Optional[StrictInt], Field(description="search users login_count (pagination prepended operators login_count=<val>, login_count=<ne:val>, login_count=<gt:val>, login_count=<lt:val>)")] = None,
+        status: Annotated[Optional[StrictStr], Field(description="search users by status (pagination prepended operators status=<val>, status=<ne:val>, status=<gt:val>, status=<lt:val>, status=<like:val>, status=<not_like:val>) -- valid values: (active, inactive, pending)")] = None,
+        created_at: Annotated[Optional[StrictStr], Field(description="search users created_at (pagination prepended operators created_at=<val>, created_at=<ne:val>, created_at=<gt:val>, created_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        updated_at: Annotated[Optional[StrictStr], Field(description="search users updated_at (pagination prepended operators updated_at=<val>, updated_at=<ne:val>, updated_at=<gt:val>, updated_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        last_login_at: Annotated[Optional[StrictStr], Field(description="search users last_login_at (pagination prepended operators last_login_at=<val>, lat_login_at=<ne:val>, last_login_at=<gt:val>, last_login_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ListPaginatedUsersResponse:
+        """List Users
+
+        List users for an app.
+
+        :param app_id: App ID (required)
+        :type app_id: str
+        :param page: page to fetch (min=1)
+        :type page: int
+        :param limit: number of users to fetch per page (max=500)
+        :type limit: int
+        :param created_before: Unix timestamp to anchor pagination results (fetches events that were created before the timestamp)
+        :type created_before: int
+        :param order_by: Comma separated list of <field>:<ASC/DESC> (example: order_by=id:DESC,created_at:ASC) **cannot order_by `identifier`
+        :type order_by: str
+        :param identifier: search users email OR phone (pagination prepended operators identifier=<val>, identifier=<ne:val>, identifier=<gt:val>, identifier=<lt:val>, identifier=<like:val>, identifier=<not_like:val>)
+        :type identifier: str
+        :param id: search users id (pagination prepended operators id=<val>, id=<ne:val>, id=<gt:val>, id=<lt:val>, id=<like:val>, id=<not_like:val>)
+        :type id: str
+        :param login_count: search users login_count (pagination prepended operators login_count=<val>, login_count=<ne:val>, login_count=<gt:val>, login_count=<lt:val>)
+        :type login_count: int
+        :param status: search users by status (pagination prepended operators status=<val>, status=<ne:val>, status=<gt:val>, status=<lt:val>, status=<like:val>, status=<not_like:val>) -- valid values: (active, inactive, pending)
+        :type status: str
+        :param created_at: search users created_at (pagination prepended operators created_at=<val>, created_at=<ne:val>, created_at=<gt:val>, created_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type created_at: str
+        :param updated_at: search users updated_at (pagination prepended operators updated_at=<val>, updated_at=<ne:val>, updated_at=<gt:val>, updated_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type updated_at: str
+        :param last_login_at: search users last_login_at (pagination prepended operators last_login_at=<val>, lat_login_at=<ne:val>, last_login_at=<gt:val>, last_login_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type last_login_at: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_paginated_users_serialize(
+            app_id=app_id,
+            page=page,
+            limit=limit,
+            created_before=created_before,
+            order_by=order_by,
+            identifier=identifier,
+            id=id,
+            login_count=login_count,
+            status=status,
+            created_at=created_at,
+            updated_at=updated_at,
+            last_login_at=last_login_at,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ListPaginatedUsersResponse",
+            '400': "Model400Error",
+            '401': "Model401Error",
+            '404': "Model404Error",
+            '500': "Model500Error"
+            
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def list_paginated_users_with_http_info(
+        self,
+        app_id: Annotated[StrictStr, Field(description="App ID")],
+        page: Annotated[Optional[StrictInt], Field(description="page to fetch (min=1)")] = None,
+        limit: Annotated[Optional[StrictInt], Field(description="number of users to fetch per page (max=500)")] = None,
+        created_before: Annotated[Optional[StrictInt], Field(description="Unix timestamp to anchor pagination results (fetches events that were created before the timestamp)")] = None,
+        order_by: Annotated[Optional[StrictStr], Field(description="Comma separated list of <field>:<ASC/DESC> (example: order_by=id:DESC,created_at:ASC) **cannot order_by `identifier`")] = None,
+        identifier: Annotated[Optional[StrictStr], Field(description="search users email OR phone (pagination prepended operators identifier=<val>, identifier=<ne:val>, identifier=<gt:val>, identifier=<lt:val>, identifier=<like:val>, identifier=<not_like:val>)")] = None,
+        id: Annotated[Optional[StrictStr], Field(description="search users id (pagination prepended operators id=<val>, id=<ne:val>, id=<gt:val>, id=<lt:val>, id=<like:val>, id=<not_like:val>)")] = None,
+        login_count: Annotated[Optional[StrictInt], Field(description="search users login_count (pagination prepended operators login_count=<val>, login_count=<ne:val>, login_count=<gt:val>, login_count=<lt:val>)")] = None,
+        status: Annotated[Optional[StrictStr], Field(description="search users by status (pagination prepended operators status=<val>, status=<ne:val>, status=<gt:val>, status=<lt:val>, status=<like:val>, status=<not_like:val>) -- valid values: (active, inactive, pending)")] = None,
+        created_at: Annotated[Optional[StrictStr], Field(description="search users created_at (pagination prepended operators created_at=<val>, created_at=<ne:val>, created_at=<gt:val>, created_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        updated_at: Annotated[Optional[StrictStr], Field(description="search users updated_at (pagination prepended operators updated_at=<val>, updated_at=<ne:val>, updated_at=<gt:val>, updated_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        last_login_at: Annotated[Optional[StrictStr], Field(description="search users last_login_at (pagination prepended operators last_login_at=<val>, lat_login_at=<ne:val>, last_login_at=<gt:val>, last_login_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ListPaginatedUsersResponse]:
+        """List Users
+
+        List users for an app.
+
+        :param app_id: App ID (required)
+        :type app_id: str
+        :param page: page to fetch (min=1)
+        :type page: int
+        :param limit: number of users to fetch per page (max=500)
+        :type limit: int
+        :param created_before: Unix timestamp to anchor pagination results (fetches events that were created before the timestamp)
+        :type created_before: int
+        :param order_by: Comma separated list of <field>:<ASC/DESC> (example: order_by=id:DESC,created_at:ASC) **cannot order_by `identifier`
+        :type order_by: str
+        :param identifier: search users email OR phone (pagination prepended operators identifier=<val>, identifier=<ne:val>, identifier=<gt:val>, identifier=<lt:val>, identifier=<like:val>, identifier=<not_like:val>)
+        :type identifier: str
+        :param id: search users id (pagination prepended operators id=<val>, id=<ne:val>, id=<gt:val>, id=<lt:val>, id=<like:val>, id=<not_like:val>)
+        :type id: str
+        :param login_count: search users login_count (pagination prepended operators login_count=<val>, login_count=<ne:val>, login_count=<gt:val>, login_count=<lt:val>)
+        :type login_count: int
+        :param status: search users by status (pagination prepended operators status=<val>, status=<ne:val>, status=<gt:val>, status=<lt:val>, status=<like:val>, status=<not_like:val>) -- valid values: (active, inactive, pending)
+        :type status: str
+        :param created_at: search users created_at (pagination prepended operators created_at=<val>, created_at=<ne:val>, created_at=<gt:val>, created_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type created_at: str
+        :param updated_at: search users updated_at (pagination prepended operators updated_at=<val>, updated_at=<ne:val>, updated_at=<gt:val>, updated_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type updated_at: str
+        :param last_login_at: search users last_login_at (pagination prepended operators last_login_at=<val>, lat_login_at=<ne:val>, last_login_at=<gt:val>, last_login_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type last_login_at: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_paginated_users_serialize(
+            app_id=app_id,
+            page=page,
+            limit=limit,
+            created_before=created_before,
+            order_by=order_by,
+            identifier=identifier,
+            id=id,
+            login_count=login_count,
+            status=status,
+            created_at=created_at,
+            updated_at=updated_at,
+            last_login_at=last_login_at,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ListPaginatedUsersResponse",
+            '400': "Model400Error",
+            '401': "Model401Error",
+            '404': "Model404Error",
+            '500': "Model500Error"
+            
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def list_paginated_users_without_preload_content(
+        self,
+        app_id: Annotated[StrictStr, Field(description="App ID")],
+        page: Annotated[Optional[StrictInt], Field(description="page to fetch (min=1)")] = None,
+        limit: Annotated[Optional[StrictInt], Field(description="number of users to fetch per page (max=500)")] = None,
+        created_before: Annotated[Optional[StrictInt], Field(description="Unix timestamp to anchor pagination results (fetches events that were created before the timestamp)")] = None,
+        order_by: Annotated[Optional[StrictStr], Field(description="Comma separated list of <field>:<ASC/DESC> (example: order_by=id:DESC,created_at:ASC) **cannot order_by `identifier`")] = None,
+        identifier: Annotated[Optional[StrictStr], Field(description="search users email OR phone (pagination prepended operators identifier=<val>, identifier=<ne:val>, identifier=<gt:val>, identifier=<lt:val>, identifier=<like:val>, identifier=<not_like:val>)")] = None,
+        id: Annotated[Optional[StrictStr], Field(description="search users id (pagination prepended operators id=<val>, id=<ne:val>, id=<gt:val>, id=<lt:val>, id=<like:val>, id=<not_like:val>)")] = None,
+        login_count: Annotated[Optional[StrictInt], Field(description="search users login_count (pagination prepended operators login_count=<val>, login_count=<ne:val>, login_count=<gt:val>, login_count=<lt:val>)")] = None,
+        status: Annotated[Optional[StrictStr], Field(description="search users by status (pagination prepended operators status=<val>, status=<ne:val>, status=<gt:val>, status=<lt:val>, status=<like:val>, status=<not_like:val>) -- valid values: (active, inactive, pending)")] = None,
+        created_at: Annotated[Optional[StrictStr], Field(description="search users created_at (pagination prepended operators created_at=<val>, created_at=<ne:val>, created_at=<gt:val>, created_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        updated_at: Annotated[Optional[StrictStr], Field(description="search users updated_at (pagination prepended operators updated_at=<val>, updated_at=<ne:val>, updated_at=<gt:val>, updated_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        last_login_at: Annotated[Optional[StrictStr], Field(description="search users last_login_at (pagination prepended operators last_login_at=<val>, lat_login_at=<ne:val>, last_login_at=<gt:val>, last_login_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """List Users
+
+        List users for an app.
+
+        :param app_id: App ID (required)
+        :type app_id: str
+        :param page: page to fetch (min=1)
+        :type page: int
+        :param limit: number of users to fetch per page (max=500)
+        :type limit: int
+        :param created_before: Unix timestamp to anchor pagination results (fetches events that were created before the timestamp)
+        :type created_before: int
+        :param order_by: Comma separated list of <field>:<ASC/DESC> (example: order_by=id:DESC,created_at:ASC) **cannot order_by `identifier`
+        :type order_by: str
+        :param identifier: search users email OR phone (pagination prepended operators identifier=<val>, identifier=<ne:val>, identifier=<gt:val>, identifier=<lt:val>, identifier=<like:val>, identifier=<not_like:val>)
+        :type identifier: str
+        :param id: search users id (pagination prepended operators id=<val>, id=<ne:val>, id=<gt:val>, id=<lt:val>, id=<like:val>, id=<not_like:val>)
+        :type id: str
+        :param login_count: search users login_count (pagination prepended operators login_count=<val>, login_count=<ne:val>, login_count=<gt:val>, login_count=<lt:val>)
+        :type login_count: int
+        :param status: search users by status (pagination prepended operators status=<val>, status=<ne:val>, status=<gt:val>, status=<lt:val>, status=<like:val>, status=<not_like:val>) -- valid values: (active, inactive, pending)
+        :type status: str
+        :param created_at: search users created_at (pagination prepended operators created_at=<val>, created_at=<ne:val>, created_at=<gt:val>, created_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type created_at: str
+        :param updated_at: search users updated_at (pagination prepended operators updated_at=<val>, updated_at=<ne:val>, updated_at=<gt:val>, updated_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type updated_at: str
+        :param last_login_at: search users last_login_at (pagination prepended operators last_login_at=<val>, lat_login_at=<ne:val>, last_login_at=<gt:val>, last_login_at=<lt:val> -- valid timestamp in the format: 2006-01-02T15:04:05.000000Z required
+        :type last_login_at: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_paginated_users_serialize(
+            app_id=app_id,
+            page=page,
+            limit=limit,
+            created_before=created_before,
+            order_by=order_by,
+            identifier=identifier,
+            id=id,
+            login_count=login_count,
+            status=status,
+            created_at=created_at,
+            updated_at=updated_at,
+            last_login_at=last_login_at,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ListPaginatedUsersResponse",
+            '400': "Model400Error",
+            '401': "Model401Error",
+            '404': "Model404Error",
+            '500': "Model500Error"
+            
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _list_paginated_users_serialize(
+        self,
+        app_id,
+        page,
+        limit,
+        created_before,
+        order_by,
+        identifier,
+        id,
+        login_count,
+        status,
+        created_at,
+        updated_at,
+        last_login_at,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> Tuple:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if app_id is not None:
+            _path_params['app_id'] = app_id
+        # process the query parameters
+        if page is not None:
+            
+            _query_params.append(('page', page))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        if created_before is not None:
+            
+            _query_params.append(('created_before', created_before))
+            
+        if order_by is not None:
+            
+            _query_params.append(('order_by', order_by))
+            
+        if identifier is not None:
+            
+            _query_params.append(('identifier', identifier))
+            
+        if id is not None:
+            
+            _query_params.append(('id', id))
+            
+        if login_count is not None:
+            
+            _query_params.append(('login_count', login_count))
+            
+        if status is not None:
+            
+            _query_params.append(('status', status))
+            
+        if created_at is not None:
+            
+            _query_params.append(('created_at', created_at))
+            
+        if updated_at is not None:
+            
+            _query_params.append(('updated_at', updated_at))
+            
+        if last_login_at is not None:
+            
+            _query_params.append(('last_login_at', last_login_at))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/apps/{app_id}/users',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

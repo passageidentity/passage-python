@@ -18,27 +18,28 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from passageidentity.openapi_client.models.user_event_status import UserEventStatus
+
+from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, StrictInt
+from pydantic import Field
+from passageidentity.openapi_client.models.list_paginated_users_item import ListPaginatedUsersItem
+from passageidentity.openapi_client.models.paginated_links import PaginatedLinks
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UserRecentEvent(BaseModel):
+class ListPaginatedUsersResponse(BaseModel):
     """
-    UserRecentEvent
+    ListPaginatedUsersResponse
     """ # noqa: E501
-    created_at: datetime
-    completed_at: Optional[datetime]
-    id: StrictStr
-    ip_addr: StrictStr
-    status: UserEventStatus
-    type: StrictStr
-    user_agent: StrictStr
-    __properties: ClassVar[List[str]] = ["created_at", "completed_at", "id", "ip_addr", "status", "type", "user_agent"]
+    links: PaginatedLinks = Field(alias="_links")
+    created_before: StrictInt = Field(description="time anchor (Unix timestamp) --> all users returned created before this timestamp")
+    limit: StrictInt
+    page: StrictInt
+    total_users: StrictInt = Field(description="total number of users for a particular query")
+    users: List[ListPaginatedUsersItem]
+    __properties: ClassVar[List[str]] = ["_links", "created_before", "limit", "page", "total_users", "users"]
 
     model_config = {
         "populate_by_name": True,
@@ -57,7 +58,7 @@ class UserRecentEvent(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UserRecentEvent from a JSON string"""
+        """Create an instance of ListPaginatedUsersResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,16 +77,21 @@ class UserRecentEvent(BaseModel):
             },
             exclude_none=True,
         )
-        # set to None if completed_at (nullable) is None
-        # and model_fields_set contains the field
-        if self.completed_at is None and "completed_at" in self.model_fields_set:
-            _dict['completed_at'] = None
-
+        # override the default output from pydantic by calling `to_dict()` of links
+        if self.links:
+            _dict['_links'] = self.links.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in users (list)
+        _items = []
+        if self.users:
+            for _item in self.users:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['users'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UserRecentEvent from a dict"""
+        """Create an instance of ListPaginatedUsersResponse from a dict"""
         if obj is None:
             return None
 
@@ -93,13 +99,12 @@ class UserRecentEvent(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "created_at": obj.get("created_at"),
-            "completed_at": obj.get("completed_at"),
-            "id": obj.get("id"),
-            "ip_addr": obj.get("ip_addr"),
-            "status": obj.get("status"),
-            "type": obj.get("type"),
-            "user_agent": obj.get("user_agent")
+            "_links": PaginatedLinks.from_dict(obj.get("_links")) if obj.get("_links") is not None else None,
+            "created_before": obj.get("created_before"),
+            "limit": obj.get("limit"),
+            "page": obj.get("page"),
+            "total_users": obj.get("total_users"),
+            "users": [ListPaginatedUsersItem.from_dict(_item) for _item in obj.get("users")] if obj.get("users") is not None else None
         })
         return _obj
 
