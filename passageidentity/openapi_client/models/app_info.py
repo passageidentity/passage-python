@@ -80,8 +80,8 @@ class AppInfo(BaseModel):
     @field_validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in ('complete', 'flex'):
-            raise ValueError("must be one of enum values ('complete', 'flex')")
+        if value not in ('complete', 'flex', 'flex_v2'):
+            raise ValueError("must be one of enum values ('complete', 'flex', 'flex_v2')")
         return value
 
     model_config = {

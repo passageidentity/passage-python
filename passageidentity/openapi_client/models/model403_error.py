@@ -26,9 +26,9 @@ try:
 except ImportError:
     from typing_extensions import Self
 
-class Model401Error(BaseModel):
+class Model403Error(BaseModel):
     """
-    Model401Error
+    Model403Error
     """ # noqa: E501
     code: StrictStr
     error: StrictStr
@@ -37,8 +37,8 @@ class Model401Error(BaseModel):
     @field_validator('code')
     def code_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in ('invalid_access_token', 'invalid_nonce'):
-            raise ValueError("must be one of enum values ('invalid_access_token', 'invalid_nonce')")
+        if value not in ('cannot_create_organization_billing_portal_session', 'cannot_create_transaction', 'cannot_delete_admin', 'cannot_delete_organization_member', 'cannot_self_update_organization_member', 'operation_not_allowed'):
+            raise ValueError("must be one of enum values ('cannot_create_organization_billing_portal_session', 'cannot_create_transaction', 'cannot_delete_admin', 'cannot_delete_organization_member', 'cannot_self_update_organization_member', 'operation_not_allowed')")
         return value
 
     model_config = {
@@ -58,7 +58,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model401Error from a JSON string"""
+        """Create an instance of Model403Error from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,7 +81,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model401Error from a dict"""
+        """Create an instance of Model403Error from a dict"""
         if obj is None:
             return None
 

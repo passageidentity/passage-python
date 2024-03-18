@@ -20,26 +20,26 @@ import json
 
 
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import BaseModel, StrictInt
+from pydantic import Field
+from passageidentity.openapi_client.models.list_paginated_users_item import ListPaginatedUsersItem
+from passageidentity.openapi_client.models.paginated_links import PaginatedLinks
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class Model401Error(BaseModel):
+class ListPaginatedUsersResponse(BaseModel):
     """
-    Model401Error
+    ListPaginatedUsersResponse
     """ # noqa: E501
-    code: StrictStr
-    error: StrictStr
-    __properties: ClassVar[List[str]] = ["code", "error"]
-
-    @field_validator('code')
-    def code_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('invalid_access_token', 'invalid_nonce'):
-            raise ValueError("must be one of enum values ('invalid_access_token', 'invalid_nonce')")
-        return value
+    links: PaginatedLinks = Field(alias="_links")
+    created_before: StrictInt = Field(description="time anchor (Unix timestamp) --> all users returned created before this timestamp")
+    limit: StrictInt
+    page: StrictInt
+    total_users: StrictInt = Field(description="total number of users for a particular query")
+    users: List[ListPaginatedUsersItem]
+    __properties: ClassVar[List[str]] = ["_links", "created_before", "limit", "page", "total_users", "users"]
 
     model_config = {
         "populate_by_name": True,
@@ -58,7 +58,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model401Error from a JSON string"""
+        """Create an instance of ListPaginatedUsersResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,11 +77,21 @@ class Model401Error(BaseModel):
             },
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of links
+        if self.links:
+            _dict['_links'] = self.links.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in users (list)
+        _items = []
+        if self.users:
+            for _item in self.users:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['users'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model401Error from a dict"""
+        """Create an instance of ListPaginatedUsersResponse from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +99,12 @@ class Model401Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "code": obj.get("code"),
-            "error": obj.get("error")
+            "_links": PaginatedLinks.from_dict(obj.get("_links")) if obj.get("_links") is not None else None,
+            "created_before": obj.get("created_before"),
+            "limit": obj.get("limit"),
+            "page": obj.get("page"),
+            "total_users": obj.get("total_users"),
+            "users": [ListPaginatedUsersItem.from_dict(_item) for _item in obj.get("users")] if obj.get("users") is not None else None
         })
         return _obj
 
