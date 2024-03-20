@@ -19,19 +19,27 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictBool
+from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, StrictStr, field_validator
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UpdatePasskeysAuthMethod(BaseModel):
+class Model403Error(BaseModel):
     """
-    UpdatePasskeysAuthMethod
+    Model403Error
     """ # noqa: E501
-    enabled: Optional[StrictBool] = True
-    __properties: ClassVar[List[str]] = ["enabled"]
+    code: StrictStr
+    error: StrictStr
+    __properties: ClassVar[List[str]] = ["code", "error"]
+
+    @field_validator('code')
+    def code_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in ('cannot_create_organization_billing_portal_session', 'cannot_create_transaction', 'cannot_delete_admin', 'cannot_delete_organization_member', 'cannot_self_update_organization_member', 'operation_not_allowed'):
+            raise ValueError("must be one of enum values ('cannot_create_organization_billing_portal_session', 'cannot_create_transaction', 'cannot_delete_admin', 'cannot_delete_organization_member', 'cannot_self_update_organization_member', 'operation_not_allowed')")
+        return value
 
     model_config = {
         "populate_by_name": True,
@@ -50,7 +58,7 @@ class UpdatePasskeysAuthMethod(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UpdatePasskeysAuthMethod from a JSON string"""
+        """Create an instance of Model403Error from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,7 +81,7 @@ class UpdatePasskeysAuthMethod(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UpdatePasskeysAuthMethod from a dict"""
+        """Create an instance of Model403Error from a dict"""
         if obj is None:
             return None
 
@@ -81,7 +89,8 @@ class UpdatePasskeysAuthMethod(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "enabled": obj.get("enabled") if obj.get("enabled") is not None else True
+            "code": obj.get("code"),
+            "error": obj.get("error")
         })
         return _obj
 
