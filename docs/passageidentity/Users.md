@@ -8,6 +8,7 @@
 | [**deleteUser()**](#deleteUser) | **DELETE** /apps/{app_id}/users/{user_id} | Delete User |
 | [**deleteUserDevice()**](#deleteUserDevice) | **DELETE** /apps/{app_id}/users/{user_id}/devices | Delete User Device |
 | [**getUser()**](#getUser) | **GET** /apps/{app_id}/users/{user_id} | Get User |
+| [**getUserByIdentifier()**](#getUserByIdentifier) | **GET** /apps/{app_id}/users | Get User By Identifier |
 | [**listUserDevices()**](#listUserDevices) | **GET** /apps/{app_id}/users/{user_id}/devices | List User Devices |
 | [**revokeUserDevice()**](#revokeUserDevices) | **DELETE** /apps/{app_id}/users/{user_id}/devices | **Deprecated:** Delete User Devices |
 | [**updateUser()**](#updateUser) | **PATCH** /apps/{app_id}/users/{user_id} | Update User |
@@ -210,6 +211,40 @@ def authenticatedEndpoint():
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **user_id** | **string**| User ID | |
+
+
+### Return type
+
+[**UserInfo**](../../openapi_client/models/user_info.py)
+
+---
+
+## getUserByIdentifier()
+
+To retrieve information about a user, you should use the `getUserByIdentifier` method.
+
+```python
+from passageidentity import Passage
+import os
+
+PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+def exampleFlaskMiddleware(request):
+    g.user = psg.authenticateRequest(request)
+
+@auth.route('/home')
+def authenticatedEndpoint():
+    user = psg.getUserByIdentifier(user_email)
+	print(user.id)
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| **identifier** | **string**| User email or phone number | |
 
 
 ### Return type
