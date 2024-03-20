@@ -191,7 +191,7 @@ class Passage():
             if len(users) == 0:
                 raise PassageError("Failed to find user data")
             
-            return getUser(self, users[0].id)
+            return self.getUser(users[0].id)
         except Exception as e:
             raise PassageError(f"Failed to fetch user data: {e}")
 
