@@ -20,26 +20,24 @@ import json
 
 
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import BaseModel
+from pydantic import Field
+from passageidentity.openapi_client.models.link import Link
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class Model401Error(BaseModel):
+class PaginatedLinks(BaseModel):
     """
-    Model401Error
+    PaginatedLinks
     """ # noqa: E501
-    code: StrictStr
-    error: StrictStr
-    __properties: ClassVar[List[str]] = ["code", "error"]
-
-    @field_validator('code')
-    def code_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('invalid_access_token', 'invalid_nonce'):
-            raise ValueError("must be one of enum values ('invalid_access_token', 'invalid_nonce')")
-        return value
+    first: Link
+    last: Link
+    next: Link
+    previous: Link
+    var_self: Link = Field(alias="self")
+    __properties: ClassVar[List[str]] = ["first", "last", "next", "previous", "self"]
 
     model_config = {
         "populate_by_name": True,
@@ -58,7 +56,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model401Error from a JSON string"""
+        """Create an instance of PaginatedLinks from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,11 +75,26 @@ class Model401Error(BaseModel):
             },
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of first
+        if self.first:
+            _dict['first'] = self.first.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of last
+        if self.last:
+            _dict['last'] = self.last.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of next
+        if self.next:
+            _dict['next'] = self.next.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of previous
+        if self.previous:
+            _dict['previous'] = self.previous.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of var_self
+        if self.var_self:
+            _dict['self'] = self.var_self.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model401Error from a dict"""
+        """Create an instance of PaginatedLinks from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +102,11 @@ class Model401Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "code": obj.get("code"),
-            "error": obj.get("error")
+            "first": Link.from_dict(obj.get("first")) if obj.get("first") is not None else None,
+            "last": Link.from_dict(obj.get("last")) if obj.get("last") is not None else None,
+            "next": Link.from_dict(obj.get("next")) if obj.get("next") is not None else None,
+            "previous": Link.from_dict(obj.get("previous")) if obj.get("previous") is not None else None,
+            "self": Link.from_dict(obj.get("self")) if obj.get("self") is not None else None
         })
         return _obj
 
