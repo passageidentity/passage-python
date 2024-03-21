@@ -105,6 +105,7 @@ Class | Method | HTTP request | Description
 *UsersApi* | [**deactivate_user**](docs/UsersApi.md#deactivate_user) | **PATCH** /apps/{app_id}/users/{user_id}/deactivate | Deactivate User
 *UsersApi* | [**delete_user**](docs/UsersApi.md#delete_user) | **DELETE** /apps/{app_id}/users/{user_id} | Delete User
 *UsersApi* | [**get_user**](docs/UsersApi.md#get_user) | **GET** /apps/{app_id}/users/{user_id} | Get User
+*UsersApi* | [**list_paginated_users**](docs/UsersApi.md#list_paginated_users) | **GET** /apps/{app_id}/users | List Users
 *UsersApi* | [**update_user**](docs/UsersApi.md#update_user) | **PATCH** /apps/{app_id}/users/{user_id} | Update User
 
 
@@ -122,7 +123,10 @@ Class | Method | HTTP request | Description
  - [GoogleUserSocialConnection](docs/GoogleUserSocialConnection.md)
  - [LayoutConfig](docs/LayoutConfig.md)
  - [Layouts](docs/Layouts.md)
+ - [Link](docs/Link.md)
  - [ListDevicesResponse](docs/ListDevicesResponse.md)
+ - [ListPaginatedUsersItem](docs/ListPaginatedUsersItem.md)
+ - [ListPaginatedUsersResponse](docs/ListPaginatedUsersResponse.md)
  - [MagicLink](docs/MagicLink.md)
  - [MagicLinkAuthMethod](docs/MagicLinkAuthMethod.md)
  - [MagicLinkChannel](docs/MagicLinkChannel.md)
@@ -130,16 +134,17 @@ Class | Method | HTTP request | Description
  - [MagicLinkType](docs/MagicLinkType.md)
  - [Model400Error](docs/Model400Error.md)
  - [Model401Error](docs/Model401Error.md)
+ - [Model403Error](docs/Model403Error.md)
  - [Model404Error](docs/Model404Error.md)
  - [Model500Error](docs/Model500Error.md)
+ - [Nonce](docs/Nonce.md)
  - [OtpAuthMethod](docs/OtpAuthMethod.md)
+ - [PaginatedLinks](docs/PaginatedLinks.md)
  - [PasskeysAuthMethod](docs/PasskeysAuthMethod.md)
  - [Technologies](docs/Technologies.md)
  - [TtlDisplayUnit](docs/TtlDisplayUnit.md)
- - [UpdateMagicLinkAuthMethod](docs/UpdateMagicLinkAuthMethod.md)
- - [UpdateOtpAuthMethod](docs/UpdateOtpAuthMethod.md)
- - [UpdatePasskeysAuthMethod](docs/UpdatePasskeysAuthMethod.md)
  - [UpdateUserRequest](docs/UpdateUserRequest.md)
+ - [UserEventStatus](docs/UserEventStatus.md)
  - [UserInfo](docs/UserInfo.md)
  - [UserMetadataField](docs/UserMetadataField.md)
  - [UserMetadataFieldType](docs/UserMetadataFieldType.md)

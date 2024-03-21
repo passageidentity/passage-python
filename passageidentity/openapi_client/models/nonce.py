@@ -19,24 +19,19 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictBool
-from pydantic import Field
-from typing_extensions import Annotated
-from passageidentity.openapi_client.models.ttl_display_unit import TtlDisplayUnit
+from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, StrictStr
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UpdateOtpAuthMethod(BaseModel):
+class Nonce(BaseModel):
     """
-    UpdateOtpAuthMethod
+    the nonce to exchange for an authentication token
     """ # noqa: E501
-    enabled: Optional[StrictBool] = None
-    ttl: Optional[Annotated[int, Field(strict=True, ge=60)]] = Field(default=300, description="Maximum time (IN SECONDS) for the auth to expire.")
-    ttl_display_unit: Optional[TtlDisplayUnit] = None
-    __properties: ClassVar[List[str]] = ["enabled", "ttl", "ttl_display_unit"]
+    nonce: StrictStr
+    __properties: ClassVar[List[str]] = ["nonce"]
 
     model_config = {
         "populate_by_name": True,
@@ -55,7 +50,7 @@ class UpdateOtpAuthMethod(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UpdateOtpAuthMethod from a JSON string"""
+        """Create an instance of Nonce from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,7 +73,7 @@ class UpdateOtpAuthMethod(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UpdateOtpAuthMethod from a dict"""
+        """Create an instance of Nonce from a dict"""
         if obj is None:
             return None
 
@@ -86,9 +81,7 @@ class UpdateOtpAuthMethod(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "enabled": obj.get("enabled"),
-            "ttl": obj.get("ttl") if obj.get("ttl") is not None else 300,
-            "ttl_display_unit": obj.get("ttl_display_unit")
+            "nonce": obj.get("nonce")
         })
         return _obj
 

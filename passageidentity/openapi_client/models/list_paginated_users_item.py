@@ -18,28 +18,31 @@ import pprint
 import re  # noqa: F401
 import json
 
-
-from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
+from datetime import datetime
+from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
+from passageidentity.openapi_client.models.user_status import UserStatus
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class Model401Error(BaseModel):
+class ListPaginatedUsersItem(BaseModel):
     """
-    Model401Error
+    ListPaginatedUsersItem
     """ # noqa: E501
-    code: StrictStr
-    error: StrictStr
-    __properties: ClassVar[List[str]] = ["code", "error"]
-
-    @field_validator('code')
-    def code_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('invalid_access_token', 'invalid_nonce'):
-            raise ValueError("must be one of enum values ('invalid_access_token', 'invalid_nonce')")
-        return value
+    created_at: datetime
+    email: StrictStr
+    email_verified: StrictBool
+    id: StrictStr
+    last_login_at: datetime
+    login_count: StrictInt
+    phone: StrictStr
+    phone_verified: StrictBool
+    status: UserStatus
+    updated_at: datetime
+    user_metadata: Optional[Union[str, Any]]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "status", "updated_at", "user_metadata"]
 
     model_config = {
         "populate_by_name": True,
@@ -58,7 +61,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model401Error from a JSON string"""
+        """Create an instance of ListPaginatedUsersItem from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,11 +80,16 @@ class Model401Error(BaseModel):
             },
             exclude_none=True,
         )
+        # set to None if user_metadata (nullable) is None
+        # and model_fields_set contains the field
+        if self.user_metadata is None and "user_metadata" in self.model_fields_set:
+            _dict['user_metadata'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model401Error from a dict"""
+        """Create an instance of ListPaginatedUsersItem from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +97,17 @@ class Model401Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "code": obj.get("code"),
-            "error": obj.get("error")
+            "created_at": obj.get("created_at"),
+            "email": obj.get("email"),
+            "email_verified": obj.get("email_verified"),
+            "id": obj.get("id"),
+            "last_login_at": obj.get("last_login_at"),
+            "login_count": obj.get("login_count"),
+            "phone": obj.get("phone"),
+            "phone_verified": obj.get("phone_verified"),
+            "status": obj.get("status"),
+            "updated_at": obj.get("updated_at"),
+            "user_metadata": obj.get("user_metadata")
         })
         return _obj
 
