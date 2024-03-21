@@ -185,7 +185,7 @@ class Passage():
 
         try:
             client = UsersApi()
-            users = client.list_paginated_users(self.app_id, limit=1, identifier=userIdentifier, 
+            users = client.list_paginated_users(self.app_id, limit=1, identifier=userIdentifier.lower(), 
                                                 _headers=self.request_headers).users
 
             if len(users) == 0:
