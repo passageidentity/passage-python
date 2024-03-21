@@ -46,6 +46,7 @@ Method | Description
 [**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice) | Delete a device for a user
 [**getApp**](./docs/passageidentity/Users.md#getApp) |  Get App
 [**getUser**](./docs/passageidentity/Users.md#getUser) | Get User
+[**getUserByIdentifier**](./docs/passageidentity/Users.md#getUserByIdentifier) | Get User By Identifier
 [**listUserDevices**](./docs/passageidentity/Users.md#listUserDevices) | List User Devices
 [**revokeUserDevice**](./docs/passageidentity/Users.md#revokeUserDevice) | **Deprecated** Delete User Device
 [**revokeUserRefreshTokens**](./docs/passageidentity/Authentication.md#revokeUserRefreshTokens) | Signout User
