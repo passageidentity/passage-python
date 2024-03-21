@@ -176,6 +176,27 @@ class Passage():
             raise PassageError(f"Failed to fetch user data: {e}")
 
     """
+    Use Passage API to get info for a user, look up by user identifier
+    """
+    def getUserByIdentifier(self, userIdentifier: str) -> Union[UserInfo, PassageError]:
+
+        if self.passage_apikey == "":
+            raise PassageError("No Passage API key provided.")
+
+        try:
+            client = UsersApi()
+            users = client.list_paginated_users(self.app_id, limit=1, identifier=userIdentifier, 
+                                                _headers=self.request_headers).users
+
+            if len(users) == 0:
+                raise PassageError("Failed to find user data")
+
+            return self.getUser(users[0].id)
+        except Exception as e:
+            raise PassageError(f"Failed to fetch user data: {e}")
+
+
+    """
     Use Passage API to list user devices, look up by user ID
     """
     def listUserDevices(self, user_id: str) -> Union[List[WebAuthnDevices], PassageError]:
