@@ -92,6 +92,27 @@ def testGetUserInfoValid():
     user = psg.getUser(PASSAGE_USER_ID)
     assert user.id == PASSAGE_USER_ID
 
+def testGetUserInfoByIdentifierValid():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    email = randomEmail()
+    newUser = psg.createUser({"email": email})
+    assert newUser.email == email
+
+    userByIdentifier = psg.getUserByIdentifier(email)
+    assert userByIdentifier.id == newUser.id
+
+    user = psg.getUser(newUser.id)
+    assert user.id == newUser.id
+
+    assert userByIdentifier == user
+
+def testGetUserInfoByIdentifierError():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    with pytest.raises(PassageError, match="Failed to find user data"):
+        psg.getUserByIdentifier("error@passage.id")
+
 def testActivateUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     user = psg.activateUser(PASSAGE_USER_ID)
