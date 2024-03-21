@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.3.2] - 2024-03-21
+## [2.4.0] - 2024-03-21
 
 ### Added
 - `GetUserByIdentifier` method has been added
