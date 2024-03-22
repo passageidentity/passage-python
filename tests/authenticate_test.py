@@ -107,6 +107,36 @@ def testGetUserInfoByIdentifierValid():
 
     assert userByIdentifier == user
 
+def testGetUserInfoByIdentifierValidUpperCase():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    email = randomEmail()
+    newUser = psg.createUser({"email": email})
+    assert newUser.email == email
+
+    userByIdentifier = psg.getUserByIdentifier(email.upper())
+    assert userByIdentifier.id == newUser.id
+
+    user = psg.getUser(newUser.id)
+    assert user.id == newUser.id
+
+    assert userByIdentifier == user
+
+def testGetUserInfoByIdentifierPhoneValid():
+    psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
+
+    phone = randomPhone()
+    newUser = psg.createUser({"phone": phone})
+    assert newUser.phone == phone
+
+    userByIdentifier = psg.getUserByIdentifier(phone)
+    assert userByIdentifier.id == newUser.id
+
+    user = psg.getUser(newUser.id)
+    assert user.id == newUser.id
+
+    assert userByIdentifier == user
+
 def testGetUserInfoByIdentifierError():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
