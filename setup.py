@@ -20,7 +20,13 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages = {'passageidentity', 'passageidentity.models', 'passageidentity.openapi_client', 'passageidentity.openapi_client.api', 'passageidentity.openapi_client.models'},
+    packages = [
+        'passageidentity', 
+        'passageidentity.models', 
+        'passageidentity.openapi_client', 
+        'passageidentity.openapi_client.api', 
+        'passageidentity.openapi_client.models'
+    ],
     package_dir = {
         'passageidentity': 'passageidentity',
         'passageidentity.models': 'passageidentity/models',
