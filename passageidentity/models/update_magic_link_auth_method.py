@@ -19,28 +19,26 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, StrictBool
+from pydantic import Field	
+from typing_extensions import Annotated	
+from passageidentity.openapi_client.models.ttl_display_unit import TtlDisplayUnit
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class Model401Error(BaseModel):
+@DeprecationWarning
+class UpdateMagicLinkAuthMethod(BaseModel):
     """
-    Model401Error
+    UpdateMagicLinkAuthMethod
     """ # noqa: E501
-    code: StrictStr
-    error: StrictStr
-    __properties: ClassVar[List[str]] = ["code", "error"]
-
-    @field_validator('code')
-    def code_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('invalid_access_token', 'invalid_nonce'):
-            raise ValueError("must be one of enum values ('invalid_access_token', 'invalid_nonce')")
-        return value
-
+    enabled: Optional[StrictBool] = None
+    ttl: Optional[Annotated[int, Field(strict=True, ge=60)]] = Field(default=300, description="Maximum time (IN SECONDS) for the auth to expire.")
+    ttl_display_unit: Optional[TtlDisplayUnit] = None
+    __properties: ClassVar[List[str]] = ["enabled", "ttl", "ttl_display_unit"]
+    
     model_config = {
         "populate_by_name": True,
         "validate_assignment": True
@@ -58,7 +56,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model401Error from a JSON string"""
+        """Create an instance of UpdateMagicLinkAuthMethod from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,7 +79,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model401Error from a dict"""
+        """Create an instance of UpdateMagicLinkAuthMethod from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +87,9 @@ class Model401Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "code": obj.get("code"),
-            "error": obj.get("error")
+            "enabled": obj.get("enabled"),
+            "ttl": obj.get("ttl") if obj.get("ttl") is not None else 300,
+            "ttl_display_unit": obj.get("ttl_display_unit")
         })
         return _obj
 

@@ -21,20 +21,21 @@ import json
 
 from typing import Any, ClassVar, Dict, List, Optional
 from pydantic import BaseModel, StrictBool
-from pydantic import Field
-from typing_extensions import Annotated
+from pydantic import Field	
+from typing_extensions import Annotated	
 from passageidentity.openapi_client.models.ttl_display_unit import TtlDisplayUnit
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class UpdateMagicLinkAuthMethod(BaseModel):
+@DeprecationWarning
+class UpdateOtpAuthMethod(BaseModel):
     """
-    UpdateMagicLinkAuthMethod
+    the UpdateOtpAuthMethod to exchange for an authentication token
     """ # noqa: E501
     enabled: Optional[StrictBool] = None
-    ttl: Optional[Annotated[int, Field(strict=True, ge=60)]] = Field(default=300, description="Maximum time (IN SECONDS) for the auth to expire.")
+    ttl: Optional[Annotated[int, Field(strict=True, ge=60)]] = Field(default=300, description="Maximum time (IN SECONDS) for the auth to expire.") 
     ttl_display_unit: Optional[TtlDisplayUnit] = None
     __properties: ClassVar[List[str]] = ["enabled", "ttl", "ttl_display_unit"]
 
@@ -55,7 +56,7 @@ class UpdateMagicLinkAuthMethod(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of UpdateMagicLinkAuthMethod from a JSON string"""
+        """Create an instance of UpdateOtpAuthMethod from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,7 +79,7 @@ class UpdateMagicLinkAuthMethod(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of UpdateMagicLinkAuthMethod from a dict"""
+        """Create an instance of UpdateOtpAuthMethod from a dict"""
         if obj is None:
             return None
 

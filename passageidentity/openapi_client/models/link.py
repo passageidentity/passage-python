@@ -20,26 +20,18 @@ import json
 
 
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import BaseModel, StrictStr
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class Model401Error(BaseModel):
+class Link(BaseModel):
     """
-    Model401Error
+    Link
     """ # noqa: E501
-    code: StrictStr
-    error: StrictStr
-    __properties: ClassVar[List[str]] = ["code", "error"]
-
-    @field_validator('code')
-    def code_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('invalid_access_token', 'invalid_nonce'):
-            raise ValueError("must be one of enum values ('invalid_access_token', 'invalid_nonce')")
-        return value
+    href: StrictStr
+    __properties: ClassVar[List[str]] = ["href"]
 
     model_config = {
         "populate_by_name": True,
@@ -58,7 +50,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Model401Error from a JSON string"""
+        """Create an instance of Link from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,7 +73,7 @@ class Model401Error(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Model401Error from a dict"""
+        """Create an instance of Link from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +81,7 @@ class Model401Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "code": obj.get("code"),
-            "error": obj.get("error")
+            "href": obj.get("href")
         })
         return _obj
 
