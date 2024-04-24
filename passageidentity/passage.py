@@ -64,6 +64,19 @@ class Passage():
         return jwkItems
 
     """
+    Fetch whether the app is hosted
+    """
+    def __fetchHosted(self):
+        r = requests.get(f"https://api.passage.id/v1/apps/{self.app_id}", api_key=self.passage_apikey)
+
+        if r.status_code != 200:
+            raise PassageError("Could not fetch app info for app id " + self.app_id, r.status_code, r.reason, r.json())
+
+        hosted = r.json()["app"]["hosted"]
+
+        return hosted
+
+    """
     This function will verify the JWT and return the user ID for the authenticated user, or throw
     a PassageError. Takes the place of the deprecated authenticateRequest() function.
     """
@@ -73,7 +86,9 @@ class Passage():
     def __refreshAuthCache(self):
         self.auth_origin = fetchApp(self.app_id)["auth_origin"]
         self.jwks = self.__fetchJWKS()
-        AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin}
+        hosted = self.__fetchHosted()
+
+        AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin, "hosted": hosted}
 
     """
     Authenticate a Flask or Django request that uses Passage for authentication.
@@ -104,6 +119,7 @@ class Passage():
     def authenticateJWT(self, token:str) -> Union[str, PassageError]:
         # load and parse the JWT
         try:
+            hosted = AUTH_CACHE[self.app_id]["hosted"]
             kid = jwt.get_unverified_header(token)["kid"]
             jwk = AUTH_CACHE[self.app_id]["jwks"][kid]
 
@@ -111,11 +127,12 @@ class Passage():
             # re-fetch the JWKS and try again
             if not jwk:
                 self.__refreshAuthCache
+                hosted = AUTH_CACHE[self.app_id]["hosted"]
                 kid = jwt.get_unverified_header(token)["kid"]
                 jwk = AUTH_CACHE[self.app_id]["jwks"][kid]
 
             public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
-            claims = jwt.decode(token, public_key, audience=self.auth_origin, algorithms=["RS256"])
+            claims = jwt.decode(token, public_key, audience=[self.app_id] if hosted else self.auth_origin, algorithms=["RS256"])
             return claims["sub"]
         except Exception as e:
             raise PassageError(f"JWT is not valid: {e}")
