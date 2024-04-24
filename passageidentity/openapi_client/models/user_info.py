@@ -39,6 +39,7 @@ class UserInfo(BaseModel):
     created_at: datetime
     email: StrictStr
     email_verified: StrictBool
+    external_id: StrictStr = Field(description="The external ID of the user. Only set if the user was created in a Flex app.")
     id: StrictStr
     last_login_at: datetime
     login_count: StrictInt
@@ -52,7 +53,7 @@ class UserInfo(BaseModel):
     webauthn: StrictBool
     webauthn_devices: List[WebAuthnDevices]
     webauthn_types: List[WebAuthnType] = Field(description="List of credential types that have been used for authentication")
-    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "recent_events", "social_connections", "status", "updated_at", "user_metadata", "webauthn", "webauthn_devices", "webauthn_types"]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "external_id", "id", "last_login_at", "login_count", "phone", "phone_verified", "recent_events", "social_connections", "status", "updated_at", "user_metadata", "webauthn", "webauthn_devices", "webauthn_types"]
 
     model_config = {
         "populate_by_name": True,
@@ -127,6 +128,7 @@ class UserInfo(BaseModel):
             "created_at": obj.get("created_at"),
             "email": obj.get("email"),
             "email_verified": obj.get("email_verified"),
+            "external_id": obj.get("external_id"),
             "id": obj.get("id"),
             "last_login_at": obj.get("last_login_at"),
             "login_count": obj.get("login_count"),
