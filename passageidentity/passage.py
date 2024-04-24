@@ -64,6 +64,19 @@ class Passage():
         return jwkItems
 
     """
+    Fetch whether the app is hosted
+    """
+    def __fetchHosted(self):
+        r = requests.get(f"https://api.passage.id/v1/apps/{self.app_id}", api_key=self.passage_apikey)
+
+        if r.status_code != 200:
+            raise PassageError("Could not fetch app info for app id " + self.app_id, r.status_code, r.reason, r.json())
+
+        hosted = r.json()["app"]["hosted"]
+
+        return hosted
+
+    """
     This function will verify the JWT and return the user ID for the authenticated user, or throw
     a PassageError. Takes the place of the deprecated authenticateRequest() function.
     """
@@ -73,13 +86,7 @@ class Passage():
     def __refreshAuthCache(self):
         self.auth_origin = fetchApp(self.app_id)["auth_origin"]
         self.jwks = self.__fetchJWKS()
-
-        r = requests.get(f"https://api.passage.id/v1/apps/{self.app_id}", api_key=self.passage_apikey)
-
-        if r.status_code != 200:
-            raise PassageError("Could not fetch app info for app id " + self.app_id, r.status_code, r.reason, r.json())
-
-        hosted = r.json()["app"]["hosted"]
+        hosted = self.__fetchHosted()
 
         AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin, "hosted": hosted}
 
