@@ -21,6 +21,7 @@ import json
 from datetime import datetime
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
+from pydantic import Field
 from passageidentity.openapi_client.models.user_status import UserStatus
 try:
     from typing import Self
@@ -34,6 +35,7 @@ class ListPaginatedUsersItem(BaseModel):
     created_at: datetime
     email: StrictStr
     email_verified: StrictBool
+    external_id: StrictStr = Field(description="The external ID of the user. Only set if the user was created in a Flex app.")
     id: StrictStr
     last_login_at: datetime
     login_count: StrictInt
@@ -42,7 +44,7 @@ class ListPaginatedUsersItem(BaseModel):
     status: UserStatus
     updated_at: datetime
     user_metadata: Optional[Union[str, Any]]
-    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "status", "updated_at", "user_metadata"]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "external_id", "id", "last_login_at", "login_count", "phone", "phone_verified", "status", "updated_at", "user_metadata"]
 
     model_config = {
         "populate_by_name": True,
@@ -100,6 +102,7 @@ class ListPaginatedUsersItem(BaseModel):
             "created_at": obj.get("created_at"),
             "email": obj.get("email"),
             "email_verified": obj.get("email_verified"),
+            "external_id": obj.get("external_id"),
             "id": obj.get("id"),
             "last_login_at": obj.get("last_login_at"),
             "login_count": obj.get("login_count"),
