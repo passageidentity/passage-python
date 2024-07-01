@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **channel** | [**MagicLinkChannel**](MagicLinkChannel.md) |  | 
 **email** | **str** |  | 
 **language** | **str** | language of the email to send (optional) | [optional] 
-**magic_link_path** | **str** |  | 
+**magic_link_path** | **str** | must be a relative url | 
 **phone** | **str** |  | 
 **redirect_url** | **str** |  | 
 **send** | **bool** |  | 
