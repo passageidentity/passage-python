@@ -45,6 +45,7 @@ class AppInfo(BaseModel):
     auth_fallback_method_ttl: StrictInt = Field(description="Deprecated Property. Please refer to `auth_methods` to view settings for individual authentication methods.")
     auth_methods: AuthMethods
     auth_origin: StrictStr
+    auto_theme_enabled: StrictBool
     created_at: datetime
     default_language: StrictStr
     id: StrictStr
@@ -55,6 +56,7 @@ class AppInfo(BaseModel):
     name: StrictStr
     hosted: StrictBool = Field(description="whether or not the app's login page hosted by passage")
     hosted_subdomain: StrictStr = Field(description="the subdomain of the app's hosted login page")
+    hosted_theme: StrictStr
     id_token_lifetime: Optional[StrictInt] = None
     passage_branding: StrictBool
     profile_management: StrictBool
@@ -75,7 +77,7 @@ class AppInfo(BaseModel):
     technologies: List[Technologies]
     element_customization: ElementCustomization
     element_customization_dark: ElementCustomization
-    __properties: ClassVar[List[str]] = ["additional_auth_origins", "allowed_callback_urls", "allowed_identifier", "allowed_logout_urls", "application_login_uri", "auth_fallback_method", "auth_fallback_method_ttl", "auth_methods", "auth_origin", "created_at", "default_language", "id", "layouts", "login_url", "light_logo_url", "dark_logo_url", "name", "hosted", "hosted_subdomain", "id_token_lifetime", "passage_branding", "profile_management", "public_signup", "redirect_url", "refresh_absolute_lifetime", "refresh_enabled", "refresh_inactivity_lifetime", "require_email_verification", "require_identifier_verification", "required_identifier", "role", "rsa_public_key", "secret", "session_timeout_length", "type", "user_metadata_schema", "technologies", "element_customization", "element_customization_dark"]
+    __properties: ClassVar[List[str]] = ["additional_auth_origins", "allowed_callback_urls", "allowed_identifier", "allowed_logout_urls", "application_login_uri", "auth_fallback_method", "auth_fallback_method_ttl", "auth_methods", "auth_origin", "auto_theme_enabled", "created_at", "default_language", "id", "layouts", "login_url", "light_logo_url", "dark_logo_url", "name", "hosted", "hosted_subdomain", "hosted_theme", "id_token_lifetime", "passage_branding", "profile_management", "public_signup", "redirect_url", "refresh_absolute_lifetime", "refresh_enabled", "refresh_inactivity_lifetime", "require_email_verification", "require_identifier_verification", "required_identifier", "role", "rsa_public_key", "secret", "session_timeout_length", "type", "user_metadata_schema", "technologies", "element_customization", "element_customization_dark"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -160,6 +162,7 @@ class AppInfo(BaseModel):
             "auth_fallback_method_ttl": obj.get("auth_fallback_method_ttl"),
             "auth_methods": AuthMethods.from_dict(obj.get("auth_methods")) if obj.get("auth_methods") is not None else None,
             "auth_origin": obj.get("auth_origin"),
+            "auto_theme_enabled": obj.get("auto_theme_enabled"),
             "created_at": obj.get("created_at"),
             "default_language": obj.get("default_language"),
             "id": obj.get("id"),
@@ -170,6 +173,7 @@ class AppInfo(BaseModel):
             "name": obj.get("name"),
             "hosted": obj.get("hosted"),
             "hosted_subdomain": obj.get("hosted_subdomain"),
+            "hosted_theme": obj.get("hosted_theme"),
             "id_token_lifetime": obj.get("id_token_lifetime"),
             "passage_branding": obj.get("passage_branding"),
             "profile_management": obj.get("profile_management"),
