@@ -21,6 +21,8 @@ import json
 from datetime import datetime
 from typing import Any, ClassVar, Dict, List, Optional
 from pydantic import BaseModel, StrictStr
+from passageidentity.openapi_client.models.social_connection_type import SocialConnectionType
+from passageidentity.openapi_client.models.user_event_action import UserEventAction
 from passageidentity.openapi_client.models.user_event_status import UserEventStatus
 try:
     from typing import Self
@@ -38,7 +40,9 @@ class UserRecentEvent(BaseModel):
     status: UserEventStatus
     type: StrictStr
     user_agent: StrictStr
-    __properties: ClassVar[List[str]] = ["created_at", "completed_at", "id", "ip_addr", "status", "type", "user_agent"]
+    action: UserEventAction
+    social_login_type: Optional[SocialConnectionType]
+    __properties: ClassVar[List[str]] = ["created_at", "completed_at", "id", "ip_addr", "status", "type", "user_agent", "action", "social_login_type"]
 
     model_config = {
         "populate_by_name": True,
@@ -81,6 +85,11 @@ class UserRecentEvent(BaseModel):
         if self.completed_at is None and "completed_at" in self.model_fields_set:
             _dict['completed_at'] = None
 
+        # set to None if social_login_type (nullable) is None
+        # and model_fields_set contains the field
+        if self.social_login_type is None and "social_login_type" in self.model_fields_set:
+            _dict['social_login_type'] = None
+
         return _dict
 
     @classmethod
@@ -99,7 +108,9 @@ class UserRecentEvent(BaseModel):
             "ip_addr": obj.get("ip_addr"),
             "status": obj.get("status"),
             "type": obj.get("type"),
-            "user_agent": obj.get("user_agent")
+            "user_agent": obj.get("user_agent"),
+            "action": obj.get("action"),
+            "social_login_type": obj.get("social_login_type")
         })
         return _obj
 
