@@ -142,6 +142,7 @@ Class | Method | HTTP request | Description
  - [PaginatedLinks](docs/PaginatedLinks.md)
  - [PasskeysAuthMethod](docs/PasskeysAuthMethod.md)
  - [Technologies](docs/Technologies.md)
+ - [ThemeType](docs/ThemeType.md)
  - [TtlDisplayUnit](docs/TtlDisplayUnit.md)
  - [UpdateUserRequest](docs/UpdateUserRequest.md)
  - [UserEventStatus](docs/UserEventStatus.md)

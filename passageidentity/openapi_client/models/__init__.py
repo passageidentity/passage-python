@@ -46,6 +46,7 @@ from passageidentity.openapi_client.models.otp_auth_method import OtpAuthMethod
 from passageidentity.openapi_client.models.paginated_links import PaginatedLinks
 from passageidentity.openapi_client.models.passkeys_auth_method import PasskeysAuthMethod
 from passageidentity.openapi_client.models.technologies import Technologies
+from passageidentity.openapi_client.models.theme_type import ThemeType
 from passageidentity.openapi_client.models.ttl_display_unit import TtlDisplayUnit
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
 from passageidentity.openapi_client.models.user_event_status import UserEventStatus
