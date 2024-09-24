@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **status** | [**UserEventStatus**](UserEventStatus.md) |  | 
 **type** | **str** |  | 
 **user_agent** | **str** |  | 
+**action** | [**UserEventAction**](UserEventAction.md) |  | 
+**social_login_type** | [**SocialConnectionType**](SocialConnectionType.md) |  | 
 
 ## Example
 
