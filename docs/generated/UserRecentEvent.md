@@ -10,7 +10,10 @@ Name | Type | Description | Notes
 **ip_addr** | **str** |  | 
 **status** | [**UserEventStatus**](UserEventStatus.md) |  | 
 **type** | **str** |  | 
-**user_agent** | **str** |  | 
+**user_agent** | **str** | The raw user agent value from the originating device | 
+**user_agent_display** | **str** | A display-friendly version of the user agent | 
+**action** | [**UserEventAction**](UserEventAction.md) |  | 
+**social_login_type** | [**SocialConnectionType**](SocialConnectionType.md) |  | 
 
 ## Example
 
