@@ -5,8 +5,6 @@ import os
 import random
 import string
 from dotenv import load_dotenv
-from werkzeug.http import dump_cookie
-
 
 load_dotenv()
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
