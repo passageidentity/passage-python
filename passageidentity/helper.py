@@ -1,7 +1,6 @@
 import os
 import re
 from base64 import b64decode
-from django.core.handlers.wsgi import WSGIRequest
 
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend

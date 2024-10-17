@@ -4,11 +4,8 @@ import pytest
 import os
 import random
 import string
-from flask import Flask, request
 from dotenv import load_dotenv
-from werkzeug.http import dump_cookie
 
-app = Flask(__name__)
 
 load_dotenv()
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
