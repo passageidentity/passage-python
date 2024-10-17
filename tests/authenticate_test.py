@@ -4,11 +4,7 @@ import pytest
 import os
 import random
 import string
-from flask import Flask, request
 from dotenv import load_dotenv
-from werkzeug.http import dump_cookie
-
-app = Flask(__name__)
 
 load_dotenv()
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
@@ -21,20 +17,6 @@ def randomEmail():
 
 def randomPhone():
     return  "+1512" + ''.join(random.choice('23456789') for _ in range(7))
-
-def testFlaskValidTokenInHeader():
-    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
-    # flask request context
-    with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer {PASSAGE_AUTH_TOKEN}'}):
-        user = psg.authenticateRequest(request)
-        assert user == PASSAGE_USER_ID
-
-def testFlaskInvalidTokenInHeader():
-    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
-    # flask request context
-    with app.test_request_context("thisisaurl.com",headers={'Authorization':f'Bearer invalid_token'}):
-        with pytest.raises(PassageError):
-            psg.authenticateRequest(request)
 
 def testValidJWT():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
@@ -54,22 +36,6 @@ def testValidateJWT():
 def testFetchJWKS():
     psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
     assert len(psg.jwks) > 0
-
-def testFlaskValidTokenInCookie():
-    psg = Passage(PASSAGE_APP_ID)
-    # flask request context
-    cookie = dump_cookie('psg_auth_token', PASSAGE_AUTH_TOKEN)
-    with app.test_request_context("thisisaurl.com",environ_base={'HTTP_COOKIE':cookie}):
-        user = psg.authenticateRequest(request)
-        assert user == PASSAGE_USER_ID
-
-def testFlaskInvalidTokenInCookie():
-    psg = Passage(PASSAGE_APP_ID)
-    # flask request context
-    cookie = dump_cookie('psg_auth_token', "invalid_token")
-    with app.test_request_context("thisisaurl.com",environ_base={'HTTP_COOKIE':cookie}):
-        with pytest.raises(PassageError):
-            psg.authenticateRequest(request)
 
 def testGetApp():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)

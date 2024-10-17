@@ -37,8 +37,6 @@ setuptools.setup(
     install_requires=[
         'aenum',
         'cryptography',
-        'django < 5', 
-        'Flask', 
         'importlib-metadata >= 1.0 ; python_version < "3.12"',
         'pydantic',
         'pyjwt',
