@@ -4,8 +4,10 @@ import pytest
 import os
 import random
 import string
+from flask import Flask, request
 from dotenv import load_dotenv
 
+app = Flask(__name__)
 
 load_dotenv()
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
