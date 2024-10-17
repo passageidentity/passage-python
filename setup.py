@@ -37,7 +37,6 @@ setuptools.setup(
     install_requires=[
         'aenum',
         'cryptography',
-        'Flask',
         'importlib-metadata >= 1.0 ; python_version < "3.12"',
         'pydantic',
         'pyjwt',
