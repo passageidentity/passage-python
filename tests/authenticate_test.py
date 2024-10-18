@@ -73,6 +73,9 @@ def testGetUserInfoByIdentifierValid():
 
     assert userByIdentifier == user
 
+    isDeleted = psg.deleteUser(newUser.id)
+    assert isDeleted == True
+
 def testGetUserInfoByIdentifierValidUpperCase():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
@@ -88,6 +91,9 @@ def testGetUserInfoByIdentifierValidUpperCase():
 
     assert userByIdentifier == user
 
+    isDeleted = psg.deleteUser(newUser.id)
+    assert isDeleted == True
+
 def testGetUserInfoByIdentifierPhoneValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
@@ -102,6 +108,9 @@ def testGetUserInfoByIdentifierPhoneValid():
     assert user.id == newUser.id
 
     assert userByIdentifier == user
+
+    isDeleted = psg.deleteUser(newUser.id)
+    assert isDeleted == True
 
 def testGetUserInfoByIdentifierError():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -162,6 +171,9 @@ def testCreateUserWithMetadata():
     user = psg.createUser({"email": email, "user_metadata": { "example1": "qwe"}})
     assert user.email ==  email
     assert user.user_metadata["example1"] == "qwe"
+
+    isDeleted = psg.deleteUser(user.id)
+    assert isDeleted == True
 
 def testGetUserInfoUserDoesNotExist():
     pass
