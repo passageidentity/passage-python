@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="passage-identity",
-    version="2.5.0",
+    version="2.5.1",
     author="Passage by 1Password",
     author_email="support@passage.id",
     description="Passkey Complete for Python - Integrate into your Python API or service to enable a completely passwordless standalone auth solution with Passage by 1Password",
