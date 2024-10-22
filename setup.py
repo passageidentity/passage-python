@@ -6,14 +6,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name="passage-identity",
     version="2.5.0",
-    author="Passage Identity, Inc",
+    author="Passage by 1Password",
     author_email="support@passage.id",
-    description="Python library to help manage your Passage application and users",
+    description="Passkey Complete for Python - Integrate into your Python API or service to enable a completely passwordless standalone auth solution with Passage by 1Password",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/passageidentity/passage-python",
+    url="https://docs.passage.id/complete",
     project_urls={
-        "Bug Tracker": "https://github.com/passageidentity/passage-python/issues",
+        "Bug Tracker": "https://github.com/passageidentity/.github/blob/main/SUPPORT.md",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
