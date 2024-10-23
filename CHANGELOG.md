@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.4.1] - 2024-10-22
+## [2.5.1] - 2024-10-22
 
-### Updated
+### Changed
 
 - Updated README, licensefile, and repository metadata
+- Chore(deps): remove unused dependencies
 
 ## [2.4.0] - 2024-03-21
 
