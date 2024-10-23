@@ -1,17 +1,53 @@
-<img src="https://storage.googleapis.com/passage-docs/passage-logo-gradient.svg" alt="Passage logo" style="width:250px;"/>
+![passage-python](https://storage.googleapis.com/passage-docs/github-md-assets/passage-python.png)
 
-[![PyPI version](https://badge.fury.io/py/passage-identity.svg)](https://badge.fury.io/py/passage-identity)
-# passage-python
+[![PyPI version](https://badge.fury.io/py/passage-identity.svg)](https://badge.fury.io/py/passage-identity) [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](#) ![GitHub License](https://img.shields.io/github/license/passageidentity/passage-python)
+![Static Badge](https://img.shields.io/badge/Built_by_1Password-grey?logo=1password)
 
-This Python SDK allows for verification of server-side authentication for applications using [Passage](https://passage.id)
+## About
+
+[Passage by 1Password](https://1password.com/product/passage) unlocks the passwordless future with a simpler, more secure passkey authentication experience. Passage handles the complexities of the [WebAuthn API](https://blog.1password.com/what-is-webauthn/), and allows you to implement passkeys with ease.
+
+Use [Passkey Flex](https://docs.passage.id/flex) to add passkeys to an existing authentication experience.
+
+Use [Passkey Complete](https://docs.passage.id/complete) as a standalone passwordless auth solution.
+
+Use [Passkey Ready](https://docs.passage.id/passkey-ready) to determine if your users are ready for passkeys.
+
+### In passage-python
+
+Use passage-python to implement Passkey Complete into your Python backend to authenticate requests and manage users.
+
+| Product                                                                                                                                  | Compatible                                                                                                |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| ![Passkey Flex](https://storage.googleapis.com/passage-docs/github-md-assets/passage-passkey-flex-icon.png) Passkey **Flex**             | ✖️ For Passkey Flex, check out the [Passkey Flex APIs](https://docs.passage.id/flex/apis)                 |
+| ![Passkey Complete](https://storage.googleapis.com/passage-docs/github-md-assets/passage-passkey-complete-icon.png) Passkey **Complete** | ✅                                                                                                        |
+| ![Passkey Ready](https://storage.googleapis.com/passage-docs/github-md-assets/passage-passkey-ready-icon.png) Passkey **Ready**          | ✖️ For Passkey Ready, check out [Authentikit](https://www.npmjs.com/package/@passageidentity/authentikit) |
+
+## Getting Started
+
+### Check Prerequisites
+
+<p>
+ You'll need a free Passage account and a Passkey Complete app set up in <a href="https://console.passage.id/">Passage Console</a> to get started. <br />
+ <sub><a href="https://docs.passage.id/home#passage-console">Learn more about Passage Console →</a></sub>
+</p>
+
+### Install
 
 Install this package using [pip](https://pypi.org/project/passage-identity/).
 
-```
+```shell
 pip install passage-identity
 ```
 
-## Instantiating the Passage Class
+### Import
+
+```python
+from passageidentity import Passage
+import os
+```
+
+### Initialize
 
 Passage has three arguments that can be used for initialization: `app_id`, `api_key`, and `auth_strategy`.
 
@@ -20,36 +56,55 @@ Passage has three arguments that can be used for initialization: `app_id`, `api_
 - **Deprecated** `auth_strategy` defines where the Passage SDK should look for the authentication token. It is set by default to `Passage.COOKIE_AUTH`, but can be changed to `Passage.HEADER_AUTH`.
 
 ```python
-
-from passageidentity import Passage
-import os
-
-PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
-PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
+PASSAGE_APP_ID = os.environ.get("YOUR_PASSAGE_APP_ID")
+PASSAGE_API_KEY = os.environ.get("YOUR_PASSAGE_API_KEY")
 
 psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 ```
 
+### Go Passwordless
 
-## Available Functions
+Find all core functions, user management details, and more implementation guidance on our [Passkey Complete Python Documentation](https://docs.passage.id/complete/backend-sdks/python) page.
 
+## API Reference
 
-Method | Description
-------------- | -------------
-[**activateUser**](./docs/passageidentity/Users.md#activateUser) | Activate User
-[**deactivateUser**](./docs/passageidentity/Users.md#deactivateUser) | Deactivate User
-[**deleteUser**](./docs/passageidentity/Users.md#deleteUser) | Delete User
-[**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice) | Delete User Device
-[**authenticateRequest**](./docs/passageidentity/Authentication.md#authenticateRequest) | Validates user jwt token
-[**createMagicLink**](./docs/passageidentity/Client.md#createmagiclink) | Create Embeddable Magic Link
-[**createUser**](./docs/passageidentity/Users.md#createUser) | Create User
-[**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice) | Delete a device for a user
-[**getApp**](./docs/passageidentity/Users.md#getApp) |  Get App
-[**getUser**](./docs/passageidentity/Users.md#getUser) | Get User
-[**getUserByIdentifier**](./docs/passageidentity/Users.md#getUserByIdentifier) | Get User By Identifier
-[**listUserDevices**](./docs/passageidentity/Users.md#listUserDevices) | List User Devices
-[**revokeUserDevice**](./docs/passageidentity/Users.md#revokeUserDevice) | **Deprecated** Delete User Device
-[**revokeUserRefreshTokens**](./docs/passageidentity/Authentication.md#revokeUserRefreshTokens) | Signout User
-[**signOut**](./docs/passageidentity/Users.md#signout) | **Deprecated** Signout User
-[**updateUser**](./docs/passageidentity/Users.md#updateUser) | Update User
-[**validateJwt**](./docs/passageidentity/Authentication.md#validateJwt) | Validates user jwt token
+| Method                                                                                          | Description                       |
+| ----------------------------------------------------------------------------------------------- | --------------------------------- |
+| [**activateUser**](./docs/passageidentity/Users.md#activateUser)                                | Activate User                     |
+| [**deactivateUser**](./docs/passageidentity/Users.md#deactivateUser)                            | Deactivate User                   |
+| [**deleteUser**](./docs/passageidentity/Users.md#deleteUser)                                    | Delete User                       |
+| [**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice)                        | Delete User Device                |
+| [**authenticateRequest**](./docs/passageidentity/Authentication.md#authenticateRequest)         | Validates user jwt token          |
+| [**createMagicLink**](./docs/passageidentity/Client.md#createmagiclink)                         | Create Embeddable Magic Link      |
+| [**createUser**](./docs/passageidentity/Users.md#createUser)                                    | Create User                       |
+| [**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice)                        | Delete a device for a user        |
+| [**getApp**](./docs/passageidentity/Users.md#getApp)                                            | Get App                           |
+| [**getUser**](./docs/passageidentity/Users.md#getUser)                                          | Get User                          |
+| [**getUserByIdentifier**](./docs/passageidentity/Users.md#getUserByIdentifier)                  | Get User By Identifier            |
+| [**listUserDevices**](./docs/passageidentity/Users.md#listUserDevices)                          | List User Devices                 |
+| [**revokeUserDevice**](./docs/passageidentity/Users.md#revokeUserDevice)                        | **Deprecated** Delete User Device |
+| [**revokeUserRefreshTokens**](./docs/passageidentity/Authentication.md#revokeUserRefreshTokens) | Signout User                      |
+| [**signOut**](./docs/passageidentity/Users.md#signout)                                          | **Deprecated** Signout User       |
+| [**updateUser**](./docs/passageidentity/Users.md#updateUser)                                    | Update User                       |
+| [**validateJwt**](./docs/passageidentity/Authentication.md#validateJwt)                         | Validates user jwt token          |
+
+## Support & Feedback
+
+We are here to help! Find additional docs, the best ways to get in touch with our team, and more within our [support resources](https://github.com/passageidentity/.github/blob/main/SUPPORT.md).
+
+<br />
+
+---
+
+<p align="center">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/passage-docs/github-md-assets/passage-by-1password-dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://storage.googleapis.com/passage-docs/github-md-assets/passage-by-1password-light.png">
+      <img alt="Passage by 1Password Logo" src="https://storage.googleapis.com/passage-docs/github-md-assets/passage-by-1password-light.png">
+    </picture>
+</p>
+
+<p align="center">
+    <sub>Passage is a product by <a href="https://1password.com/product/passage">1Password</a>, the global leader in access management solutions with nearly 150k business customers.</sub><br />
+    <sub>This project is licensed under the MIT license. See the <a href="LICENSE">LICENSE</a> file for more info.</sub>
+</p>

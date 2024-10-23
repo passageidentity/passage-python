@@ -2,9 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2024-10-23
+
+### Changed
+
+- chore: update README, licensefile, and repository metadata
+- chore(deps): remove unused dependencies
+
+## [2.5.0] - 2024-04-24
+
+### Added
+
+- feat: add support for OIDC token validation to authenticateJWT method
+
 ## [2.4.0] - 2024-03-21
 
 ### Added
+
 - `GetUserByIdentifier` method has been added
 - `ListPaginatedUsersItem` model has been added
 
@@ -13,7 +27,6 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Fixed another issue with the package names generating incorrect names
-
 
 ## [2.3.1] - 2024-02-05
 
