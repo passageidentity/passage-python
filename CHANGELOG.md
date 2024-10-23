@@ -6,8 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Updated README, licensefile, and repository metadata
-- Chore(deps): remove unused dependencies
+- chore: update README, licensefile, and repository metadata
+- chore(deps): remove unused dependencies
+
+## [2.5.0] - 2024-04-24
+
+### Added
+
+- feat: add support for OIDC token validation to authenticateJWT method
 
 ## [2.4.0] - 2024-03-21
 
