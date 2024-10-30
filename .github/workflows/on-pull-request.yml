@@ -1,5 +1,7 @@
-name: Run Tests
-on: 
+name: Lint, Format, and Test
+
+on:
+  workflow_call:
   workflow_dispatch:
   pull_request:
 
@@ -8,22 +10,36 @@ env:
   PASSAGE_APP_ID: ${{ secrets.PASSAGE_APP_ID }}
   PASSAGE_API_KEY: ${{ secrets.PASSAGE_API_KEY }}
   PASSAGE_AUTH_TOKEN: ${{ secrets.PASSAGE_AUTH_TOKEN }}
+  CI: true # used by pytest to enable untruncated output
 
 jobs:
-  run-tests:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v1
+        with:
+          args: check
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v1
+        with:
+          args: format --check
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.8"
-      - name: Run Tests
+      - name: Install dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
           python -m pip install --upgrade pip
           pip install pytest python-dotenv
-          pip list
-          python setup.py pytest
+      - name: Test
+        run: python setup.py pytest
