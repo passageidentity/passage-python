@@ -36,7 +36,7 @@ class CreateMagicLinkRequest(BaseModel):
     channel: MagicLinkChannel
     email: StrictStr
     language: Optional[StrictStr] = Field(default=None, description="language of the email to send (optional)")
-    magic_link_path: StrictStr
+    magic_link_path: StrictStr = Field(description="must be a relative url")
     phone: StrictStr
     redirect_url: StrictStr
     send: StrictBool
