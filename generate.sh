@@ -6,18 +6,15 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-file="$1"
-
-npm install @openapitools/openapi-generator-cli -g
-
-mkdir temp
 rm -rf ./passageidentity/openapi_client
 rm -rf ./docs/generated
 
-openapi-generator-cli generate \
-  -i $file \
+file="$1"
+
+docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest generate \
+  -i "/local/$file" \
   -g python \
-  -o ./temp \
+  -o /local/temp \
   --additional-properties=modelPropertyNaming=original,packageName=passageidentity.openapi_client
 
 mv ./temp/docs ./docs/generated
@@ -26,4 +23,3 @@ mv ./temp/README.md ./docs/generated
 mv ./temp/passageidentity/openapi_client ./passageidentity/openapi_client
 
 rm -rf ./temp
-

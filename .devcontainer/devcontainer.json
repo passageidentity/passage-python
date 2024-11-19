@@ -1,0 +1,21 @@
+{
+	"name": "Python 3",
+	"image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
+	"features": {
+		"ghcr.io/itsmechlark/features/act:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"charliermarsh.ruff",
+				"arahata.linter-actionlint",
+				"tamasfe.even-better-toml",
+				"-ms-python.autopep8",
+				"-dbaeumer.vscode-eslint"
+			]
+		}
+	},
+	"postCreateCommand": "pip install pytest python-dotenv build ruff"
+}
