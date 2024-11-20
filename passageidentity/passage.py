@@ -1,4 +1,6 @@
-import jwt, json, warnings
+import jwt
+import json
+import warnings
 import sys
 
 if sys.version_info >= (3, 8):
