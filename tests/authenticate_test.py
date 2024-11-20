@@ -20,7 +20,7 @@ def randomEmail():
 
 
 def randomPhone():
-    return "+1512" + "".join(random.choice("23456789") for _ in range(7))
+    return f.phone_number()
 
 
 def testValidJWT():
