@@ -6,7 +6,7 @@ class PassageError(Exception):
         self.message = message
         self.status_code = status_code
         self.status_text = status_text
-        if body != None:
+        if body is not None:
             self.error = body["error"]
         else:
             self.error = None
