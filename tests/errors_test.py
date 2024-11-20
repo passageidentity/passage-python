@@ -1,5 +1,4 @@
 from passageidentity import PassageError
-import pytest
 
 def testErrorWithAllValues():
     error = PassageError("some message", 400, "Bad Request", {"error": "some error"})
