@@ -72,9 +72,7 @@ def testGetUserInfoByIdentifierValid():
     assert user.id == newUser.id
 
     assert userByIdentifier == user
-
-    isDeleted = psg.deleteUser(newUser.id)
-    assert isDeleted == True
+    assert psg.deleteUser(newUser.id)
 
 def testGetUserInfoByIdentifierValidUpperCase():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -90,9 +88,8 @@ def testGetUserInfoByIdentifierValidUpperCase():
     assert user.id == newUser.id
 
     assert userByIdentifier == user
+    assert psg.deleteUser(newUser.id)
 
-    isDeleted = psg.deleteUser(newUser.id)
-    assert isDeleted == True
 
 def testGetUserInfoByIdentifierPhoneValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -108,9 +105,7 @@ def testGetUserInfoByIdentifierPhoneValid():
     assert user.id == newUser.id
 
     assert userByIdentifier == user
-
-    isDeleted = psg.deleteUser(newUser.id)
-    assert isDeleted == True
+    assert psg.deleteUser(newUser.id)
 
 def testGetUserInfoByIdentifierError():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -171,9 +166,7 @@ def testCreateUserWithMetadata():
     user = psg.createUser({"email": email, "user_metadata": { "example1": "qwe"}})
     assert user.email ==  email
     assert user.user_metadata["example1"] == "qwe"
-
-    isDeleted = psg.deleteUser(user.id)
-    assert isDeleted == True
+    assert psg.deleteUser(user.id)
 
 def testGetUserInfoUserDoesNotExist():
     pass
@@ -184,9 +177,7 @@ def testCreateAndDeleteUser():
     email = randomEmail()
     newUser = psg.createUser({"email": email})
     assert newUser.email == email
-
-    deletedUser = psg.deleteUser(newUser.id)
-    assert deletedUser == True
+    assert psg.deleteUser(newUser.id)
 
 def testSmartLinkValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
@@ -194,16 +185,14 @@ def testSmartLinkValid():
     email = randomEmail()
     magicLink = psg.createMagicLink({"email": email})
     assert magicLink.identifier == email
-    assert magicLink.activated == False
+    assert not magicLink.activated
 
 def testsignOut():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    success = psg.signOut(PASSAGE_USER_ID)
-    assert success == True
+    assert psg.signOut(PASSAGE_USER_ID)
 
 def testrevokeUserRefreshTokens():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    success = psg.revokeUserRefreshTokens(PASSAGE_USER_ID)
-    assert success == True
+    assert psg.revokeUserRefreshTokens(PASSAGE_USER_ID)
