@@ -1,6 +1,6 @@
 from passageidentity.passage import Passage
 from passageidentity import PassageError
-import faker
+from faker import Faker
 import pytest
 import os
 import random
@@ -8,7 +8,7 @@ import string
 from dotenv import load_dotenv
 
 load_dotenv()
-f = faker.Faker()
+f = Faker()
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
 PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
