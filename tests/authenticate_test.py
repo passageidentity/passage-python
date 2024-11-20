@@ -3,8 +3,6 @@ from passageidentity import PassageError
 from faker import Faker
 import pytest
 import os
-import random
-import string
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,12 +13,10 @@ PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
 PASSAGE_AUTH_TOKEN = os.environ.get("PASSAGE_AUTH_TOKEN")
 
 
-def randomEmail():
-    return f.email() 
-
-
 def randomPhone():
-    return "+1512" + ''.join(str(f.random_number(digits=1, fix_len=True)) for _ in range(7))
+    return "+1512" + "".join(
+        str(f.random_number(digits=1, fix_len=True)) for _ in range(7)
+    )
 
 
 def testValidJWT():
@@ -73,7 +69,7 @@ def testGetUserInfoValid():
 def testGetUserInfoByIdentifierValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email = randomEmail()
+    email = f.email()
     newUser = psg.createUser({"email": email})
     assert newUser.email == email
 
@@ -90,7 +86,7 @@ def testGetUserInfoByIdentifierValid():
 def testGetUserInfoByIdentifierValidUpperCase():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email = randomEmail()
+    email = f.email()
     newUser = psg.createUser({"email": email})
     assert newUser.email == email
 
@@ -162,7 +158,7 @@ def testUpdateUserPhone():
 def testUpdateUserEmail():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email1 = randomEmail()
+    email1 = f.email()
     user = psg.updateUser(PASSAGE_USER_ID, {"email": email1})
     assert user.email == email1
 
@@ -170,7 +166,7 @@ def testUpdateUserEmail():
 def testUpdateUserWithMetadata():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email = randomEmail()
+    email = f.email()
     user = psg.updateUser(
         PASSAGE_USER_ID, {"email": email, "user_metadata": {"example1": "qwe"}}
     )
@@ -187,7 +183,7 @@ def testUpdateUserWithMetadata():
 def testCreateUserWithMetadata():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email = randomEmail()
+    email = f.email()
     user = psg.createUser({"email": email, "user_metadata": {"example1": "qwe"}})
     assert user.email == email
     assert user.user_metadata["example1"] == "qwe"
@@ -201,7 +197,7 @@ def testGetUserInfoUserDoesNotExist():
 def testCreateAndDeleteUser():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email = randomEmail()
+    email = f.email()
     newUser = psg.createUser({"email": email})
     assert newUser.email == email
     assert psg.deleteUser(newUser.id)
@@ -210,7 +206,7 @@ def testCreateAndDeleteUser():
 def testSmartLinkValid():
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    email = randomEmail()
+    email = f.email()
     magicLink = psg.createMagicLink({"email": email})
     assert magicLink.identifier == email
     assert not magicLink.activated
