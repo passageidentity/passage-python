@@ -1,12 +1,9 @@
 import jwt, json, warnings
-from datetime import datetime
-
 import sys
 
 if sys.version_info >= (3, 8):
     from typing import List, Union
 else:
-    from typing_extensions import TypedDict
     from typing import List
     from typing import Union
 
