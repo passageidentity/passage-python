@@ -11,6 +11,6 @@ def testErrorWithAllValues():
 def testErrorWithOnlyMessage():
     error = PassageError("some message")
     assert error.message == "some message"
-    assert error.status_code == None 
-    assert error.status_text == None
-    assert error.error == None
+    assert error.status_code is None 
+    assert error.status_text is None
+    assert error.error is None
