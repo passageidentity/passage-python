@@ -1,5 +1,6 @@
 from passageidentity.passage import Passage
 from passageidentity import PassageError
+import faker
 import pytest
 import os
 import random
@@ -7,6 +8,7 @@ import string
 from dotenv import load_dotenv
 
 load_dotenv()
+f = faker.Faker()
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
 PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
@@ -14,9 +16,7 @@ PASSAGE_AUTH_TOKEN = os.environ.get("PASSAGE_AUTH_TOKEN")
 
 
 def randomEmail():
-    return (
-        "".join(random.choice(string.ascii_lowercase) for _ in range(14)) + "@email.com"
-    )
+    return f.email() 
 
 
 def randomPhone():
