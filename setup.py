@@ -38,6 +38,7 @@ setuptools.setup(
         "aenum",
         "cryptography",
         "faker",
+        "faker_e164",
         'importlib-metadata >= 1.0 ; python_version < "3.12"',
         "pydantic",
         "pyjwt",
