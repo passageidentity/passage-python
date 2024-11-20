@@ -1,5 +1,6 @@
 from passageidentity.passage import Passage
 from passageidentity import PassageError
+from faker_e164.providers import E164Provider 
 from faker import Faker
 import pytest
 import os
@@ -9,6 +10,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 f = Faker()
+f.add_provider(E164Provider) 
 PASSAGE_USER_ID = os.environ.get("PASSAGE_USER_ID")
 PASSAGE_APP_ID = os.environ.get("PASSAGE_APP_ID")
 PASSAGE_API_KEY = os.environ.get("PASSAGE_API_KEY")
@@ -20,7 +22,7 @@ def randomEmail():
 
 
 def randomPhone():
-    return f.phone_number()
+    return f.e164(valid=True)
 
 
 def testValidJWT():
