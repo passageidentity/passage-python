@@ -36,13 +36,13 @@ def getAuthTokenFromRequest(request, auth_strategy):
             if 'psg_auth_token' not in cookies.keys():
                 raise PassageError("No Passage authentication token.")
             return cookies['psg_auth_token']
-        except:
+        except Exception:
             try:
                 cookies = request.cookies
                 if 'psg_auth_token' not in cookies.keys():
                     raise PassageError("No Passage authentication token.")
                 return cookies['psg_auth_token']
-            except:
+            except Exception:
                 raise PassageError("No passage authentication token")
 
 """
