@@ -1,9 +1,4 @@
-import os
 import re
-from base64 import b64decode
-
-from cryptography.hazmat.primitives.serialization import load_pem_public_key
-from cryptography.hazmat.backends import default_backend
 
 from passageidentity import requests
 from passageidentity.errors import PassageError
@@ -14,6 +9,8 @@ BASE_URL = "https://api.passage.id/v1/apps/"
 """
 Helper function to extract the JWT from an Authorization header. 
 """
+
+
 def extractToken(authHeader):
     expression = re.escape(TOKEN_TYPE) + r" ([^\s,]+)"
     match = re.search(expression, authHeader)
@@ -22,10 +19,13 @@ def extractToken(authHeader):
     except (AttributeError, IndexError):
         raise PassageError("No Passage authorization header.")
 
+
 """
 Helper funtion to get the auth token from a request.
 Checks the Authorization header first, then the psg_auth_token cookie
 """
+
+
 def getAuthTokenFromRequest(request, auth_strategy):
     if auth_strategy == 2:
         authHeader = request.headers["Authorization"]
@@ -38,21 +38,24 @@ def getAuthTokenFromRequest(request, auth_strategy):
     else:
         try:
             cookies = request.COOKIES
-            if 'psg_auth_token' not in cookies.keys():
+            if "psg_auth_token" not in cookies.keys():
                 raise PassageError("No Passage authentication token.")
-            return cookies['psg_auth_token']
-        except:
+            return cookies["psg_auth_token"]
+        except Exception:
             try:
                 cookies = request.cookies
-                if 'psg_auth_token' not in cookies.keys():
+                if "psg_auth_token" not in cookies.keys():
                     raise PassageError("No Passage authentication token.")
-                return cookies['psg_auth_token']
-            except:
+                return cookies["psg_auth_token"]
+            except Exception:
                 raise PassageError("No passage authentication token")
+
 
 """
 Helper function to fetch the public key for the given app id from Passage
 """
+
+
 def fetchApp(app_id):
     # unauthenticated request to get the public key
     r = requests.get(BASE_URL + app_id)
@@ -62,4 +65,3 @@ def fetchApp(app_id):
         raise PassageError("Could not fetch app information for app id " + app_id)
 
     return r.json()["app"]
-
