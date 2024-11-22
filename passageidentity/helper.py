@@ -1,67 +1,59 @@
+"""Provides helper functions for interacting with the Passage Identity API."""
+
 import re
+from http import HTTPStatus
+
+from requests.sessions import Request
 
 from passageidentity import requests
 from passageidentity.errors import PassageError
 
-TOKEN_TYPE = "Bearer"
+BEARER_PATTERN = r"Bearer ([^\s,]+)"
 BASE_URL = "https://api.passage.id/v1/apps/"
 
-"""
-Helper function to extract the JWT from an Authorization header. 
-"""
 
+def extract_token(auth_header: str) -> str:
+    """Extract the JWT from an Authorization header."""
+    expression = re.escape(BEARER_PATTERN)
+    match = re.search(expression, auth_header)
 
-def extractToken(authHeader):
-    expression = re.escape(TOKEN_TYPE) + r" ([^\s,]+)"
-    match = re.search(expression, authHeader)
-    try:
+    if match:
         return match.group(1)
-    except (AttributeError, IndexError):
-        raise PassageError("No Passage authorization header.")
+
+    msg = "No Passage authorization header."
+    raise PassageError(msg)
 
 
-"""
-Helper funtion to get the auth token from a request.
-Checks the Authorization header first, then the psg_auth_token cookie
-"""
+def get_auth_token_from_request(request: Request, auth_strategy: int) -> str:
+    """Get the auth token from a request.
 
+    Checks the Authorization header first, then the psg_auth_token cookie.
+    """
+    if auth_strategy == 2:  # noqa: PLR2004
+        auth_header = request.headers["Authorization"]
+        expression = re.escape(BEARER_PATTERN)
+        match = re.search(expression, auth_header)
 
-def getAuthTokenFromRequest(request, auth_strategy):
-    if auth_strategy == 2:
-        authHeader = request.headers["Authorization"]
-        expression = re.escape(TOKEN_TYPE) + r" ([^\s,]+)"
-        match = re.search(expression, authHeader)
-        try:
+        if match:
             return match.group(1)
-        except (AttributeError, IndexError):
-            raise PassageError("No Passage authorization header.")
-    else:
-        try:
-            cookies = request.COOKIES
-            if "psg_auth_token" not in cookies.keys():
-                raise PassageError("No Passage authentication token.")
-            return cookies["psg_auth_token"]
-        except Exception:
-            try:
-                cookies = request.cookies
-                if "psg_auth_token" not in cookies.keys():
-                    raise PassageError("No Passage authentication token.")
-                return cookies["psg_auth_token"]
-            except Exception:
-                raise PassageError("No passage authentication token")
+
+        msg = "No Passage authorization header."
+        raise PassageError(msg)
+
+    cookies = request.COOKIES # type: ignore noqa: PGH003
+    if "psg_auth_token" not in cookies:
+        msg = "No Passage authentication token."
+        raise PassageError(msg)
+
+    return cookies["psg_auth_token"]
 
 
-"""
-Helper function to fetch the public key for the given app id from Passage
-"""
-
-
-def fetchApp(app_id):
+def fetch_app(app_id: str) -> dict:
+    """Fetch the public key for the given app id from Passage."""
     # unauthenticated request to get the public key
     r = requests.get(BASE_URL + app_id)
 
-    # check response code
-    if r.status_code != 200:
+    if r.status_code != HTTPStatus.OK:
         raise PassageError("Could not fetch app information for app id " + app_id)
 
     return r.json()["app"]
