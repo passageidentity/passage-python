@@ -148,9 +148,9 @@ class Passage:
         # load and parse the JWT
         try:
             return self.authenticateJWT(token)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"JWT is not valid: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def authenticateJWT(self, token: str) -> str | PassageError:  # noqa: N802
@@ -183,9 +183,9 @@ class Passage:
                 algorithms=["RS256"],
             )
             return claims["sub"]
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"JWT is not valid: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def createMagicLink(  # noqa: N802
@@ -222,9 +222,9 @@ class Passage:
             return client.create_magic_link(
                 self.app_id, magic_link_req, _headers=self.request_headers, # type: ignore[arg-type]
             ).magic_link # type: ignore[attr-defined]
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to create magic link: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def getApp(self) -> AppInfo | PassageError:  # noqa: N802
@@ -244,9 +244,9 @@ class Passage:
             return client.get_user(
                 self.app_id, user_id, _headers=self.request_headers,
             ).user
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to fetch user data: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def getUserByIdentifier(self, userIdentifier: str) -> UserInfo | PassageError:  # noqa: N802, N803
@@ -263,9 +263,9 @@ class Passage:
                 identifier=userIdentifier.lower(),
                 _headers=self.request_headers,
             ).users
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to fetch user data: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
         if len(users) == 0:
             msg = "Failed to find user data"
@@ -287,9 +287,9 @@ class Passage:
             return client.list_user_devices(
                 self.app_id, user_id, _headers=self.request_headers,
             ).devices
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to list user's devices: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def deleteUserDevice(  # noqa: N802
@@ -318,9 +318,9 @@ class Passage:
                 self.app_id, user_id, device_id, _headers=self.request_headers,
             )
             return True  # noqa: TRY300
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to revoke user device: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def revokeUserRefreshTokens(self, user_id: str) -> bool | PassageError:  # noqa: N802
@@ -349,9 +349,9 @@ class Passage:
                 self.app_id, user_id, _headers=self.request_headers,
             )
             return True  # noqa: TRY300
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to revoke user's refresh tokens: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def activateUser(self, user_id: str) -> UserInfo | PassageError:  # noqa: N802
@@ -365,9 +365,9 @@ class Passage:
             return client.activate_user(
                 self.app_id, user_id, _headers=self.request_headers,
             ).user
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed activate user: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def deactivateUser(self, user_id: str) -> UserInfo | PassageError:  # noqa: N802
@@ -381,9 +381,9 @@ class Passage:
             return client.deactivate_user(
                 self.app_id, user_id, _headers=self.request_headers,
             ).user
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed deactivate user: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
     def updateUser(  # noqa: N802
         self, user_id: str, attributes: UpdateUserRequest,
@@ -398,9 +398,9 @@ class Passage:
             return client.update_user(
                 self.app_id, user_id, attributes, _headers=self.request_headers,
             ).user
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to update user attributes: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def deleteUser(self, user_id: str) -> bool | PassageError:  # noqa: N802
@@ -413,9 +413,9 @@ class Passage:
             client = UsersApi()
             client.delete_user(self.app_id, user_id, _headers=self.request_headers)
             return True  # noqa: TRY300
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to  delete user: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
 
 
     def createUser(  # noqa: N802
@@ -436,6 +436,6 @@ class Passage:
             return client.create_user(
                 self.app_id, userAttributes, _headers=self.request_headers,
             ).user
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Failed to create user: {e}"
-            raise PassageError(msg)  # noqa: B904
+            raise PassageError(msg) from e
