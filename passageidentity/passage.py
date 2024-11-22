@@ -422,7 +422,7 @@ class Passage:
         self, userAttributes: CreateUserRequest,  # noqa: N803
     ) -> UserInfo | PassageError:
         """Create Passage User."""
-        if not (userAttributes.phone or userAttributes.email):
+        if not ("phone" in userAttributes or "email" in userAttributes): # type: ignore[dict-item]
             msg = "either phone or email must be provided to create the user"
             raise PassageError(msg)
 
