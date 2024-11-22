@@ -9,7 +9,6 @@ from passageidentity import PassageError
 from passageidentity.openapi_client.models.app_info import AppInfo
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
 from passageidentity.openapi_client.models.user_info import UserInfo
-from passageidentity.openapi_client.models.web_authn_devices import WebAuthnDevices
 from passageidentity.passage import Passage
 
 load_dotenv()
@@ -143,7 +142,7 @@ def test_deactivate_user() -> None:
 def test_list_user_devices() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    devices = cast(list[WebAuthnDevices], psg.listUserDevices(PASSAGE_USER_ID))
+    devices = cast(list, psg.listUserDevices(PASSAGE_USER_ID))
     assert len(devices) == 2
 
 
