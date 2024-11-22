@@ -44,7 +44,6 @@ setuptools.setup(
     install_requires=[
         "aenum",
         "cryptography",
-        "faker",
         'importlib-metadata >= 1.0 ; python_version < "3.12"',
         "pydantic",
         "pyjwt",
@@ -53,8 +52,17 @@ setuptools.setup(
         "typing_extensions >= 4.7.1",
         "urllib3 >= 1.25.3, < 2.1.0",
     ],
+    extras_require={
+        "dev": [
+            "pytest",
+            "python-dotenv",
+            "faker",
+            "build",
+            "ruff",
+        ],
+    },
     setup_requires=["pytest-runner"],
-    tests_require=["pytest==7.4.3"],
+    tests_require=["pytest"],
     test_suite="tests",
     python_requires=">=3.7",
 )
