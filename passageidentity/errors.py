@@ -1,4 +1,5 @@
 """Defines custom error classes for handling Passage-related errors."""
+
 from __future__ import annotations
 
 
