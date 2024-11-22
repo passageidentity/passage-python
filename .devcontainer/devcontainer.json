@@ -14,8 +14,42 @@
 				"tamasfe.even-better-toml",
 				"-ms-python.autopep8",
 				"-dbaeumer.vscode-eslint"
-			]
+			],
+			"settings": {
+				"linter.linters": {
+					"pylint": {
+						"enabled": false
+					},
+					"yamllint": {
+						"capabilities": [
+							"ignore-line"
+						],
+						"command": [
+							"yamllint",
+							"--format",
+							"parsable",
+							[
+								"$config",
+								"--config-file",
+								"$config"
+							],
+							"-"
+						],
+						"configFiles": [
+							".yamllint.yml",
+							".yamllint.yaml",
+							".yamllint"
+						],
+						"enabled": true,
+						"languages": [
+							"yaml"
+						],
+						"name": "yamllint",
+						"url": "https://github.com/adrienverge/yamllint"
+					}
+				}
+			}
 		}
 	},
-	"postCreateCommand": "pip install pytest python-dotenv build ruff"
+	"postCreateCommand": "sudo python setup.py install && pip install pytest python-dotenv build ruff"
 }
