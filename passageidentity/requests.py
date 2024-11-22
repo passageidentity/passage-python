@@ -1,21 +1,17 @@
-import json
-import requests
-import sys
+"""Provides functions to make HTTP requests with optional API key authorization."""
 
-if sys.version_info >= (3, 8):
-    from importlib import metadata
-else:
-    import importlib_metadata as metadata
+from __future__ import annotations
+
+import json
+from importlib import metadata
+
+import requests
 
 PACKAGE_VERSION = metadata.version("passage-identity")
 
 
-def get_headers(api_key=None):
-    """Creates a new headers dict, with the package version included.
-
-    :returns: dict
-
-    """
+def get_headers(api_key: str | None = None) -> dict[str, str]:
+    """Create a new headers dict with the package version included."""
     headers = {"Passage-Version": f"passage-python {PACKAGE_VERSION}"}
     if api_key:
         headers["Authorization"] = "Bearer " + api_key
@@ -23,51 +19,25 @@ def get_headers(api_key=None):
     return headers
 
 
-def get(url, api_key=None):
-    """Creates GET request, with API key in Authorization header if provided.
-
-    :url: string
-    :api_key: string
-    :returns: requests.Response
-
-    """
-    return requests.get(url, headers=get_headers(api_key))
+def get(url: str, api_key: str | None = None) -> requests.Response:
+    """Send a GET request with API key in Authorization header if provided."""
+    return requests.get(url, headers=get_headers(api_key))  # noqa: S113
 
 
-def post(url, api_key=None, data=None):
-    """Creates POST request, with API key in Authorization header if provided, and the JSON-encoded data in the body.
-
-    :url: string
-    :api_key: string
-    :data: dict
-    :returns: requests.Response
-
-    """
-    return requests.post(
-        url, headers=get_headers(api_key), data=json.dumps(data) if data else None
+def post(url: str, api_key: str | None = None, data: dict | None = None) -> requests.Response:
+    """Send a POST request with API key in Authorization header if provided, and the JSON-encoded data in the body."""
+    return requests.post(  # noqa: S113
+        url, headers=get_headers(api_key), data=json.dumps(data) if data else None,
     )
 
 
-def patch(url, api_key=None, data=None):
-    """Creates PATCH request, with API key in Authorization header if provided, and the JSON-encoded data in the body.
-
-    :url: string
-    :api_key: string
-    :data: dict
-    :returns: requests.Response
-
-    """
-    return requests.patch(
-        url, headers=get_headers(api_key), data=json.dumps(data) if data else None
+def patch(url: str, api_key: str | None = None, data: dict | None = None) -> requests.Response:
+    """Send a PATCH request with API key in Authorization header if provided, and the JSON-encoded data in the body."""
+    return requests.patch(  # noqa: S113
+        url, headers=get_headers(api_key), data=json.dumps(data) if data else None,
     )
 
 
-def delete(url, api_key=None):
-    """Creates DELETE request, with API key in Authorization header if provided.
-
-    :url: string
-    :api_key: string
-    :returns: requests.Response
-
-    """
-    return requests.delete(url, headers=get_headers(api_key))
+def delete(url: str, api_key: str | None = None) -> requests.Response:
+    """Send a DELETE request with API key in Authorization header if provided."""
+    return requests.delete(url, headers=get_headers(api_key))  # noqa: S113

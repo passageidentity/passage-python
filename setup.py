@@ -1,6 +1,10 @@
+"""Setup configuration for the Passage Identity Python package."""
+
+from pathlib import Path
+
 import setuptools
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with Path("README.md").open(encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
@@ -8,7 +12,10 @@ setuptools.setup(
     version="2.5.1",
     author="Passage by 1Password",
     author_email="support@passage.id",
-    description="Passkey Complete for Python - Integrate into your Python API or service to enable a completely passwordless standalone auth solution with Passage by 1Password",
+    description=(
+        "Passkey Complete for Python - Integrate into your Python API or service to enable "
+        "a completely passwordless standalone auth solution with Passage by 1Password"
+    ),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://docs.passage.id/complete",
