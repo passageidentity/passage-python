@@ -211,13 +211,13 @@ def test_smart_link_valid() -> None:
     assert not magic_link.activated # type: ignore[attr-defined]
 
 
-def testsign_out() -> None:
+def test_sign_out() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     assert psg.signOut(PASSAGE_USER_ID)
 
 
-def testrevoke_user_refresh_tokens() -> None:
+def test_revoke_user_refresh_tokens() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     assert psg.revokeUserRefreshTokens(PASSAGE_USER_ID)
