@@ -34,7 +34,6 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
       # https://github.com/googleapis/release-please-action?tab=readme-ov-file#creating-majorminor-tags
       - name: Tag versions
