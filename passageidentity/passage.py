@@ -1,12 +1,11 @@
-import jwt, json, warnings
-from datetime import datetime
-
+import jwt
+import json
+import warnings
 import sys
 
 if sys.version_info >= (3, 8):
     from typing import List, Union
 else:
-    from typing_extensions import TypedDict
     from typing import List
     from typing import Union
 
@@ -15,19 +14,35 @@ from passageidentity import requests
 from passageidentity.helper import fetchApp, getAuthTokenFromRequest
 from passageidentity.errors import PassageError
 
-from .openapi_client.api import AppsApi, MagicLinksApi, TokensApi, UsersApi, UserDevicesApi
-from .openapi_client.models import AppInfo, CreateMagicLinkRequest, CreateUserRequest, MagicLinkType, UpdateUserRequest, UserInfo, WebAuthnDevices
+from .openapi_client.api import (
+    AppsApi,
+    MagicLinksApi,
+    TokensApi,
+    UsersApi,
+    UserDevicesApi,
+)
+from .openapi_client.models import (
+    AppInfo,
+    CreateMagicLinkRequest,
+    CreateUserRequest,
+    MagicLinkType,
+    UpdateUserRequest,
+    UserInfo,
+    WebAuthnDevices,
+)
 
 AUTH_CACHE = {}
 BASE_URL = "https://api.passage.id/v1/apps/"
 
-class Passage():
+
+class Passage:
     COOKIE_AUTH = 1
     HEADER_AUTH = 2
 
     """
     When a Passage object is created, fetch the public key from the cache or make an API request to get it
     """
+
     def __init__(self, app_id, api_key="", auth_strategy=COOKIE_AUTH):
         self.app_id: str = app_id
         self.passage_apikey: str = api_key
@@ -44,15 +59,22 @@ class Passage():
         else:
             self.__refreshAuthCache()
 
-
     """
     Fetch JWKs for the app
     """
+
     def __fetchJWKS(self):
-        r = requests.get(f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json")
+        r = requests.get(
+            f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json"
+        )
 
         if r.status_code != 200:
-            raise PassageError("Could not fetch JWKs for app id " + self.app_id, r.status_code, r.reason, r.json())
+            raise PassageError(
+                "Could not fetch JWKs for app id " + self.app_id,
+                r.status_code,
+                r.reason,
+                r.json(),
+            )
 
         jwks = r.json()["keys"]
 
@@ -66,11 +88,19 @@ class Passage():
     """
     Fetch whether the app is hosted
     """
+
     def __fetchHosted(self):
-        r = requests.get(f"https://api.passage.id/v1/apps/{self.app_id}", api_key=self.passage_apikey)
+        r = requests.get(
+            f"https://api.passage.id/v1/apps/{self.app_id}", api_key=self.passage_apikey
+        )
 
         if r.status_code != 200:
-            raise PassageError("Could not fetch app info for app id " + self.app_id, r.status_code, r.reason, r.json())
+            raise PassageError(
+                "Could not fetch app info for app id " + self.app_id,
+                r.status_code,
+                r.reason,
+                r.json(),
+            )
 
         hosted = r.json()["app"]["hosted"]
 
@@ -80,6 +110,7 @@ class Passage():
     This function will verify the JWT and return the user ID for the authenticated user, or throw
     a PassageError. Takes the place of the deprecated authenticateRequest() function.
     """
+
     def validateJwt(self, token):
         return self.authenticateJWT(token)
 
@@ -88,15 +119,23 @@ class Passage():
         self.jwks = self.__fetchJWKS()
         hosted = self.__fetchHosted()
 
-        AUTH_CACHE[self.app_id] = {"jwks": self.jwks, "auth_origin": self.auth_origin, "hosted": hosted}
+        AUTH_CACHE[self.app_id] = {
+            "jwks": self.jwks,
+            "auth_origin": self.auth_origin,
+            "hosted": hosted,
+        }
 
     """
     Authenticate a Flask or Django request that uses Passage for authentication.
     This function will verify the JWT and return the user ID for the authenticated user, or throw
     a PassageError
     """
+
     def authenticateRequest(self, request: Request) -> Union[str, PassageError]:
-        warnings.warn("Passage.authenticateRequest() is deprecated. Use Passage.authenticateJWT() instead.", DeprecationWarning)
+        warnings.warn(
+            "Passage.authenticateRequest() is deprecated. Use Passage.authenticateJWT() instead.",
+            DeprecationWarning,
+        )
 
         # check for authorization header
         token = getAuthTokenFromRequest(request, self.auth_strategy)
@@ -116,7 +155,8 @@ class Passage():
     This function can be used to authenticate JWTs from Passage if they are not sent in a typical cookie or
     authorization header.
     """
-    def authenticateJWT(self, token:str) -> Union[str, PassageError]:
+
+    def authenticateJWT(self, token: str) -> Union[str, PassageError]:
         # load and parse the JWT
         try:
             hosted = AUTH_CACHE[self.app_id]["hosted"]
@@ -132,7 +172,12 @@ class Passage():
                 jwk = AUTH_CACHE[self.app_id]["jwks"][kid]
 
             public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
-            claims = jwt.decode(token, public_key, audience=[self.app_id] if hosted else self.auth_origin, algorithms=["RS256"])
+            claims = jwt.decode(
+                token,
+                public_key,
+                audience=[self.app_id] if hosted else self.auth_origin,
+                algorithms=["RS256"],
+            )
             return claims["sub"]
         except Exception as e:
             raise PassageError(f"JWT is not valid: {e}")
@@ -140,19 +185,24 @@ class Passage():
     """
     Create Passage MagicLink
     """
-    def createMagicLink(self, magicLinkAttributes: CreateMagicLinkRequest) -> Union[MagicLinkType, PassageError]:
+
+    def createMagicLink(
+        self, magicLinkAttributes: CreateMagicLinkRequest
+    ) -> Union[MagicLinkType, PassageError]:
         # if no api key, fail
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
-        
+
         magic_link_req = {}
-        
+
         magic_link_req["user_id"] = magicLinkAttributes.get("user_id") or ""
         magic_link_req["email"] = magicLinkAttributes.get("email") or ""
         magic_link_req["phone"] = magicLinkAttributes.get("phone") or ""
 
         magic_link_req["language"] = magicLinkAttributes.get("language") or ""
-        magic_link_req["magic_link_path"] = magicLinkAttributes.get("magic_link_path") or ""
+        magic_link_req["magic_link_path"] = (
+            magicLinkAttributes.get("magic_link_path") or ""
+        )
         magic_link_req["redirect_url"] = magicLinkAttributes.get("redirect_url") or ""
         magic_link_req["send"] = magicLinkAttributes.get("send") or False
         magic_link_req["ttl"] = magicLinkAttributes.get("ttl") or 0
@@ -165,7 +215,9 @@ class Passage():
 
         try:
             client = MagicLinksApi()
-            return client.create_magic_link(self.app_id, magic_link_req, _headers=self.request_headers).magic_link
+            return client.create_magic_link(
+                self.app_id, magic_link_req, _headers=self.request_headers
+            ).magic_link
         except Exception as e:
             raise PassageError(f"Failed to create magic link: {e}")
 
@@ -177,33 +229,38 @@ class Passage():
         client = AppsApi()
         return client.get_app(self.app_id).app
 
-
     """
     Use Passage API to get info for a user, look up by user ID
     """
-    def getUser(self, user_id: str) -> Union[UserInfo, PassageError]:
 
+    def getUser(self, user_id: str) -> Union[UserInfo, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UsersApi()
-            return client.get_user(self.app_id, user_id, _headers=self.request_headers).user
+            return client.get_user(
+                self.app_id, user_id, _headers=self.request_headers
+            ).user
         except Exception as e:
             raise PassageError(f"Failed to fetch user data: {e}")
 
     """
     Use Passage API to get info for a user, look up by user identifier
     """
-    def getUserByIdentifier(self, userIdentifier: str) -> Union[UserInfo, PassageError]:
 
+    def getUserByIdentifier(self, userIdentifier: str) -> Union[UserInfo, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UsersApi()
-            users = client.list_paginated_users(self.app_id, limit=1, identifier=userIdentifier.lower(), 
-                                                _headers=self.request_headers).users
+            users = client.list_paginated_users(
+                self.app_id,
+                limit=1,
+                identifier=userIdentifier.lower(),
+                _headers=self.request_headers,
+            ).users
 
             if len(users) == 0:
                 raise PassageError("Failed to find user data")
@@ -212,61 +269,84 @@ class Passage():
         except Exception as e:
             raise PassageError(f"Failed to fetch user data: {e}")
 
-
     """
     Use Passage API to list user devices, look up by user ID
     """
-    def listUserDevices(self, user_id: str) -> Union[List[WebAuthnDevices], PassageError]:
+
+    def listUserDevices(
+        self, user_id: str
+    ) -> Union[List[WebAuthnDevices], PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UserDevicesApi()
-            return client.list_user_devices(self.app_id, user_id, _headers=self.request_headers).devices
+            return client.list_user_devices(
+                self.app_id, user_id, _headers=self.request_headers
+            ).devices
         except Exception as e:
             raise PassageError(f"Failed to list user's devices: {e}")
 
-    
     """
     Use Passage API to revoke user devices, look up by user ID
     """
-    def deleteUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
+
+    def deleteUserDevice(
+        self, user_id: str, device_id: str
+    ) -> Union[bool, PassageError]:
         return self.revokeUserDevice(user_id, device_id)
-    
-    
+
     """
     Use Passage API to revoke user devices, look up by user ID
     """
-    def revokeUserDevice(self, user_id: str, device_id: str) -> Union[bool, PassageError]:
-        warnings.warn("Passage.revokeUserDevice() is deprecated. Use Passage.deleteUserDevice() instead.", DeprecationWarning)
+
+    def revokeUserDevice(
+        self, user_id: str, device_id: str
+    ) -> Union[bool, PassageError]:
+        warnings.warn(
+            "Passage.revokeUserDevice() is deprecated. Use Passage.deleteUserDevice() instead.",
+            DeprecationWarning,
+        )
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UserDevicesApi()
-            client.delete_user_devices(self.app_id, user_id, device_id, _headers=self.request_headers)
+            client.delete_user_devices(
+                self.app_id, user_id, device_id, _headers=self.request_headers
+            )
             return True
         except Exception as e:
             raise PassageError(f"Failed to revoke user device: {e}")
-        
+
     """
     Use Passage API to revoke all of a user's refresh tokens, look up by user ID
     """
+
     def revokeUserRefreshTokens(self, user_id: str) -> Union[bool, PassageError]:
         return self.signOut(user_id)
-    
+
     """
     Use Passage API to revoke all of a user's refresh tokens, look up by user ID
     """
-    def signOut(self, user_id: str, ) -> Union[bool, PassageError]:
-        warnings.warn("Passage.signOut() is deprecated. Use Passage.revokeUserRefreshTokens() instead.", DeprecationWarning)
+
+    def signOut(
+        self,
+        user_id: str,
+    ) -> Union[bool, PassageError]:
+        warnings.warn(
+            "Passage.signOut() is deprecated. Use Passage.revokeUserRefreshTokens() instead.",
+            DeprecationWarning,
+        )
 
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = TokensApi()
-            client.revoke_user_refresh_tokens(self.app_id, user_id, _headers=self.request_headers)
+            client.revoke_user_refresh_tokens(
+                self.app_id, user_id, _headers=self.request_headers
+            )
             return True
         except Exception as e:
             raise PassageError(f"Failed to revoke user's refresh tokens: {e}")
@@ -274,43 +354,53 @@ class Passage():
     """
     Activate Passage User
     """
+
     def activateUser(self, user_id: str) -> Union[UserInfo, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UsersApi()
-            return client.activate_user(self.app_id, user_id, _headers=self.request_headers).user
+            return client.activate_user(
+                self.app_id, user_id, _headers=self.request_headers
+            ).user
         except Exception as e:
             raise PassageError(f"Failed activate user: {e}")
 
     """
     Deactivate Passage User
     """
+
     def deactivateUser(self, user_id: str) -> Union[UserInfo, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UsersApi()
-            return client.deactivate_user(self.app_id, user_id, _headers=self.request_headers).user
+            return client.deactivate_user(
+                self.app_id, user_id, _headers=self.request_headers
+            ).user
         except Exception as e:
             raise PassageError(f"Failed deactivate user: {e}")
 
-
-    def updateUser(self, user_id: str, attributes: UpdateUserRequest) -> Union[UserInfo, PassageError]:
+    def updateUser(
+        self, user_id: str, attributes: UpdateUserRequest
+    ) -> Union[UserInfo, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
 
         try:
             client = UsersApi()
-            return client.update_user(self.app_id, user_id, attributes, _headers=self.request_headers).user
+            return client.update_user(
+                self.app_id, user_id, attributes, _headers=self.request_headers
+            ).user
         except Exception as e:
             raise PassageError(f"Failed to update user attributes: {e}")
 
     """
     Delete Passage User
     """
+
     def deleteUser(self, user_id: str) -> Union[bool, PassageError]:
         if self.passage_apikey == "":
             raise PassageError("No Passage API key provided.")
@@ -325,9 +415,14 @@ class Passage():
     """
     Create Passage User
     """
-    def createUser(self, userAttributes: CreateUserRequest) -> Union[UserInfo, PassageError]:
+
+    def createUser(
+        self, userAttributes: CreateUserRequest
+    ) -> Union[UserInfo, PassageError]:
         if not ("phone" in userAttributes or "email" in userAttributes):
-            raise PassageError("either phone or email must be provided to create the user")
+            raise PassageError(
+                "either phone or email must be provided to create the user"
+            )
 
         # if no api key, fail
         if self.passage_apikey == "":
@@ -335,6 +430,8 @@ class Passage():
 
         try:
             client = UsersApi()
-            return client.create_user(self.app_id, userAttributes, _headers=self.request_headers).user
+            return client.create_user(
+                self.app_id, userAttributes, _headers=self.request_headers
+            ).user
         except Exception as e:
             raise PassageError(f"Failed to create user: {e}")
