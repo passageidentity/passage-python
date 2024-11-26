@@ -8,6 +8,7 @@ import jwt
 import jwt.algorithms
 
 from passageidentity.errors import PassageError
+from passageidentity.helper import fetch_app
 from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.openapi_client.exceptions import ApiException
 from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
@@ -25,7 +26,12 @@ class Auth:
         """Initialize the Auth class with the app ID and request headers."""
         self.app_id = app_id
         self.request_headers = request_headers
-        self.jwks = jwt.PyJWKClient(f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json")
+        self.jwks = jwt.PyJWKClient(
+            f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json",
+            # must set a user agent to avoid 403 from CF
+            headers={"User-Agent": "passageidentity/python"},
+        )
+        self.app = fetch_app(self.app_id)
 
         self.magic_links_api = MagicLinksApi()
 
@@ -37,7 +43,7 @@ class Auth:
             claims = jwt.decode(
                 token,
                 public_key,
-                audience=[self.app_id],
+                audience=[self.app_id] if self.app["hosted"] else self.app["auth_origin"],
                 algorithms=["RS256"],
             )
 
