@@ -10,20 +10,12 @@ import jwt.algorithms
 from passageidentity.errors import PassageError
 from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.openapi_client.exceptions import ApiException
-
-from .openapi_client.models import (
-    CreateUserRequest,
-    UpdateUserRequest,
-    UserInfo,
-)
+from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 
 if TYPE_CHECKING:
-    from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
     from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
 
-PassageUser = UserInfo
-CreateUserArgs = CreateUserRequest
-UpdateUserArgs = UpdateUserRequest
+CreateMagicLinkArgs = CreateMagicLinkRequest
 
 
 class Auth:
@@ -33,10 +25,7 @@ class Auth:
         """Initialize the Auth class with the app ID and request headers."""
         self.app_id = app_id
         self.request_headers = request_headers
-        self.jwks = jwt.PyJWKClient(
-            f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json",
-            headers=self.request_headers,
-        )
+        self.jwks = jwt.PyJWKClient(f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json")
 
         self.magic_links_api = MagicLinksApi()
 
@@ -57,10 +46,10 @@ class Auth:
             msg = f"JWT is not valid: {e}"
             raise PassageError(msg) from e
 
-    def create_magic_link(self, args: CreateMagicLinkRequest) -> MagicLinkType:
+    def create_magic_link(self, args: CreateMagicLinkArgs) -> MagicLinkType:
         """Create a Magic Link for your app."""
         magic_link_req = {}
-        args_dict = args.model_dump()
+        args_dict = args.to_dict() if isinstance(args, CreateMagicLinkRequest) else args
 
         magic_link_req["user_id"] = args_dict.get("user_id") or ""
         magic_link_req["email"] = args_dict.get("email") or ""
