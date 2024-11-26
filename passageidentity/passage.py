@@ -9,7 +9,6 @@ import typing_extensions
 from passageidentity.auth import Auth
 from passageidentity.errors import PassageError
 from passageidentity.helper import get_auth_token_from_request
-from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.user import User
 
 from .openapi_client.api import (
@@ -105,36 +104,7 @@ class Passage:
             msg = "No Passage API key provided."
             raise PassageError(msg)
 
-        magic_link_req = {}
-
-        magic_link_req["user_id"] = magicLinkAttributes.get("user_id") or ""  # type: ignore  # noqa: PGH003
-        magic_link_req["email"] = magicLinkAttributes.get("email") or ""  # type: ignore  # noqa: PGH003
-        magic_link_req["phone"] = magicLinkAttributes.get("phone") or ""  # type: ignore  # noqa: PGH003
-
-        magic_link_req["language"] = magicLinkAttributes.get("language") or ""  # type: ignore  # noqa: PGH003
-        magic_link_req["magic_link_path"] = (
-            magicLinkAttributes.get("magic_link_path") or ""  # type: ignore  # noqa: PGH003
-        )
-        magic_link_req["redirect_url"] = magicLinkAttributes.get("redirect_url") or ""  # type: ignore  # noqa: PGH003
-        magic_link_req["send"] = magicLinkAttributes.get("send") or False  # type: ignore  # noqa: PGH003
-        magic_link_req["ttl"] = magicLinkAttributes.get("ttl") or 0  # type: ignore  # noqa: PGH003
-        magic_link_req["type"] = magicLinkAttributes.get("type") or "login"  # type: ignore  # noqa: PGH003
-
-        if magicLinkAttributes.get("email"):  # type: ignore  # noqa: PGH003
-            magic_link_req["channel"] = magicLinkAttributes.get("channel") or "email"  # type: ignore  # noqa: PGH003
-        elif magicLinkAttributes.get("phone"):  # type: ignore  # noqa: PGH003
-            magic_link_req["channel"] = magicLinkAttributes.get("channel") or "phone"  # type: ignore  # noqa: PGH003
-
-        try:
-            client = MagicLinksApi()
-            return client.create_magic_link(
-                self.app_id,
-                magic_link_req,  # type: ignore[arg-type]
-                _headers=self.request_headers,
-            ).magic_link  # type: ignore[attr-defined]
-        except Exception as e:
-            msg = f"Failed to create magic link: {e}"
-            raise PassageError(msg) from e
+        return self.auth.create_magic_link(magicLinkAttributes)  # type: ignore[attr-defined]
 
     @typing_extensions.deprecated("Passage.getApp() will be removed without replacement.")
     def getApp(self) -> AppInfo | PassageError:  # noqa: N802

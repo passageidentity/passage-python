@@ -14,7 +14,7 @@ from passageidentity.openapi_client.exceptions import ApiException
 from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 
 if TYPE_CHECKING:
-    from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
+    from passageidentity.openapi_client.models.magic_link import MagicLink
 
 CreateMagicLinkArgs = CreateMagicLinkRequest
 
@@ -52,7 +52,7 @@ class Auth:
             msg = f"JWT is not valid: {e}"
             raise PassageError(msg) from e
 
-    def create_magic_link(self, args: CreateMagicLinkArgs) -> MagicLinkType:
+    def create_magic_link(self, args: CreateMagicLinkArgs) -> MagicLink:
         """Create a Magic Link for your app."""
         magic_link_req = {}
         args_dict = args.to_dict() if isinstance(args, CreateMagicLinkRequest) else args
@@ -78,7 +78,7 @@ class Auth:
                 self.app_id,
                 magic_link_req,  # type: ignore[arg-type]
                 _headers=self.request_headers,
-            ).magic_link.type
+            ).magic_link
         except ApiException as e:
             msg = "Could not create a magic link for this app"
             raise PassageError.from_response_error(e, msg) from e
