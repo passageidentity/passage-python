@@ -117,7 +117,7 @@ def test_get_user_info_by_identifier_phone_valid() -> None:
 def test_get_user_info_by_identifier_error() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    with pytest.raises(PassageError, match="Failed to find user data"):
+    with pytest.raises(PassageError, match="Could not find user with identifier"):
         psg.getUserByIdentifier("error@passage.id")
 
 
