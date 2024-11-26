@@ -9,7 +9,6 @@ from passageidentity import requests
 from passageidentity.errors import PassageError
 
 BEARER_PATTERN = r"Bearer ([^\s,]+)"
-BASE_URL = "https://api.passage.id/v1/apps/"
 
 
 def extract_token(auth_header: str) -> str:
@@ -50,9 +49,10 @@ def get_auth_token_from_request(request: Request, auth_strategy: int) -> str:
 def fetch_app(app_id: str) -> dict:
     """Fetch the public key for the given app id from Passage."""
     # unauthenticated request to get the public key
-    r = requests.get(BASE_URL + app_id)
+    r = requests.get(f"https://api.passage.id/v1/apps/{app_id}")
 
     if r.status_code != HTTPStatus.OK:
-        raise PassageError("Could not fetch app information for app id " + app_id)
+        msg = f"Could not fetch app information for app id {app_id}"
+        raise PassageError(msg)
 
     return r.json()["app"]

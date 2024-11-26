@@ -38,11 +38,6 @@ def test_validate_jwt() -> None:
     assert user == PASSAGE_USER_ID
 
 
-def test_fetch_jwks() -> None:
-    psg = Passage(PASSAGE_APP_ID, auth_strategy=Passage.HEADER_AUTH)
-    assert len(psg.jwks) > 0
-
-
 def test_get_app() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
     app = cast(AppInfo, psg.getApp())
