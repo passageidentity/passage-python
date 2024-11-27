@@ -1,7 +1,7 @@
 from passageidentity import PassageError
 
 
-def testErrorWithAllValues():
+def test_error_with_all_values() -> None:
     error = PassageError("some message", 400, "Bad Request", {"error": "some error"})
     assert error.message == "some message"
     assert error.status_code == 400
@@ -9,7 +9,7 @@ def testErrorWithAllValues():
     assert error.error == "some error"
 
 
-def testErrorWithOnlyMessage():
+def test_error_with_only_message() -> None:
     error = PassageError("some message")
     assert error.message == "some message"
     assert error.status_code is None

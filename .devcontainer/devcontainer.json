@@ -14,8 +14,15 @@
 				"tamasfe.even-better-toml",
 				"-ms-python.autopep8",
 				"-dbaeumer.vscode-eslint"
-			]
+			],
+			"settings": {
+				"linter.linters": {
+					"pylint": {
+						"enabled": false
+					}
+				}
+			}
 		}
 	},
-	"postCreateCommand": "pip install pytest python-dotenv build ruff"
+	"postCreateCommand": "pip install --upgrade pip && pip install -e .[dev]"
 }

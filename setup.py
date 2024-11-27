@@ -1,6 +1,10 @@
+"""Setup configuration for the Passage Identity Python package."""
+
+from pathlib import Path
+
 import setuptools
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with Path("README.md").open(encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
@@ -8,7 +12,10 @@ setuptools.setup(
     version="2.5.1",
     author="Passage by 1Password",
     author_email="support@passage.id",
-    description="Passkey Complete for Python - Integrate into your Python API or service to enable a completely passwordless standalone auth solution with Passage by 1Password",
+    description=(
+        "Passkey Complete for Python - Integrate into your Python API or service to enable "
+        "a completely passwordless standalone auth solution with Passage by 1Password"
+    ),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://docs.passage.id/complete",
@@ -37,7 +44,6 @@ setuptools.setup(
     install_requires=[
         "aenum",
         "cryptography",
-        "faker",
         'importlib-metadata >= 1.0 ; python_version < "3.12"',
         "pydantic",
         "pyjwt",
@@ -46,8 +52,17 @@ setuptools.setup(
         "typing_extensions >= 4.7.1",
         "urllib3 >= 1.25.3, < 2.1.0",
     ],
+    extras_require={
+        "dev": [
+            "pytest",
+            "python-dotenv",
+            "faker",
+            "build",
+            "ruff",
+        ],
+    },
     setup_requires=["pytest-runner"],
-    tests_require=["pytest==7.4.3"],
+    tests_require=["pytest"],
     test_suite="tests",
     python_requires=">=3.7",
 )
