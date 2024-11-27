@@ -7,6 +7,7 @@ from faker import Faker
 
 from passageidentity import PassageError
 from passageidentity.openapi_client.models.app_info import AppInfo
+from passageidentity.openapi_client.models.magic_link import MagicLink
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
 from passageidentity.openapi_client.models.user_info import UserInfo
 from passageidentity.passage import Passage
@@ -207,9 +208,9 @@ def test_smart_link_valid() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    magic_link = psg.createMagicLink({"email": email})  # type: ignore[arg-type]
-    assert magic_link.identifier == email  # type: ignore[attr-defined]
-    assert not magic_link.activated  # type: ignore[attr-defined]
+    magic_link = cast(MagicLink, psg.createMagicLink({"email": email}))  # type: ignore[arg-type]
+    assert magic_link.identifier == email
+    assert not magic_link.activated
 
 
 def test_sign_out() -> None:
