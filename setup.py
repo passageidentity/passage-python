@@ -42,23 +42,22 @@ setuptools.setup(
         "passageidentity.openapi_client.models": "passageidentity/openapi_client/models",
     },
     install_requires=[
-        "cryptography >= 44.0.0", # used by pyjwt
-        "importlib-metadata >= 8.5.0", # required for python < 3.8
-        "pydantic >= 2.10.2", # used by codgen
-        "pyjwt >= 2.10.1",
-        "requests >= 2.32.3",
+        "cryptography ~= 44.0",  # used by pyjwt
+        "pydantic ~= 2.10",  # used by codgen
+        "pyjwt ~= 2.9",
+        "requests ~= 2.32",
     ],
     extras_require={
         "dev": [
-            "pytest >= 8.3.4",
-            "python-dotenv >= 1.0.1",
-            "faker >= 33.1.0",
-            "build >= 1.2.2.post1",
-            "ruff >= 0.8.1",
+            "pytest ~= 8.3",
+            "python-dotenv ~= 1.0",
+            "faker ~= 33.1",
+            "build ~= 1.2",
+            "ruff ~= 0.8",
         ],
     },
     setup_requires=["pytest-runner"],
     tests_require=["pytest"],
     test_suite="tests",
-    python_requires=">=3.7",
+    python_requires=">=3.8",
 )
