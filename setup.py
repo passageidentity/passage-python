@@ -42,15 +42,11 @@ setuptools.setup(
         "passageidentity.openapi_client.models": "passageidentity/openapi_client/models",
     },
     install_requires=[
-        "aenum >= 3.1.15",
-        "cryptography >= 44.0.0",
-        "importlib-metadata >= 8.5.0",
-        "pydantic >= 2.10.2",
+        "cryptography >= 44.0.0", # used by pyjwt
+        "importlib-metadata >= 8.5.0", # required for python < 3.8
+        "pydantic >= 2.10.2", # used by codgen
         "pyjwt >= 2.10.1",
-        "python-dateutil >= 2.9.0.post0",
         "requests >= 2.32.3",
-        "typing_extensions >= 4.12.2",
-        "urllib3 >= 2.2.3",
     ],
     extras_require={
         "dev": [
