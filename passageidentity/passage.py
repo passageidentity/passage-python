@@ -6,13 +6,24 @@ from typing import TYPE_CHECKING
 
 import typing_extensions
 
-from passageidentity.auth import Auth
+from passageidentity.auth import (
+    Auth,
+    MagicLinkOptions,
+    MagicLinkWithEmailArgs,
+    MagicLinkWithPhoneArgs,
+    MagicLinkWithUserArgs,
+)
 from passageidentity.errors import PassageError
 from passageidentity.helper import get_auth_token_from_request
+from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
 from passageidentity.user import User
 
 from .openapi_client.api import (
     AppsApi,
+)
+from .openapi_client.models import (
+    CreateMagicLinkRequest,
+    MagicLinkType,
 )
 
 if TYPE_CHECKING:
@@ -20,9 +31,7 @@ if TYPE_CHECKING:
 
     from .openapi_client.models import (
         AppInfo,
-        CreateMagicLinkRequest,
         CreateUserRequest,
-        MagicLinkType,
         UpdateUserRequest,
         UserInfo,
         WebAuthnDevices,
@@ -104,7 +113,33 @@ class Passage:
             msg = "No Passage API key provided."
             raise PassageError(msg)
 
-        return self.auth.create_magic_link(magicLinkAttributes)  # type: ignore[attr-defined]
+        magic_link_attrs_dict = (
+            magicLinkAttributes.to_dict()
+            if isinstance(magicLinkAttributes, CreateMagicLinkRequest)
+            else magicLinkAttributes
+        )
+
+        if "email" in magic_link_attrs_dict:
+            args = MagicLinkWithEmailArgs()
+            args.email = magic_link_attrs_dict["email"]
+        elif "phone" in magic_link_attrs_dict:
+            args = MagicLinkWithPhoneArgs()
+            args.phone = magic_link_attrs_dict["phone"]
+        elif "user_id" in magic_link_attrs_dict:
+            args = MagicLinkWithUserArgs()
+            args.user_id = magic_link_attrs_dict["user_id"]
+            args.channel = magic_link_attrs_dict.get("channel") or MagicLinkChannel.EMAIL
+
+        args.send = magic_link_attrs_dict.get("send") or False
+        args.type = magic_link_attrs_dict.get("type") or MagicLinkType.LOGIN
+
+        options = MagicLinkOptions()
+        options.language = magic_link_attrs_dict.get("language")
+        options.magic_link_path = magic_link_attrs_dict.get("magic_link_path")
+        options.redirect_url = magic_link_attrs_dict.get("redirect_url")
+        options.ttl = magic_link_attrs_dict.get("ttl")
+
+        return self.auth.create_magic_link(args, options)  # type: ignore[attr-defined]
 
     @typing_extensions.deprecated("Passage.getApp() will be removed without replacement.")
     def getApp(self) -> AppInfo | PassageError:  # noqa: N802

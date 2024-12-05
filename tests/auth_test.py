@@ -45,15 +45,18 @@ def test_get_app() -> None:
 
 def test_create_magic_link() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    magic_link = psg.createMagicLink(
-        {
-            "email": "chris@passage.id",
-            "channel": "email",
-            "ttl": 12,
-        },  # type: ignore[arg-type]
+    magic_link = cast(
+        MagicLink,
+        psg.createMagicLink(
+            {
+                "email": "chris@passage.id",
+                "channel": "email",
+                "ttl": 12,
+            },  # type: ignore[arg-type]
+        ),
     )
-    assert magic_link.identifier == "chris@passage.id"  # type: ignore[attr-defined]
-    assert magic_link.ttl == 12  # type: ignore[attr-defined]
+    assert magic_link.identifier == "chris@passage.id"
+    assert magic_link.ttl == 12
 
 
 def test_smart_link_valid() -> None:
