@@ -17,9 +17,8 @@ Get app information.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.app_response import AppResponse
 from passageidentity.openapi_client.rest import ApiException
@@ -60,6 +59,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -78,6 +78,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |

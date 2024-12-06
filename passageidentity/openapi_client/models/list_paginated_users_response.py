@@ -18,16 +18,12 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictInt
-from pydantic import Field
 from passageidentity.openapi_client.models.list_paginated_users_item import ListPaginatedUsersItem
 from passageidentity.openapi_client.models.paginated_links import PaginatedLinks
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class ListPaginatedUsersResponse(BaseModel):
     """
@@ -41,10 +37,11 @@ class ListPaginatedUsersResponse(BaseModel):
     users: List[ListPaginatedUsersItem]
     __properties: ClassVar[List[str]] = ["_links", "created_before", "limit", "page", "total_users", "users"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -57,7 +54,7 @@ class ListPaginatedUsersResponse(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ListPaginatedUsersResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -71,10 +68,12 @@ class ListPaginatedUsersResponse(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of links
@@ -83,14 +82,14 @@ class ListPaginatedUsersResponse(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in users (list)
         _items = []
         if self.users:
-            for _item in self.users:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_users in self.users:
+                if _item_users:
+                    _items.append(_item_users.to_dict())
             _dict['users'] = _items
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ListPaginatedUsersResponse from a dict"""
         if obj is None:
             return None
@@ -99,12 +98,12 @@ class ListPaginatedUsersResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "_links": PaginatedLinks.from_dict(obj.get("_links")) if obj.get("_links") is not None else None,
+            "_links": PaginatedLinks.from_dict(obj["_links"]) if obj.get("_links") is not None else None,
             "created_before": obj.get("created_before"),
             "limit": obj.get("limit"),
             "page": obj.get("page"),
             "total_users": obj.get("total_users"),
-            "users": [ListPaginatedUsersItem.from_dict(_item) for _item in obj.get("users")] if obj.get("users") is not None else None
+            "users": [ListPaginatedUsersItem.from_dict(_item) for _item in obj["users"]] if obj.get("users") is not None else None
         })
         return _obj
 

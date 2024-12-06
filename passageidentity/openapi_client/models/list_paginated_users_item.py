@@ -19,13 +19,11 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from passageidentity.openapi_client.models.user_status import UserStatus
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class ListPaginatedUsersItem(BaseModel):
     """
@@ -34,6 +32,7 @@ class ListPaginatedUsersItem(BaseModel):
     created_at: datetime
     email: StrictStr
     email_verified: StrictBool
+    external_id: StrictStr = Field(description="The external ID of the user. Only set if the user was created in a Flex app.")
     id: StrictStr
     last_login_at: datetime
     login_count: StrictInt
@@ -41,13 +40,14 @@ class ListPaginatedUsersItem(BaseModel):
     phone_verified: StrictBool
     status: UserStatus
     updated_at: datetime
-    user_metadata: Optional[Union[str, Any]]
-    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "status", "updated_at", "user_metadata"]
+    user_metadata: Optional[Dict[str, Any]]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "external_id", "id", "last_login_at", "login_count", "phone", "phone_verified", "status", "updated_at", "user_metadata"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -60,7 +60,7 @@ class ListPaginatedUsersItem(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ListPaginatedUsersItem from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -74,10 +74,12 @@ class ListPaginatedUsersItem(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # set to None if user_metadata (nullable) is None
@@ -88,7 +90,7 @@ class ListPaginatedUsersItem(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ListPaginatedUsersItem from a dict"""
         if obj is None:
             return None
@@ -100,6 +102,7 @@ class ListPaginatedUsersItem(BaseModel):
             "created_at": obj.get("created_at"),
             "email": obj.get("email"),
             "email_verified": obj.get("email_verified"),
+            "external_id": obj.get("external_id"),
             "id": obj.get("id"),
             "last_login_at": obj.get("last_login_at"),
             "login_count": obj.get("login_count"),

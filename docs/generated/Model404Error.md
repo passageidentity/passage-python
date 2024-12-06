@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **code** | **str** |  | 
@@ -17,12 +18,12 @@ json = "{}"
 # create an instance of Model404Error from a JSON string
 model404_error_instance = Model404Error.from_json(json)
 # print the JSON string representation of the object
-print Model404Error.to_json()
+print(Model404Error.to_json())
 
 # convert the object into a dict
 model404_error_dict = model404_error_instance.to_dict()
 # create an instance of Model404Error from a dict
-model404_error_form_dict = model404_error.from_dict(model404_error_dict)
+model404_error_from_dict = Model404Error.from_dict(model404_error_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
