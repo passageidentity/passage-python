@@ -6,15 +6,11 @@ from typing import TYPE_CHECKING
 
 import typing_extensions
 
-from passageidentity.auth import (
-    Auth,
-    MagicLinkOptions,
-    MagicLinkWithEmailArgs,
-    MagicLinkWithPhoneArgs,
-    MagicLinkWithUserArgs,
-)
+from passageidentity.auth import Auth
 from passageidentity.errors import PassageError
 from passageidentity.helper import get_auth_token_from_request
+from passageidentity.models.magic_link_args import MagicLinkWithEmailArgs, MagicLinkWithPhoneArgs, MagicLinkWithUserArgs
+from passageidentity.models.magic_link_options import MagicLinkOptions
 from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
 from passageidentity.user import User
 
