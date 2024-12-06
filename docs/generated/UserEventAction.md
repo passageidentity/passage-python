@@ -1,11 +1,13 @@
-# UserEventStatus
+# UserEventAction
 
 
 ## Enum
 
-* `COMPLETE` (value: `'complete'`)
+* `REGISTER` (value: `'register'`)
 
-* `INCOMPLETE` (value: `'incomplete'`)
+* `LOGIN` (value: `'login'`)
+
+* `OTHER` (value: `'other'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

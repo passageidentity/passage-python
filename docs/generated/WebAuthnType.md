@@ -2,9 +2,13 @@
 
 The type of this credential
 
-## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
+## Enum
+
+* `PASSKEY` (value: `'passkey'`)
+
+* `SECURITY_KEY` (value: `'security_key'`)
+
+* `PLATFORM` (value: `'platform'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

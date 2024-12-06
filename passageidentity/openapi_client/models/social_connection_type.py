@@ -19,26 +19,21 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class Technologies(str, Enum):
+class SocialConnectionType(str, Enum):
     """
-    Technologies
+    SocialConnectionType
     """
 
     """
     allowed enum values
     """
-    REACT = 'react'
-    GO = 'go'
-    VUE = 'vue'
-    ANGULAR = 'angular'
-    PYTHON = 'python'
-    JAVASCRIPT = 'javascript'
-    IOS = 'ios'
-    ANDROID = 'android'
+    APPLE = 'apple'
+    GITHUB = 'github'
+    GOOGLE = 'google'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Technologies from a JSON string"""
+        """Create an instance of SocialConnectionType from a JSON string"""
         return cls(json.loads(json_str))
 
 

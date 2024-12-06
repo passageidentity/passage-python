@@ -18,9 +18,8 @@ Delete a device for a user.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
@@ -60,6 +59,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -80,6 +80,7 @@ void (empty response body)
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
@@ -99,9 +100,8 @@ List user devices.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.list_devices_response import ListDevicesResponse
 from passageidentity.openapi_client.rest import ApiException
@@ -143,6 +143,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -162,6 +163,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |

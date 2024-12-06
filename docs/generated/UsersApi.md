@@ -23,9 +23,8 @@ Activate a user. They will now be able to login.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.rest import ApiException
@@ -67,6 +66,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -86,6 +86,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
@@ -105,9 +106,8 @@ Create user for an application. Must provide an email of phone number identifier
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
 from passageidentity.openapi_client.models.user_response import UserResponse
@@ -150,6 +150,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -169,6 +170,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | Created |  -  |
@@ -189,9 +191,8 @@ Deactivate a user. Their account will still exist, but they will not be able to 
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.rest import ApiException
@@ -233,6 +234,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -252,6 +254,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
@@ -271,9 +274,8 @@ Delete a user.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
@@ -312,6 +314,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -331,6 +334,7 @@ void (empty response body)
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
@@ -350,9 +354,8 @@ Get information about a user.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.rest import ApiException
@@ -394,6 +397,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -413,6 +417,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
@@ -432,9 +437,8 @@ List users for an app.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.list_paginated_users_response import ListPaginatedUsersResponse
 from passageidentity.openapi_client.rest import ApiException
@@ -486,6 +490,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -515,6 +520,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
@@ -535,9 +541,8 @@ Update a user's information.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
 from passageidentity.openapi_client.models.user_response import UserResponse
@@ -581,6 +586,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
@@ -601,6 +607,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |

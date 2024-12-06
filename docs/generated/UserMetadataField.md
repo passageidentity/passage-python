@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **field_name** | **str** |  | 
@@ -21,12 +22,12 @@ json = "{}"
 # create an instance of UserMetadataField from a JSON string
 user_metadata_field_instance = UserMetadataField.from_json(json)
 # print the JSON string representation of the object
-print UserMetadataField.to_json()
+print(UserMetadataField.to_json())
 
 # convert the object into a dict
 user_metadata_field_dict = user_metadata_field_instance.to_dict()
 # create an instance of UserMetadataField from a dict
-user_metadata_field_form_dict = user_metadata_field.from_dict(user_metadata_field_dict)
+user_metadata_field_from_dict = UserMetadataField.from_dict(user_metadata_field_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

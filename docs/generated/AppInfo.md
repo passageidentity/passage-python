@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **additional_auth_origins** | **List[str]** |  | 
@@ -13,6 +14,7 @@ Name | Type | Description | Notes
 **auth_fallback_method_ttl** | **int** | Deprecated Property. Please refer to &#x60;auth_methods&#x60; to view settings for individual authentication methods. | 
 **auth_methods** | [**AuthMethods**](AuthMethods.md) |  | 
 **auth_origin** | **str** |  | 
+**auto_theme_enabled** | **bool** | Deprecated Property. Please use &#x60;hosted_theme&#x60; to set hosted page theming instead. | 
 **created_at** | **datetime** |  | 
 **default_language** | **str** |  | 
 **id** | **str** |  | 
@@ -21,8 +23,9 @@ Name | Type | Description | Notes
 **light_logo_url** | **str** |  | [optional] 
 **dark_logo_url** | **str** |  | [optional] 
 **name** | **str** |  | 
-**hosted** | **bool** | whether or not the app&#39;s login page hosted by passage | 
+**hosted** | **bool** | whether or not the app&#39;s login page is hosted by Passage | 
 **hosted_subdomain** | **str** | the subdomain of the app&#39;s hosted login page | 
+**hosted_theme** | [**ThemeType**](ThemeType.md) |  | 
 **id_token_lifetime** | **int** |  | [optional] 
 **passage_branding** | **bool** |  | 
 **profile_management** | **bool** |  | 
@@ -54,12 +57,12 @@ json = "{}"
 # create an instance of AppInfo from a JSON string
 app_info_instance = AppInfo.from_json(json)
 # print the JSON string representation of the object
-print AppInfo.to_json()
+print(AppInfo.to_json())
 
 # convert the object into a dict
 app_info_dict = app_info_instance.to_dict()
 # create an instance of AppInfo from a dict
-app_info_form_dict = app_info.from_dict(app_info_dict)
+app_info_from_dict = AppInfo.from_dict(app_info_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

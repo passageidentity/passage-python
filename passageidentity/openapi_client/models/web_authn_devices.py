@@ -19,15 +19,12 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictInt, StrictStr
-from pydantic import Field
 from passageidentity.openapi_client.models.web_authn_icons import WebAuthnIcons
 from passageidentity.openapi_client.models.web_authn_type import WebAuthnType
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class WebAuthnDevices(BaseModel):
     """
@@ -44,10 +41,11 @@ class WebAuthnDevices(BaseModel):
     icons: WebAuthnIcons
     __properties: ClassVar[List[str]] = ["created_at", "cred_id", "friendly_name", "id", "last_login_at", "type", "updated_at", "usage_count", "icons"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -60,7 +58,7 @@ class WebAuthnDevices(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of WebAuthnDevices from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -74,10 +72,12 @@ class WebAuthnDevices(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of icons
@@ -86,7 +86,7 @@ class WebAuthnDevices(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of WebAuthnDevices from a dict"""
         if obj is None:
             return None
@@ -103,7 +103,7 @@ class WebAuthnDevices(BaseModel):
             "type": obj.get("type"),
             "updated_at": obj.get("updated_at"),
             "usage_count": obj.get("usage_count"),
-            "icons": WebAuthnIcons.from_dict(obj.get("icons")) if obj.get("icons") is not None else None
+            "icons": WebAuthnIcons.from_dict(obj["icons"]) if obj.get("icons") is not None else None
         })
         return _obj
 

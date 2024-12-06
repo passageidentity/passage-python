@@ -18,16 +18,13 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel
 from passageidentity.openapi_client.models.magic_link_auth_method import MagicLinkAuthMethod
 from passageidentity.openapi_client.models.otp_auth_method import OtpAuthMethod
 from passageidentity.openapi_client.models.passkeys_auth_method import PasskeysAuthMethod
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class AuthMethods(BaseModel):
     """
@@ -38,10 +35,11 @@ class AuthMethods(BaseModel):
     magic_link: MagicLinkAuthMethod
     __properties: ClassVar[List[str]] = ["passkeys", "otp", "magic_link"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -54,7 +52,7 @@ class AuthMethods(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of AuthMethods from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -68,10 +66,12 @@ class AuthMethods(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of passkeys
@@ -86,7 +86,7 @@ class AuthMethods(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of AuthMethods from a dict"""
         if obj is None:
             return None
@@ -95,9 +95,9 @@ class AuthMethods(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "passkeys": PasskeysAuthMethod.from_dict(obj.get("passkeys")) if obj.get("passkeys") is not None else None,
-            "otp": OtpAuthMethod.from_dict(obj.get("otp")) if obj.get("otp") is not None else None,
-            "magic_link": MagicLinkAuthMethod.from_dict(obj.get("magic_link")) if obj.get("magic_link") is not None else None
+            "passkeys": PasskeysAuthMethod.from_dict(obj["passkeys"]) if obj.get("passkeys") is not None else None,
+            "otp": OtpAuthMethod.from_dict(obj["otp"]) if obj.get("otp") is not None else None,
+            "magic_link": MagicLinkAuthMethod.from_dict(obj["magic_link"]) if obj.get("magic_link") is not None else None
         })
         return _obj
 
