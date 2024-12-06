@@ -9,14 +9,14 @@ import jwt.algorithms
 
 from passageidentity.errors import PassageError
 from passageidentity.helper import fetch_app
+from passageidentity.models.magic_link_args import MagicLinkWithEmailArgs, MagicLinkWithPhoneArgs, MagicLinkWithUserArgs
 from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.openapi_client.exceptions import ApiException
-from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 
 if TYPE_CHECKING:
+    from passageidentity.models.magic_link_args import MagicLinkArgs
+    from passageidentity.models.magic_link_options import MagicLinkOptions
     from passageidentity.openapi_client.models.magic_link import MagicLink
-
-CreateMagicLinkArgs = CreateMagicLinkRequest
 
 
 class Auth:
@@ -52,31 +52,34 @@ class Auth:
             msg = f"JWT is not valid: {e}"
             raise PassageError(msg) from e
 
-    def create_magic_link(self, args: CreateMagicLinkArgs) -> MagicLink:
+    def create_magic_link(self, args: MagicLinkArgs, options: MagicLinkOptions | None = None) -> MagicLink:
         """Create a Magic Link for your app."""
-        magic_link_req = {}
-        args_dict = args.to_dict() if isinstance(args, CreateMagicLinkRequest) else args
+        payload = {
+            "type": args.type,
+            "send": args.send,
+        }
 
-        magic_link_req["user_id"] = args_dict.get("user_id") or ""
-        magic_link_req["email"] = args_dict.get("email") or ""
-        magic_link_req["phone"] = args_dict.get("phone") or ""
+        if isinstance(args, MagicLinkWithEmailArgs):
+            payload["email"] = args.email
+        elif isinstance(args, MagicLinkWithPhoneArgs):
+            payload["phone"] = args.phone
+        elif isinstance(args, MagicLinkWithUserArgs):
+            payload["user_id"] = args.user_id
+            payload["channel"] = args.channel
+        else:
+            msg = "args must be an instance of MagicLinkArgs"
+            raise TypeError(msg)
 
-        magic_link_req["language"] = args_dict.get("language") or ""
-        magic_link_req["magic_link_path"] = args_dict.get("magic_link_path") or ""
-        magic_link_req["redirect_url"] = args_dict.get("redirect_url") or ""
-        magic_link_req["send"] = args_dict.get("send") or False
-        magic_link_req["ttl"] = args_dict.get("ttl") or 0
-        magic_link_req["type"] = args_dict.get("type") or "login"
-
-        if args_dict.get("email"):
-            magic_link_req["channel"] = args_dict.get("channel") or "email"
-        elif args_dict.get("phone"):
-            magic_link_req["channel"] = args_dict.get("channel") or "phone"
+        if options:
+            payload["language"] = options.language
+            payload["magic_link_path"] = options.magic_link_path
+            payload["redirect_url"] = options.redirect_url
+            payload["ttl"] = options.ttl
 
         try:
             return self.magic_links_api.create_magic_link(
                 self.app_id,
-                magic_link_req,  # type: ignore[arg-type]
+                payload,  # type: ignore[arg-type]
                 _headers=self.request_headers,
             ).magic_link
         except ApiException as e:
