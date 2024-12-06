@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **activated** | **bool** |  | 
@@ -25,12 +26,12 @@ json = "{}"
 # create an instance of MagicLink from a JSON string
 magic_link_instance = MagicLink.from_json(json)
 # print the JSON string representation of the object
-print MagicLink.to_json()
+print(MagicLink.to_json())
 
 # convert the object into a dict
 magic_link_dict = magic_link_instance.to_dict()
 # create an instance of MagicLink from a dict
-magic_link_form_dict = magic_link.from_dict(magic_link_dict)
+magic_link_from_dict = MagicLink.from_dict(magic_link_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

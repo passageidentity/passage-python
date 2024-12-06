@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **first** | [**Link**](Link.md) |  | 
@@ -20,12 +21,12 @@ json = "{}"
 # create an instance of PaginatedLinks from a JSON string
 paginated_links_instance = PaginatedLinks.from_json(json)
 # print the JSON string representation of the object
-print PaginatedLinks.to_json()
+print(PaginatedLinks.to_json())
 
 # convert the object into a dict
 paginated_links_dict = paginated_links_instance.to_dict()
 # create an instance of PaginatedLinks from a dict
-paginated_links_form_dict = paginated_links.from_dict(paginated_links_dict)
+paginated_links_from_dict = PaginatedLinks.from_dict(paginated_links_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

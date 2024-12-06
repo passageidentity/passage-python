@@ -18,13 +18,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class Model404Error(BaseModel):
     """
@@ -37,14 +34,15 @@ class Model404Error(BaseModel):
     @field_validator('code')
     def code_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in ('admin_not_found', 'api_key_not_found', 'app_not_found', 'device_not_found', 'domain_not_found', 'email_provider_not_found', 'email_template_not_found', 'event_not_found', 'function_not_found', 'function_secret_key_not_found', 'function_version_not_found', 'metadata_field_not_found', 'oauth2_app_not_found', 'organization_member_not_found', 'sms_provider_not_found', 'sms_template_not_found', 'social_connection_not_found', 'user_not_found'):
-            raise ValueError("must be one of enum values ('admin_not_found', 'api_key_not_found', 'app_not_found', 'device_not_found', 'domain_not_found', 'email_provider_not_found', 'email_template_not_found', 'event_not_found', 'function_not_found', 'function_secret_key_not_found', 'function_version_not_found', 'metadata_field_not_found', 'oauth2_app_not_found', 'organization_member_not_found', 'sms_provider_not_found', 'sms_template_not_found', 'social_connection_not_found', 'user_not_found')")
+        if value not in set(['admin_not_found', 'api_key_not_found', 'app_not_found', 'device_not_found', 'domain_not_found', 'email_provider_not_found', 'email_template_not_found', 'event_not_found', 'function_not_found', 'function_secret_key_not_found', 'function_version_not_found', 'metadata_field_not_found', 'oauth2_app_not_found', 'organization_member_not_found', 'sms_provider_not_found', 'sms_template_not_found', 'social_connection_not_found', 'user_not_found', 'native_client_not_found']):
+            raise ValueError("must be one of enum values ('admin_not_found', 'api_key_not_found', 'app_not_found', 'device_not_found', 'domain_not_found', 'email_provider_not_found', 'email_template_not_found', 'event_not_found', 'function_not_found', 'function_secret_key_not_found', 'function_version_not_found', 'metadata_field_not_found', 'oauth2_app_not_found', 'organization_member_not_found', 'sms_provider_not_found', 'sms_template_not_found', 'social_connection_not_found', 'user_not_found', 'native_client_not_found')")
         return value
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -57,7 +55,7 @@ class Model404Error(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Model404Error from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -71,16 +69,18 @@ class Model404Error(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Model404Error from a dict"""
         if obj is None:
             return None

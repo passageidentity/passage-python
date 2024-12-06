@@ -18,15 +18,11 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictInt, StrictStr
-from pydantic import Field
 from passageidentity.openapi_client.models.font_family import FontFamily
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class ElementCustomization(BaseModel):
     """
@@ -36,8 +32,8 @@ class ElementCustomization(BaseModel):
     passage_container_max_width: Optional[StrictInt] = Field(default=300, description="Maximum width of container (px)")
     passage_input_box_background_color: Optional[StrictStr] = Field(default=None, description="Input box background color in hex. Default is `#ffffff` in light mode & `#4b4b4b` in dark mode. ")
     passage_input_box_border_radius: Optional[StrictInt] = Field(default=5, description="Input box border radius (px)")
-    passage_header_font_family: Optional[FontFamily] = None
-    passage_body_font_family: Optional[FontFamily] = None
+    passage_header_font_family: Optional[FontFamily] = FontFamily.HELVETICA
+    passage_body_font_family: Optional[FontFamily] = FontFamily.HELVETICA
     passage_header_text_color: Optional[StrictStr] = Field(default=None, description="Header text color in hex. Default is `#222222` in light mode & `#f3f3f3` in dark mode. ")
     passage_body_text_color: Optional[StrictStr] = Field(default=None, description="Body text color in hex. Default is `#222222` in light mode & `#f3f3f3` in dark mode. ")
     passage_primary_button_background_color: Optional[StrictStr] = Field(default='#121212', description="Primary button background colour (hex)")
@@ -54,10 +50,11 @@ class ElementCustomization(BaseModel):
     passage_secondary_button_border_width: Optional[StrictInt] = Field(default=1, description="Secondary button border width (px)")
     __properties: ClassVar[List[str]] = ["passage_container_background_color", "passage_container_max_width", "passage_input_box_background_color", "passage_input_box_border_radius", "passage_header_font_family", "passage_body_font_family", "passage_header_text_color", "passage_body_text_color", "passage_primary_button_background_color", "passage_primary_button_text_color", "passage_primary_button_hover_color", "passage_primary_button_border_radius", "passage_primary_button_border_color", "passage_primary_button_border_width", "passage_secondary_button_background_color", "passage_secondary_button_text_color", "passage_secondary_button_hover_color", "passage_secondary_button_border_radius", "passage_secondary_button_border_color", "passage_secondary_button_border_width"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -70,7 +67,7 @@ class ElementCustomization(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ElementCustomization from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -84,16 +81,18 @@ class ElementCustomization(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ElementCustomization from a dict"""
         if obj is None:
             return None
@@ -106,8 +105,8 @@ class ElementCustomization(BaseModel):
             "passage_container_max_width": obj.get("passage_container_max_width") if obj.get("passage_container_max_width") is not None else 300,
             "passage_input_box_background_color": obj.get("passage_input_box_background_color"),
             "passage_input_box_border_radius": obj.get("passage_input_box_border_radius") if obj.get("passage_input_box_border_radius") is not None else 5,
-            "passage_header_font_family": obj.get("passage_header_font_family"),
-            "passage_body_font_family": obj.get("passage_body_font_family"),
+            "passage_header_font_family": obj.get("passage_header_font_family") if obj.get("passage_header_font_family") is not None else FontFamily.HELVETICA,
+            "passage_body_font_family": obj.get("passage_body_font_family") if obj.get("passage_body_font_family") is not None else FontFamily.HELVETICA,
             "passage_header_text_color": obj.get("passage_header_text_color"),
             "passage_body_text_color": obj.get("passage_body_text_color"),
             "passage_primary_button_background_color": obj.get("passage_primary_button_background_color") if obj.get("passage_primary_button_background_color") is not None else '#121212',
