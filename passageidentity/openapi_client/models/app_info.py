@@ -19,18 +19,15 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictBool, StrictInt, StrictStr, field_validator
-from pydantic import Field
 from passageidentity.openapi_client.models.auth_methods import AuthMethods
 from passageidentity.openapi_client.models.element_customization import ElementCustomization
 from passageidentity.openapi_client.models.layouts import Layouts
 from passageidentity.openapi_client.models.technologies import Technologies
 from passageidentity.openapi_client.models.user_metadata_field import UserMetadataField
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class AppInfo(BaseModel):
     """
@@ -45,6 +42,7 @@ class AppInfo(BaseModel):
     auth_fallback_method_ttl: StrictInt = Field(description="Deprecated Property. Please refer to `auth_methods` to view settings for individual authentication methods.")
     auth_methods: AuthMethods
     auth_origin: StrictStr
+    auto_theme_enabled: StrictBool = Field(description="Deprecated Property. Please use `hosted_theme` to set hosted page theming instead.")
     created_at: datetime
     default_language: StrictStr
     id: StrictStr
@@ -53,8 +51,9 @@ class AppInfo(BaseModel):
     light_logo_url: Optional[StrictStr] = None
     dark_logo_url: Optional[StrictStr] = None
     name: StrictStr
-    hosted: StrictBool = Field(description="whether or not the app's login page hosted by passage")
+    hosted: StrictBool = Field(description="whether or not the app's login page is hosted by Passage")
     hosted_subdomain: StrictStr = Field(description="the subdomain of the app's hosted login page")
+    hosted_theme: StrictStr
     id_token_lifetime: Optional[StrictInt] = None
     passage_branding: StrictBool
     profile_management: StrictBool
@@ -75,19 +74,20 @@ class AppInfo(BaseModel):
     technologies: List[Technologies]
     element_customization: ElementCustomization
     element_customization_dark: ElementCustomization
-    __properties: ClassVar[List[str]] = ["additional_auth_origins", "allowed_callback_urls", "allowed_identifier", "allowed_logout_urls", "application_login_uri", "auth_fallback_method", "auth_fallback_method_ttl", "auth_methods", "auth_origin", "created_at", "default_language", "id", "layouts", "login_url", "light_logo_url", "dark_logo_url", "name", "hosted", "hosted_subdomain", "id_token_lifetime", "passage_branding", "profile_management", "public_signup", "redirect_url", "refresh_absolute_lifetime", "refresh_enabled", "refresh_inactivity_lifetime", "require_email_verification", "require_identifier_verification", "required_identifier", "role", "rsa_public_key", "secret", "session_timeout_length", "type", "user_metadata_schema", "technologies", "element_customization", "element_customization_dark"]
+    __properties: ClassVar[List[str]] = ["additional_auth_origins", "allowed_callback_urls", "allowed_identifier", "allowed_logout_urls", "application_login_uri", "auth_fallback_method", "auth_fallback_method_ttl", "auth_methods", "auth_origin", "auto_theme_enabled", "created_at", "default_language", "id", "layouts", "login_url", "light_logo_url", "dark_logo_url", "name", "hosted", "hosted_subdomain", "hosted_theme", "id_token_lifetime", "passage_branding", "profile_management", "public_signup", "redirect_url", "refresh_absolute_lifetime", "refresh_enabled", "refresh_inactivity_lifetime", "require_email_verification", "require_identifier_verification", "required_identifier", "role", "rsa_public_key", "secret", "session_timeout_length", "type", "user_metadata_schema", "technologies", "element_customization", "element_customization_dark"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in ('complete', 'flex'):
+        if value not in set(['complete', 'flex']):
             raise ValueError("must be one of enum values ('complete', 'flex')")
         return value
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -100,7 +100,7 @@ class AppInfo(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of AppInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -114,10 +114,12 @@ class AppInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of auth_methods
@@ -129,9 +131,9 @@ class AppInfo(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in user_metadata_schema (list)
         _items = []
         if self.user_metadata_schema:
-            for _item in self.user_metadata_schema:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_user_metadata_schema in self.user_metadata_schema:
+                if _item_user_metadata_schema:
+                    _items.append(_item_user_metadata_schema.to_dict())
             _dict['user_metadata_schema'] = _items
         # override the default output from pydantic by calling `to_dict()` of element_customization
         if self.element_customization:
@@ -142,7 +144,7 @@ class AppInfo(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of AppInfo from a dict"""
         if obj is None:
             return None
@@ -158,18 +160,20 @@ class AppInfo(BaseModel):
             "application_login_uri": obj.get("application_login_uri"),
             "auth_fallback_method": obj.get("auth_fallback_method"),
             "auth_fallback_method_ttl": obj.get("auth_fallback_method_ttl"),
-            "auth_methods": AuthMethods.from_dict(obj.get("auth_methods")) if obj.get("auth_methods") is not None else None,
+            "auth_methods": AuthMethods.from_dict(obj["auth_methods"]) if obj.get("auth_methods") is not None else None,
             "auth_origin": obj.get("auth_origin"),
+            "auto_theme_enabled": obj.get("auto_theme_enabled"),
             "created_at": obj.get("created_at"),
             "default_language": obj.get("default_language"),
             "id": obj.get("id"),
-            "layouts": Layouts.from_dict(obj.get("layouts")) if obj.get("layouts") is not None else None,
+            "layouts": Layouts.from_dict(obj["layouts"]) if obj.get("layouts") is not None else None,
             "login_url": obj.get("login_url"),
             "light_logo_url": obj.get("light_logo_url"),
             "dark_logo_url": obj.get("dark_logo_url"),
             "name": obj.get("name"),
             "hosted": obj.get("hosted"),
             "hosted_subdomain": obj.get("hosted_subdomain"),
+            "hosted_theme": obj.get("hosted_theme"),
             "id_token_lifetime": obj.get("id_token_lifetime"),
             "passage_branding": obj.get("passage_branding"),
             "profile_management": obj.get("profile_management"),
@@ -186,10 +190,10 @@ class AppInfo(BaseModel):
             "secret": obj.get("secret"),
             "session_timeout_length": obj.get("session_timeout_length"),
             "type": obj.get("type"),
-            "user_metadata_schema": [UserMetadataField.from_dict(_item) for _item in obj.get("user_metadata_schema")] if obj.get("user_metadata_schema") is not None else None,
+            "user_metadata_schema": [UserMetadataField.from_dict(_item) for _item in obj["user_metadata_schema"]] if obj.get("user_metadata_schema") is not None else None,
             "technologies": obj.get("technologies"),
-            "element_customization": ElementCustomization.from_dict(obj.get("element_customization")) if obj.get("element_customization") is not None else None,
-            "element_customization_dark": ElementCustomization.from_dict(obj.get("element_customization_dark")) if obj.get("element_customization_dark") is not None else None
+            "element_customization": ElementCustomization.from_dict(obj["element_customization"]) if obj.get("element_customization") is not None else None,
+            "element_customization_dark": ElementCustomization.from_dict(obj["element_customization_dark"]) if obj.get("element_customization_dark") is not None else None
         })
         return _obj
 

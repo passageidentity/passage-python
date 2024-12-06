@@ -19,18 +19,15 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
-from pydantic import Field
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from passageidentity.openapi_client.models.user_recent_event import UserRecentEvent
 from passageidentity.openapi_client.models.user_social_connections import UserSocialConnections
 from passageidentity.openapi_client.models.user_status import UserStatus
 from passageidentity.openapi_client.models.web_authn_devices import WebAuthnDevices
 from passageidentity.openapi_client.models.web_authn_type import WebAuthnType
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class UserInfo(BaseModel):
     """
@@ -39,6 +36,7 @@ class UserInfo(BaseModel):
     created_at: datetime
     email: StrictStr
     email_verified: StrictBool
+    external_id: StrictStr = Field(description="The external ID of the user. Only set if the user was created in a Flex app.")
     id: StrictStr
     last_login_at: datetime
     login_count: StrictInt
@@ -48,16 +46,17 @@ class UserInfo(BaseModel):
     social_connections: UserSocialConnections
     status: UserStatus
     updated_at: datetime
-    user_metadata: Optional[Union[str, Any]]
+    user_metadata: Optional[Dict[str, Any]]
     webauthn: StrictBool
     webauthn_devices: List[WebAuthnDevices]
     webauthn_types: List[WebAuthnType] = Field(description="List of credential types that have been used for authentication")
-    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "id", "last_login_at", "login_count", "phone", "phone_verified", "recent_events", "social_connections", "status", "updated_at", "user_metadata", "webauthn", "webauthn_devices", "webauthn_types"]
+    __properties: ClassVar[List[str]] = ["created_at", "email", "email_verified", "external_id", "id", "last_login_at", "login_count", "phone", "phone_verified", "recent_events", "social_connections", "status", "updated_at", "user_metadata", "webauthn", "webauthn_devices", "webauthn_types"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -70,7 +69,7 @@ class UserInfo(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of UserInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -84,18 +83,20 @@ class UserInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in recent_events (list)
         _items = []
         if self.recent_events:
-            for _item in self.recent_events:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_recent_events in self.recent_events:
+                if _item_recent_events:
+                    _items.append(_item_recent_events.to_dict())
             _dict['recent_events'] = _items
         # override the default output from pydantic by calling `to_dict()` of social_connections
         if self.social_connections:
@@ -103,9 +104,9 @@ class UserInfo(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in webauthn_devices (list)
         _items = []
         if self.webauthn_devices:
-            for _item in self.webauthn_devices:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_webauthn_devices in self.webauthn_devices:
+                if _item_webauthn_devices:
+                    _items.append(_item_webauthn_devices.to_dict())
             _dict['webauthn_devices'] = _items
         # set to None if user_metadata (nullable) is None
         # and model_fields_set contains the field
@@ -115,7 +116,7 @@ class UserInfo(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of UserInfo from a dict"""
         if obj is None:
             return None
@@ -127,18 +128,19 @@ class UserInfo(BaseModel):
             "created_at": obj.get("created_at"),
             "email": obj.get("email"),
             "email_verified": obj.get("email_verified"),
+            "external_id": obj.get("external_id"),
             "id": obj.get("id"),
             "last_login_at": obj.get("last_login_at"),
             "login_count": obj.get("login_count"),
             "phone": obj.get("phone"),
             "phone_verified": obj.get("phone_verified"),
-            "recent_events": [UserRecentEvent.from_dict(_item) for _item in obj.get("recent_events")] if obj.get("recent_events") is not None else None,
-            "social_connections": UserSocialConnections.from_dict(obj.get("social_connections")) if obj.get("social_connections") is not None else None,
+            "recent_events": [UserRecentEvent.from_dict(_item) for _item in obj["recent_events"]] if obj.get("recent_events") is not None else None,
+            "social_connections": UserSocialConnections.from_dict(obj["social_connections"]) if obj.get("social_connections") is not None else None,
             "status": obj.get("status"),
             "updated_at": obj.get("updated_at"),
             "user_metadata": obj.get("user_metadata"),
             "webauthn": obj.get("webauthn"),
-            "webauthn_devices": [WebAuthnDevices.from_dict(_item) for _item in obj.get("webauthn_devices")] if obj.get("webauthn_devices") is not None else None,
+            "webauthn_devices": [WebAuthnDevices.from_dict(_item) for _item in obj["webauthn_devices"]] if obj.get("webauthn_devices") is not None else None,
             "webauthn_types": obj.get("webauthn_types")
         })
         return _obj

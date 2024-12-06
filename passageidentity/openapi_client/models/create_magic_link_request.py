@@ -18,37 +18,34 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
-from pydantic import Field
 from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
 from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class CreateMagicLinkRequest(BaseModel):
     """
     CreateMagicLinkRequest
     """ # noqa: E501
-    channel: MagicLinkChannel
-    email: StrictStr
+    channel: Optional[MagicLinkChannel] = None
+    email: Optional[StrictStr] = None
     language: Optional[StrictStr] = Field(default=None, description="language of the email to send (optional)")
-    magic_link_path: StrictStr
-    phone: StrictStr
-    redirect_url: StrictStr
-    send: StrictBool
-    ttl: StrictInt
+    magic_link_path: Optional[StrictStr] = Field(default=None, description="must be a relative url")
+    phone: Optional[StrictStr] = None
+    redirect_url: Optional[StrictStr] = None
+    send: Optional[StrictBool] = None
+    ttl: Optional[StrictInt] = None
     type: Optional[MagicLinkType] = None
-    user_id: StrictStr
+    user_id: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = ["channel", "email", "language", "magic_link_path", "phone", "redirect_url", "send", "ttl", "type", "user_id"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -61,7 +58,7 @@ class CreateMagicLinkRequest(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of CreateMagicLinkRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -75,16 +72,18 @@ class CreateMagicLinkRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of CreateMagicLinkRequest from a dict"""
         if obj is None:
             return None

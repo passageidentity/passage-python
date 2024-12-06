@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **created_at** | **datetime** | The first time this webAuthn device was used to authenticate the user | 
@@ -24,12 +25,12 @@ json = "{}"
 # create an instance of WebAuthnDevices from a JSON string
 web_authn_devices_instance = WebAuthnDevices.from_json(json)
 # print the JSON string representation of the object
-print WebAuthnDevices.to_json()
+print(WebAuthnDevices.to_json())
 
 # convert the object into a dict
 web_authn_devices_dict = web_authn_devices_instance.to_dict()
 # create an instance of WebAuthnDevices from a dict
-web_authn_devices_form_dict = web_authn_devices.from_dict(web_authn_devices_dict)
+web_authn_devices_from_dict = WebAuthnDevices.from_dict(web_authn_devices_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

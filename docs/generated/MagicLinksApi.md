@@ -17,9 +17,8 @@ Create magic link for a user.
 ### Example
 
 * Bearer (JWT) Authentication (bearerAuth):
+
 ```python
-import time
-import os
 import passageidentity.openapi_client
 from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 from passageidentity.openapi_client.models.magic_link_response import MagicLinkResponse
@@ -47,7 +46,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = passageidentity.openapi_client.MagicLinksApi(api_client)
     app_id = 'app_id_example' # str | App ID
-    create_magic_link_request = passageidentity.openapi_client.CreateMagicLinkRequest() # CreateMagicLinkRequest | magic link request
+    create_magic_link_request = passageidentity.openapi_client.CreateMagicLinkRequest() # CreateMagicLinkRequest | Request to create a magic link
 
     try:
         # Create Embeddable Magic Link
@@ -62,10 +61,11 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
- **create_magic_link_request** | [**CreateMagicLinkRequest**](CreateMagicLinkRequest.md)| magic link request | 
+ **create_magic_link_request** | [**CreateMagicLinkRequest**](CreateMagicLinkRequest.md)| Request to create a magic link | 
 
 ### Return type
 
@@ -81,6 +81,7 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | Created |  -  |

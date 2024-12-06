@@ -18,14 +18,11 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel
 from passageidentity.openapi_client.models.app_info import AppInfo
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class AppResponse(BaseModel):
     """
@@ -34,10 +31,11 @@ class AppResponse(BaseModel):
     app: AppInfo
     __properties: ClassVar[List[str]] = ["app"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -50,7 +48,7 @@ class AppResponse(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of AppResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -64,10 +62,12 @@ class AppResponse(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
+        excluded_fields: Set[str] = set([
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of app
@@ -76,7 +76,7 @@ class AppResponse(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of AppResponse from a dict"""
         if obj is None:
             return None
@@ -85,7 +85,7 @@ class AppResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "app": AppInfo.from_dict(obj.get("app")) if obj.get("app") is not None else None
+            "app": AppInfo.from_dict(obj["app"]) if obj.get("app") is not None else None
         })
         return _obj
 
