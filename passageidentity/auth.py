@@ -2,58 +2,21 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 import jwt
 import jwt.algorithms
 
 from passageidentity.errors import PassageError
 from passageidentity.helper import fetch_app
+from passageidentity.models.magic_link_args import MagicLinkWithEmailArgs, MagicLinkWithPhoneArgs, MagicLinkWithUserArgs
 from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.openapi_client.exceptions import ApiException
 
 if TYPE_CHECKING:
+    from passageidentity.models.magic_link_args import MagicLinkArgs
+    from passageidentity.models.magic_link_options import MagicLinkOptions
     from passageidentity.openapi_client.models.magic_link import MagicLink
-    from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
-    from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
-
-
-class MagicLinkArgsBase:
-    """Base class for MagicLinkArgs."""
-
-    type: MagicLinkType
-    send: bool
-
-
-class MagicLinkWithEmailArgs(MagicLinkArgsBase):
-    """Arguments for creating a Magic Link with an email."""
-
-    email: str
-
-
-class MagicLinkWithPhoneArgs(MagicLinkArgsBase):
-    """Arguments for creating a Magic Link with a phone number."""
-
-    phone: str
-
-
-class MagicLinkWithUserArgs(MagicLinkArgsBase):
-    """Arguments for creating a Magic Link with a user ID."""
-
-    user_id: str
-    channel: MagicLinkChannel
-
-
-MagicLinkArgs = Union[MagicLinkWithEmailArgs, MagicLinkWithPhoneArgs, MagicLinkWithUserArgs]
-
-
-class MagicLinkOptions:
-    """Options for creating a Magic Link."""
-
-    language: str | None
-    magic_link_path: str | None
-    redirect_url: str | None
-    ttl: int | None
 
 
 class Auth:
