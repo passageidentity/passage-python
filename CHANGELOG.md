@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0](https://github.com/passageidentity/passage-python/compare/v2.5.1...v2.6.0) (2024-12-06)
+
+
+### Features
+
+* add new method signatures ([#105](https://github.com/passageidentity/passage-python/issues/105)) ([9246e3c](https://github.com/passageidentity/passage-python/commit/9246e3c8ec65eaa810cc881fb16ed0c75550fa51))
+* **codegen:** create magic link request fields are now optional ([#115](https://github.com/passageidentity/passage-python/issues/115)) ([b1f164b](https://github.com/passageidentity/passage-python/commit/b1f164bf00bbbebdf50dfe6a6e45510098fe4eec))
+
 ## [2.5.1] - 2024-10-23
 
 ### Changed
