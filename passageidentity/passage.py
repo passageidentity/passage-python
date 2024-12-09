@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import typing_extensions
 
@@ -19,6 +19,7 @@ from .openapi_client.api import (
 )
 from .openapi_client.models import (
     CreateMagicLinkRequest,
+    CreateUserRequest,
     MagicLinkType,
 )
 
@@ -27,7 +28,6 @@ if TYPE_CHECKING:
 
     from .openapi_client.models import (
         AppInfo,
-        CreateUserRequest,
         UpdateUserRequest,
         UserInfo,
         WebAuthnDevices,
@@ -243,4 +243,10 @@ class Passage:
             msg = "either phone or email must be provided to create the user"
             raise PassageError(msg)
 
-        return self.user.create(userAttributes)
+        user_args = (
+            cast(CreateUserRequest, CreateUserRequest.from_dict(userAttributes))
+            if isinstance(userAttributes, dict)
+            else userAttributes
+        )
+
+        return self.user.create(user_args)
