@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import jwt
-import jwt.algorithms
+import jwt as pyjwt
 
 from passageidentity.errors import PassageError
 from passageidentity.helper import fetch_app
@@ -28,7 +27,7 @@ class Auth:
         """Initialize the Auth class with the app ID and request headers."""
         self.app_id = app_id
         self.request_headers = request_headers
-        self.jwks = jwt.PyJWKClient(
+        self.jwks = pyjwt.PyJWKClient(
             f"https://auth.passage.id/v1/apps/{self.app_id}/.well-known/jwks.json",
             # must set a user agent to avoid 403 from CF
             headers={"User-Agent": "passageidentity/python"},
@@ -37,13 +36,17 @@ class Auth:
 
         self.magic_links_api = MagicLinksApi()
 
-    def validate_jwt(self, token: str) -> str:
+    def validate_jwt(self, jwt: str) -> str:
         """Verify the JWT and return the user ID for the authenticated user, or throw a PassageError."""
+        if not jwt:
+            msg = "jwt is required."
+            raise ValueError(msg)
+
         try:
-            kid = jwt.get_unverified_header(token)["kid"]
+            kid = pyjwt.get_unverified_header(jwt)["kid"]
             public_key = self.jwks.get_signing_key(kid)
-            claims = jwt.decode(
-                token,
+            claims = pyjwt.decode(
+                jwt,
                 public_key,
                 audience=[self.app_id] if self.app["hosted"] else self.app["auth_origin"],
                 algorithms=["RS256"],

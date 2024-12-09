@@ -23,10 +23,10 @@ def test_get_by_identifier_valid_upper_case() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    new_user = cast(UserInfo, psg.user.create({"email": email}))  # type: ignore[arg-type]
+    new_user = cast(UserInfo, psg.createUser({"email": email}))  # type: ignore[arg-type]
     assert new_user.email == email
 
-    user_by_identifier = cast(UserInfo, psg.user.get_by_identifier(email.upper()))
+    user_by_identifier = cast(UserInfo, psg.getUserByIdentifier(email.upper()))
     assert user_by_identifier.id == new_user.id
 
     user = cast(UserInfo, psg.user.get(new_user.id))
