@@ -98,14 +98,14 @@ class User:
             msg = "Could not deactivate user"
             raise PassageError.from_response_error(e, msg) from e
 
-    def update(self, user_id: str, args: UpdateUserArgs) -> PassageUser:
+    def update(self, user_id: str, options: UpdateUserArgs) -> PassageUser:
         """Update a user."""
         if not user_id:
             msg = "user_id is required."
             raise ValueError(msg)
 
         try:
-            return self.users_api.update_user(self.app_id, user_id, args, _headers=self.request_headers).user
+            return self.users_api.update_user(self.app_id, user_id, options, _headers=self.request_headers).user
         except ApiException as e:
             msg = "Could not update user"
             raise PassageError.from_response_error(e, msg) from e
