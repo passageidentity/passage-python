@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0](https://github.com/passageidentity/passage-python/compare/v2.5.1...v2.6.0) (2024-12-11)
+
+
+### Features
+
+* add new method signatures ([#105](https://github.com/passageidentity/passage-python/issues/105)) ([9246e3c](https://github.com/passageidentity/passage-python/commit/9246e3c8ec65eaa810cc881fb16ed0c75550fa51))
+* **codegen:** create magic link request fields are now optional ([#115](https://github.com/passageidentity/passage-python/issues/115)) ([b1f164b](https://github.com/passageidentity/passage-python/commit/b1f164bf00bbbebdf50dfe6a6e45510098fe4eec))
+* updates create_magic_link method to use stronger typed parameters ([#114](https://github.com/passageidentity/passage-python/issues/114)) ([83cd628](https://github.com/passageidentity/passage-python/commit/83cd6283c6b6df092a40e18818a3076261682ac3))
+
+
+### Bug Fixes
+
+* add dateutil dependency ([#119](https://github.com/passageidentity/passage-python/issues/119)) ([7084ec3](https://github.com/passageidentity/passage-python/commit/7084ec38c423886926dd84206a5fd798be00947f))
+
 ## [2.5.1] - 2024-10-23
 
 ### Changed
