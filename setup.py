@@ -53,6 +53,7 @@ setuptools.setup(
         "cryptography ~= 44.0",  # used by pyjwt
         "pydantic ~= 2.10",  # used by codgen
         "pyjwt ~= 2.9",
+        "python-dateutil ~= 2.9",  # used by codegen
         "requests ~= 2.32",
     ],
     extras_require={
