@@ -12,6 +12,8 @@ from passageidentity.helper import fetch_app
 from passageidentity.models.magic_link_args import MagicLinkWithEmailArgs, MagicLinkWithPhoneArgs, MagicLinkWithUserArgs
 from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.openapi_client.exceptions import ApiException
+from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
+from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
 
 if TYPE_CHECKING:
     from passageidentity.models.magic_link_args import MagicLinkArgs
@@ -54,32 +56,33 @@ class Auth:
 
     def create_magic_link(self, args: MagicLinkArgs, options: MagicLinkOptions | None = None) -> MagicLink:
         """Create a Magic Link for your app."""
-        payload = {
-            "type": args.type,
-            "send": args.send,
-        }
+        payload = CreateMagicLinkRequest()
+        payload.type = args.type
+        payload.send = args.send
 
         if isinstance(args, MagicLinkWithEmailArgs):
-            payload["email"] = args.email
+            payload.email = args.email
+            payload.channel = MagicLinkChannel.EMAIL
         elif isinstance(args, MagicLinkWithPhoneArgs):
-            payload["phone"] = args.phone
+            payload.phone = args.phone
+            payload.channel = MagicLinkChannel.PHONE
         elif isinstance(args, MagicLinkWithUserArgs):
-            payload["user_id"] = args.user_id
-            payload["channel"] = args.channel
+            payload.user_id = args.user_id
+            payload.channel = args.channel
         else:
             msg = "args must be an instance of MagicLinkArgs"
             raise TypeError(msg)
 
         if options:
-            payload["language"] = options.language
-            payload["magic_link_path"] = options.magic_link_path
-            payload["redirect_url"] = options.redirect_url
-            payload["ttl"] = options.ttl
+            payload.language = options.language
+            payload.magic_link_path = options.magic_link_path
+            payload.redirect_url = options.redirect_url
+            payload.ttl = options.ttl
 
         try:
             return self.magic_links_api.create_magic_link(
                 self.app_id,
-                payload,  # type: ignore[arg-type]
+                payload,
                 _headers=self.request_headers,
             ).magic_link
         except ApiException as e:
