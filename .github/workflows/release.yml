@@ -32,13 +32,14 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: python -m build
       - name: Publish to PyPI
+        id: publish
         if: ${{ steps.release.outputs.release_created }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
       # https://github.com/googleapis/release-please-action?tab=readme-ov-file#creating-majorminor-tags
       - name: Tag versions
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created && steps.publish.outcome == 'success' }}
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
