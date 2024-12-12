@@ -115,16 +115,19 @@ class Passage:
             else magicLinkAttributes
         )
 
-        if "email" in magic_link_attrs_dict:
+        if email := magic_link_attrs_dict.get("email"):
             args = MagicLinkWithEmailArgs()
-            args.email = magic_link_attrs_dict["email"]
-        elif "phone" in magic_link_attrs_dict:
+            args.email = email
+        elif phone := magic_link_attrs_dict.get("phone"):
             args = MagicLinkWithPhoneArgs()
-            args.phone = magic_link_attrs_dict["phone"]
-        elif "user_id" in magic_link_attrs_dict:
+            args.phone = phone
+        elif user_id := magic_link_attrs_dict.get("user_id"):
             args = MagicLinkWithUserArgs()
-            args.user_id = magic_link_attrs_dict["user_id"]
+            args.user_id = user_id
             args.channel = magic_link_attrs_dict.get("channel") or MagicLinkChannel.EMAIL
+        else:
+            msg = "Could not create a magic link for this app: must provide one of: email, phone, user_id"
+            raise TypeError(msg)
 
         args.send = magic_link_attrs_dict.get("send") or False
         args.type = magic_link_attrs_dict.get("type") or MagicLinkType.LOGIN
