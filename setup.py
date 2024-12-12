@@ -9,7 +9,7 @@ with Path("README.md").open(encoding="utf-8") as fh:
 
 setuptools.setup(
     name="passage-identity",
-    version="2.5.1",
+    version="2.6.0",
     author="Passage by 1Password",
     author_email="support@passage.id",
     description=(
