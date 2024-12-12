@@ -126,7 +126,7 @@ class Passage:
             args.user_id = user_id
             args.channel = magic_link_attrs_dict.get("channel") or MagicLinkChannel.EMAIL
         else:
-            msg = "Could not create a magic link for this app: must provide one of: email, phone, user_id"
+            msg = "Could not create a magic link for this app: must provide one of: email, phone, userID"
             raise TypeError(msg)
 
         args.send = magic_link_attrs_dict.get("send") or False
