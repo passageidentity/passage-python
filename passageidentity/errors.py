@@ -36,6 +36,10 @@ class PassageError(Exception):
             self.error = body["error"]
             self.error_code = body["code"]
 
+    def __str__(self) -> str:
+        """Return the error message."""
+        return self.message
+
     @classmethod
     def from_response_error(cls, response_error: ApiException, message: str | None = None) -> PassageError:
         """Initialize the error with a response body and optional message."""
