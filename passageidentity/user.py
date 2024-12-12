@@ -69,7 +69,7 @@ class User:
             raise PassageError.from_response_error(e, msg) from e
 
         if len(users) == 0:
-            msg = "Could not find user with identifier: {identifier}"
+            msg = "User not found."
             raise PassageError(msg)
 
         return self.get(users[0].id)

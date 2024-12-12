@@ -39,7 +39,7 @@ def test_get_by_identifier_valid_upper_case() -> None:
 def test_get_by_identifier_user_not_exist() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    with pytest.raises(PassageError, match="Could not find user with identifier"):
+    with pytest.raises(PassageError, match="User not found."):
         psg.user.get_by_identifier("error@passage.id")
 
 
