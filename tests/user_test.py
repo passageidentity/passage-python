@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 from faker import Faker
 
 from passageidentity.errors import PassageError
-from passageidentity.models.create_user_args import CreateUserArgs
-from passageidentity.models.update_user_args import UpdateUserArgs
+from passageidentity.openapi_client.models.create_user_args import CreateUserArgs
+from passageidentity.openapi_client.models.update_user_args import UpdateUserArgs
 from passageidentity.passage import Passage
 
 load_dotenv()

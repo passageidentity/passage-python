@@ -8,14 +8,28 @@ from .models import (
     MagicLinkWithPhoneArgs,
     MagicLinkWithUserArgs,
 )
+from .openapi_client.models import (
+    CreateUserArgs,
+    MagicLink,
+    MagicLinkChannel,
+    MagicLinkType,
+    PassageUser,
+    UpdateUserArgs,
+)
 from .passage import Passage
 
 __all__ = [
+    "CreateUserArgs",
+    "MagicLink",
     "MagicLinkArgs",
+    "MagicLinkChannel",
     "MagicLinkOptions",
+    "MagicLinkType",
     "MagicLinkWithEmailArgs",
     "MagicLinkWithPhoneArgs",
     "MagicLinkWithUserArgs",
     "Passage",
     "PassageError",
+    "PassageUser",
+    "UpdateUserArgs",
 ]
