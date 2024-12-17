@@ -12,20 +12,14 @@ from .openapi_client.api import (
     UserDevicesApi,
     UsersApi,
 )
-from .openapi_client.models import (
-    CreateUserRequest,
-    UpdateUserRequest,
-    UserInfo,
-)
 
 if TYPE_CHECKING:
     from .openapi_client.models import (
+        CreateUserArgs,
+        PassageUser,
+        UpdateUserArgs,
         WebAuthnDevices,
     )
-
-PassageUser = UserInfo
-CreateUserArgs = CreateUserRequest
-UpdateUserArgs = UpdateUserRequest
 
 
 class User:

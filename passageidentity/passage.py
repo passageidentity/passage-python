@@ -19,7 +19,7 @@ from .openapi_client.api import (
 )
 from .openapi_client.models import (
     CreateMagicLinkRequest,
-    CreateUserRequest,
+    CreateUserArgs,
     MagicLinkType,
 )
 
@@ -28,8 +28,8 @@ if TYPE_CHECKING:
 
     from .openapi_client.models import (
         AppInfo,
-        UpdateUserRequest,
-        UserInfo,
+        PassageUser,
+        UpdateUserArgs,
         WebAuthnDevices,
     )
 
@@ -147,14 +147,14 @@ class Passage:
         return client.get_app(self.app_id).app
 
     @typing_extensions.deprecated("Passage.getUser() will be deprecated. Use Passage.user.get() instead.")
-    def getUser(self, user_id: str) -> UserInfo | PassageError:  # noqa: N802
+    def getUser(self, user_id: str) -> PassageUser | PassageError:  # noqa: N802
         """Use Passage API to get info for a user, look up by user ID."""
         return self.user.get(user_id)
 
     @typing_extensions.deprecated(
         "Passage.getUserByIdentifier() will be deprecated. Use Passage.user.get_by_identifier() instead.",
     )
-    def getUserByIdentifier(self, userIdentifier: str) -> UserInfo | PassageError:  # noqa: N802, N803
+    def getUserByIdentifier(self, userIdentifier: str) -> PassageUser | PassageError:  # noqa: N802, N803
         """Use Passage API to get info for a user, look up by user identifier."""
         return self.user.get_by_identifier(userIdentifier)
 
@@ -212,12 +212,12 @@ class Passage:
         return True
 
     @typing_extensions.deprecated("Passage.activateUser() will be deprecated. Use Passage.user.activate() instead.")
-    def activateUser(self, user_id: str) -> UserInfo | PassageError:  # noqa: N802
+    def activateUser(self, user_id: str) -> PassageUser | PassageError:  # noqa: N802
         """Activate Passage User."""
         return self.user.activate(user_id)
 
     @typing_extensions.deprecated("Passage.deactivateUser() will be deprecated. Use Passage.user.deactivate() instead.")
-    def deactivateUser(self, user_id: str) -> UserInfo | PassageError:  # noqa: N802
+    def deactivateUser(self, user_id: str) -> PassageUser | PassageError:  # noqa: N802
         """Deactivate Passage User."""
         return self.user.deactivate(user_id)
 
@@ -225,8 +225,8 @@ class Passage:
     def updateUser(  # noqa: N802
         self,
         user_id: str,
-        attributes: UpdateUserRequest,
-    ) -> UserInfo | PassageError:
+        attributes: UpdateUserArgs,
+    ) -> PassageUser | PassageError:
         """Update Passage User."""
         return self.user.update(user_id, attributes)
 
@@ -239,15 +239,15 @@ class Passage:
     @typing_extensions.deprecated("Passage.createUser() will be deprecated. Use Passage.user.create() instead.")
     def createUser(  # noqa: N802
         self,
-        userAttributes: CreateUserRequest,  # noqa: N803
-    ) -> UserInfo | PassageError:
+        userAttributes: CreateUserArgs,  # noqa: N803
+    ) -> PassageUser | PassageError:
         """Create Passage User."""
         if not ("phone" in userAttributes or "email" in userAttributes):  # type: ignore[dict-item]
             msg = "either phone or email must be provided to create the user"
             raise PassageError(msg)
 
         user_args = (
-            cast(CreateUserRequest, CreateUserRequest.from_dict(userAttributes))
+            cast(CreateUserArgs, CreateUserArgs.from_dict(userAttributes))
             if isinstance(userAttributes, dict)
             else userAttributes
         )
