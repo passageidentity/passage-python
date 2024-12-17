@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user** | [**UserInfo**](UserInfo.md) |  | 
+**user** | [**PassageUser**](PassageUser.md) |  | 
 
 ## Example
 

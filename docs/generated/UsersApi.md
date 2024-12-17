@@ -97,7 +97,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_user**
-> UserResponse create_user(app_id, create_user_request)
+> UserResponse create_user(app_id, create_user_args)
 
 Create User
 
@@ -109,7 +109,7 @@ Create user for an application. Must provide an email of phone number identifier
 
 ```python
 import passageidentity.openapi_client
-from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
+from passageidentity.openapi_client.models.create_user_args import CreateUserArgs
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
@@ -135,11 +135,11 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
-    create_user_request = passageidentity.openapi_client.CreateUserRequest() # CreateUserRequest | email, phone, user_metadata
+    create_user_args = passageidentity.openapi_client.CreateUserArgs() # CreateUserArgs | email, phone, user_metadata
 
     try:
         # Create User
-        api_response = api_instance.create_user(app_id, create_user_request)
+        api_response = api_instance.create_user(app_id, create_user_args)
         print("The response of UsersApi->create_user:\n")
         pprint(api_response)
     except Exception as e:
@@ -154,7 +154,7 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
- **create_user_request** | [**CreateUserRequest**](CreateUserRequest.md)| email, phone, user_metadata | 
+ **create_user_args** | [**CreateUserArgs**](CreateUserArgs.md)| email, phone, user_metadata | 
 
 ### Return type
 
@@ -532,7 +532,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_user**
-> UserResponse update_user(app_id, user_id, update_user_request)
+> UserResponse update_user(app_id, user_id, update_user_args)
 
 Update User
 
@@ -544,7 +544,7 @@ Update a user's information.
 
 ```python
 import passageidentity.openapi_client
-from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
+from passageidentity.openapi_client.models.update_user_args import UpdateUserArgs
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.rest import ApiException
 from pprint import pprint
@@ -571,11 +571,11 @@ with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     api_instance = passageidentity.openapi_client.UsersApi(api_client)
     app_id = 'app_id_example' # str | App ID
     user_id = 'user_id_example' # str | User ID
-    update_user_request = passageidentity.openapi_client.UpdateUserRequest() # UpdateUserRequest | user settings
+    update_user_args = passageidentity.openapi_client.UpdateUserArgs() # UpdateUserArgs | user settings
 
     try:
         # Update User
-        api_response = api_instance.update_user(app_id, user_id, update_user_request)
+        api_response = api_instance.update_user(app_id, user_id, update_user_args)
         print("The response of UsersApi->update_user:\n")
         pprint(api_response)
     except Exception as e:
@@ -591,7 +591,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **app_id** | **str**| App ID | 
  **user_id** | **str**| User ID | 
- **update_user_request** | [**UpdateUserRequest**](UpdateUserRequest.md)| user settings | 
+ **update_user_args** | [**UpdateUserArgs**](UpdateUserArgs.md)| user settings | 
 
 ### Return type
 
