@@ -1,4 +1,4 @@
-# UserInfo
+# PassageUser
 
 
 ## Properties
@@ -26,19 +26,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from passageidentity.openapi_client.models.user_info import UserInfo
+from passageidentity.openapi_client.models.passage_user import PassageUser
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of UserInfo from a JSON string
-user_info_instance = UserInfo.from_json(json)
+# create an instance of PassageUser from a JSON string
+passage_user_instance = PassageUser.from_json(json)
 # print the JSON string representation of the object
-print(UserInfo.to_json())
+print(PassageUser.to_json())
 
 # convert the object into a dict
-user_info_dict = user_info_instance.to_dict()
-# create an instance of UserInfo from a dict
-user_info_from_dict = UserInfo.from_dict(user_info_dict)
+passage_user_dict = passage_user_instance.to_dict()
+# create an instance of PassageUser from a dict
+passage_user_from_dict = PassageUser.from_dict(passage_user_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

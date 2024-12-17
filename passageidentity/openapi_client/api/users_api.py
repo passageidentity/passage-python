@@ -20,9 +20,9 @@ from typing_extensions import Annotated
 from pydantic import Field, StrictInt, StrictStr
 from typing import Optional
 from typing_extensions import Annotated
-from passageidentity.openapi_client.models.create_user_request import CreateUserRequest
+from passageidentity.openapi_client.models.create_user_args import CreateUserArgs
 from passageidentity.openapi_client.models.list_paginated_users_response import ListPaginatedUsersResponse
-from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
+from passageidentity.openapi_client.models.update_user_args import UpdateUserArgs
 from passageidentity.openapi_client.models.user_response import UserResponse
 
 from passageidentity.openapi_client.api_client import ApiClient, RequestSerialized
@@ -332,7 +332,7 @@ class UsersApi:
     def create_user(
         self,
         app_id: Annotated[StrictStr, Field(description="App ID")],
-        create_user_request: Annotated[CreateUserRequest, Field(description="email, phone, user_metadata")],
+        create_user_args: Annotated[CreateUserArgs, Field(description="email, phone, user_metadata")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -352,8 +352,8 @@ class UsersApi:
 
         :param app_id: App ID (required)
         :type app_id: str
-        :param create_user_request: email, phone, user_metadata (required)
-        :type create_user_request: CreateUserRequest
+        :param create_user_args: email, phone, user_metadata (required)
+        :type create_user_args: CreateUserArgs
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -378,7 +378,7 @@ class UsersApi:
 
         _param = self._create_user_serialize(
             app_id=app_id,
-            create_user_request=create_user_request,
+            create_user_args=create_user_args,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -407,7 +407,7 @@ class UsersApi:
     def create_user_with_http_info(
         self,
         app_id: Annotated[StrictStr, Field(description="App ID")],
-        create_user_request: Annotated[CreateUserRequest, Field(description="email, phone, user_metadata")],
+        create_user_args: Annotated[CreateUserArgs, Field(description="email, phone, user_metadata")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -427,8 +427,8 @@ class UsersApi:
 
         :param app_id: App ID (required)
         :type app_id: str
-        :param create_user_request: email, phone, user_metadata (required)
-        :type create_user_request: CreateUserRequest
+        :param create_user_args: email, phone, user_metadata (required)
+        :type create_user_args: CreateUserArgs
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -453,7 +453,7 @@ class UsersApi:
 
         _param = self._create_user_serialize(
             app_id=app_id,
-            create_user_request=create_user_request,
+            create_user_args=create_user_args,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -482,7 +482,7 @@ class UsersApi:
     def create_user_without_preload_content(
         self,
         app_id: Annotated[StrictStr, Field(description="App ID")],
-        create_user_request: Annotated[CreateUserRequest, Field(description="email, phone, user_metadata")],
+        create_user_args: Annotated[CreateUserArgs, Field(description="email, phone, user_metadata")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -502,8 +502,8 @@ class UsersApi:
 
         :param app_id: App ID (required)
         :type app_id: str
-        :param create_user_request: email, phone, user_metadata (required)
-        :type create_user_request: CreateUserRequest
+        :param create_user_args: email, phone, user_metadata (required)
+        :type create_user_args: CreateUserArgs
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -528,7 +528,7 @@ class UsersApi:
 
         _param = self._create_user_serialize(
             app_id=app_id,
-            create_user_request=create_user_request,
+            create_user_args=create_user_args,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -552,7 +552,7 @@ class UsersApi:
     def _create_user_serialize(
         self,
         app_id,
-        create_user_request,
+        create_user_args,
         _request_auth,
         _content_type,
         _headers,
@@ -580,8 +580,8 @@ class UsersApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if create_user_request is not None:
-            _body_params = create_user_request
+        if create_user_args is not None:
+            _body_params = create_user_args
 
 
         # set the HTTP header `Accept`
@@ -1949,7 +1949,7 @@ class UsersApi:
         self,
         app_id: Annotated[StrictStr, Field(description="App ID")],
         user_id: Annotated[StrictStr, Field(description="User ID")],
-        update_user_request: Annotated[UpdateUserRequest, Field(description="user settings")],
+        update_user_args: Annotated[UpdateUserArgs, Field(description="user settings")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1971,8 +1971,8 @@ class UsersApi:
         :type app_id: str
         :param user_id: User ID (required)
         :type user_id: str
-        :param update_user_request: user settings (required)
-        :type update_user_request: UpdateUserRequest
+        :param update_user_args: user settings (required)
+        :type update_user_args: UpdateUserArgs
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1998,7 +1998,7 @@ class UsersApi:
         _param = self._update_user_serialize(
             app_id=app_id,
             user_id=user_id,
-            update_user_request=update_user_request,
+            update_user_args=update_user_args,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2028,7 +2028,7 @@ class UsersApi:
         self,
         app_id: Annotated[StrictStr, Field(description="App ID")],
         user_id: Annotated[StrictStr, Field(description="User ID")],
-        update_user_request: Annotated[UpdateUserRequest, Field(description="user settings")],
+        update_user_args: Annotated[UpdateUserArgs, Field(description="user settings")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2050,8 +2050,8 @@ class UsersApi:
         :type app_id: str
         :param user_id: User ID (required)
         :type user_id: str
-        :param update_user_request: user settings (required)
-        :type update_user_request: UpdateUserRequest
+        :param update_user_args: user settings (required)
+        :type update_user_args: UpdateUserArgs
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2077,7 +2077,7 @@ class UsersApi:
         _param = self._update_user_serialize(
             app_id=app_id,
             user_id=user_id,
-            update_user_request=update_user_request,
+            update_user_args=update_user_args,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2107,7 +2107,7 @@ class UsersApi:
         self,
         app_id: Annotated[StrictStr, Field(description="App ID")],
         user_id: Annotated[StrictStr, Field(description="User ID")],
-        update_user_request: Annotated[UpdateUserRequest, Field(description="user settings")],
+        update_user_args: Annotated[UpdateUserArgs, Field(description="user settings")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2129,8 +2129,8 @@ class UsersApi:
         :type app_id: str
         :param user_id: User ID (required)
         :type user_id: str
-        :param update_user_request: user settings (required)
-        :type update_user_request: UpdateUserRequest
+        :param update_user_args: user settings (required)
+        :type update_user_args: UpdateUserArgs
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2156,7 +2156,7 @@ class UsersApi:
         _param = self._update_user_serialize(
             app_id=app_id,
             user_id=user_id,
-            update_user_request=update_user_request,
+            update_user_args=update_user_args,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2181,7 +2181,7 @@ class UsersApi:
         self,
         app_id,
         user_id,
-        update_user_request,
+        update_user_args,
         _request_auth,
         _content_type,
         _headers,
@@ -2211,8 +2211,8 @@ class UsersApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if update_user_request is not None:
-            _body_params = update_user_request
+        if update_user_args is not None:
+            _body_params = update_user_args
 
 
         # set the HTTP header `Accept`
