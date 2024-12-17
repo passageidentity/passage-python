@@ -64,7 +64,9 @@ class User:
             raise PassageError.from_response_error(e, msg) from e
 
         if len(users) == 0:
-            raise PassageError.from_response_error(ApiException(status=404, data=Model404Error(code="user_not_found", error="User not found.")))
+            raise PassageError.from_response_error(
+                ApiException(status=404, data=Model404Error(code="user_not_found", error="User not found.")),
+            )
 
         return self.get(users[0].id)
 
