@@ -76,16 +76,17 @@ configuration = passageidentity.openapi_client.Configuration(
 # Enter a context with an instance of the API client
 with passageidentity.openapi_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = passageidentity.openapi_client.AppsApi(api_client)
+    api_instance = passageidentity.openapi_client.MagicLinksApi(api_client)
     app_id = 'app_id_example' # str | App ID
+    create_magic_link_request = passageidentity.openapi_client.CreateMagicLinkRequest() # CreateMagicLinkRequest | Request to create a magic link
 
     try:
-        # Get App
-        api_response = api_instance.get_app(app_id)
-        print("The response of AppsApi->get_app:\n")
+        # Create Embeddable Magic Link
+        api_response = api_instance.create_magic_link(app_id, create_magic_link_request)
+        print("The response of MagicLinksApi->create_magic_link:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling AppsApi->get_app: %s\n" % e)
+        print("Exception when calling MagicLinksApi->create_magic_link: %s\n" % e)
 
 ```
 
@@ -95,7 +96,6 @@ All URIs are relative to *https://api.passage.id/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AppsApi* | [**get_app**](docs/AppsApi.md#get_app) | **GET** /apps/{app_id} | Get App
 *MagicLinksApi* | [**create_magic_link**](docs/MagicLinksApi.md#create_magic_link) | **POST** /apps/{app_id}/magic-links | Create Embeddable Magic Link
 *TokensApi* | [**revoke_user_refresh_tokens**](docs/TokensApi.md#revoke_user_refresh_tokens) | **DELETE** /apps/{app_id}/users/{user_id}/tokens | Revokes refresh tokens
 *UserDevicesApi* | [**delete_user_devices**](docs/UserDevicesApi.md#delete_user_devices) | **DELETE** /apps/{app_id}/users/{user_id}/devices/{device_id} | Delete a device for a user
@@ -111,24 +111,16 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
- - [AppInfo](docs/AppInfo.md)
- - [AppResponse](docs/AppResponse.md)
  - [AppleUserSocialConnection](docs/AppleUserSocialConnection.md)
- - [AuthMethods](docs/AuthMethods.md)
  - [CreateMagicLinkRequest](docs/CreateMagicLinkRequest.md)
  - [CreateUserRequest](docs/CreateUserRequest.md)
- - [ElementCustomization](docs/ElementCustomization.md)
- - [FontFamily](docs/FontFamily.md)
  - [GithubUserSocialConnection](docs/GithubUserSocialConnection.md)
  - [GoogleUserSocialConnection](docs/GoogleUserSocialConnection.md)
- - [LayoutConfig](docs/LayoutConfig.md)
- - [Layouts](docs/Layouts.md)
  - [Link](docs/Link.md)
  - [ListDevicesResponse](docs/ListDevicesResponse.md)
  - [ListPaginatedUsersItem](docs/ListPaginatedUsersItem.md)
  - [ListPaginatedUsersResponse](docs/ListPaginatedUsersResponse.md)
  - [MagicLink](docs/MagicLink.md)
- - [MagicLinkAuthMethod](docs/MagicLinkAuthMethod.md)
  - [MagicLinkChannel](docs/MagicLinkChannel.md)
  - [MagicLinkResponse](docs/MagicLinkResponse.md)
  - [MagicLinkType](docs/MagicLinkType.md)
@@ -138,19 +130,12 @@ Class | Method | HTTP request | Description
  - [Model404Error](docs/Model404Error.md)
  - [Model500Error](docs/Model500Error.md)
  - [Nonce](docs/Nonce.md)
- - [OtpAuthMethod](docs/OtpAuthMethod.md)
  - [PaginatedLinks](docs/PaginatedLinks.md)
- - [PasskeysAuthMethod](docs/PasskeysAuthMethod.md)
  - [SocialConnectionType](docs/SocialConnectionType.md)
- - [Technologies](docs/Technologies.md)
- - [ThemeType](docs/ThemeType.md)
- - [TtlDisplayUnit](docs/TtlDisplayUnit.md)
  - [UpdateUserRequest](docs/UpdateUserRequest.md)
  - [UserEventAction](docs/UserEventAction.md)
  - [UserEventStatus](docs/UserEventStatus.md)
  - [UserInfo](docs/UserInfo.md)
- - [UserMetadataField](docs/UserMetadataField.md)
- - [UserMetadataFieldType](docs/UserMetadataFieldType.md)
  - [UserRecentEvent](docs/UserRecentEvent.md)
  - [UserResponse](docs/UserResponse.md)
  - [UserSocialConnections](docs/UserSocialConnections.md)
