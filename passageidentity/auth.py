@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 import jwt as pyjwt
 
 from passageidentity.errors import PassageError
-from passageidentity.helper import fetch_app
 from passageidentity.models.magic_link_args import MagicLinkWithEmailArgs, MagicLinkWithPhoneArgs, MagicLinkWithUserArgs
 from passageidentity.openapi_client.api.magic_links_api import MagicLinksApi
 from passageidentity.openapi_client.exceptions import ApiException
@@ -32,7 +31,6 @@ class Auth:
             # must set a user agent to avoid 403 from CF
             headers={"User-Agent": "passageidentity/python"},
         )
-        self.app = fetch_app(self.app_id)
 
         self.magic_links_api = MagicLinksApi()
 
@@ -48,7 +46,7 @@ class Auth:
             claims = pyjwt.decode(
                 jwt,
                 public_key,
-                audience=[self.app_id] if self.app["hosted"] else self.app["auth_origin"],
+                audience=self.app_id,
                 algorithms=["RS256"],
             )
 
