@@ -5,10 +5,8 @@ import pytest
 from dotenv import load_dotenv
 from faker import Faker
 
-from passageidentity import PassageError
+from passageidentity import MagicLink, Passage, PassageError
 from passageidentity.openapi_client.models.app_info import AppInfo
-from passageidentity.openapi_client.models.magic_link import MagicLink
-from passageidentity.passage import Passage
 
 load_dotenv()
 f = Faker()
