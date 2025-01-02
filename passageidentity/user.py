@@ -31,6 +31,7 @@ PassageUser = UserInfo
 CreateUserArgs = CreateUserRequest
 UpdateUserArgs = UpdateUserRequest
 
+
 class User:
     """User class for handling operations to get and update user information."""
 
