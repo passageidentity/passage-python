@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from importlib import metadata
 
 import requests
@@ -22,26 +21,3 @@ def get_headers(api_key: str | None = None) -> dict[str, str]:
 def get(url: str, api_key: str | None = None) -> requests.Response:
     """Send a GET request with API key in Authorization header if provided."""
     return requests.get(url, headers=get_headers(api_key))  # noqa: S113
-
-
-def post(url: str, api_key: str | None = None, data: dict | None = None) -> requests.Response:
-    """Send a POST request with API key in Authorization header if provided, and the JSON-encoded data in the body."""
-    return requests.post(  # noqa: S113
-        url,
-        headers=get_headers(api_key),
-        data=json.dumps(data) if data else None,
-    )
-
-
-def patch(url: str, api_key: str | None = None, data: dict | None = None) -> requests.Response:
-    """Send a PATCH request with API key in Authorization header if provided, and the JSON-encoded data in the body."""
-    return requests.patch(  # noqa: S113
-        url,
-        headers=get_headers(api_key),
-        data=json.dumps(data) if data else None,
-    )
-
-
-def delete(url: str, api_key: str | None = None) -> requests.Response:
-    """Send a DELETE request with API key in Authorization header if provided."""
-    return requests.delete(url, headers=get_headers(api_key))  # noqa: S113
