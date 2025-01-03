@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
 fi
 
 rm -rf ./passageidentity/openapi_client
-rm -rf ./docs/generated
+rm -rf ./docs
 
 file="$1"
 
@@ -18,8 +18,8 @@ docker run --rm -v "${PWD}:/local" -u $(id -u) openapitools/openapi-generator-cl
   --additional-properties=modelPropertyNaming=original,packageName=passageidentity.openapi_client \
   --model-name-mappings CreateUserRequest=CreateUserArgs,UpdateUserRequest=UpdateUserArgs,UserInfo=PassageUser
 
-mv ./temp/docs ./docs/generated
-mv ./temp/README.md ./docs/generated
+mv ./temp/docs ./docs
+mv ./temp/README.md ./docs
 
 mv ./temp/passageidentity/openapi_client ./passageidentity/openapi_client
 
