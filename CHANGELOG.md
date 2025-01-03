@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0](https://github.com/passageidentity/passage-python/compare/v2.6.0...v3.0.0) (2025-01-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update Passage ctor signature to remove deprecated args ([#132](https://github.com/passageidentity/passage-python/issues/132))
+* remove deprecated methods and classes ([#126](https://github.com/passageidentity/passage-python/issues/126))
+* rename codegen user models ([#125](https://github.com/passageidentity/passage-python/issues/125))
+
+### Features
+
+* export all models from passageidentity ([#133](https://github.com/passageidentity/passage-python/issues/133)) ([872ba81](https://github.com/passageidentity/passage-python/commit/872ba818feb62e5cf7be09052eb0430bf6513b6e))
+* make magic link parameter classes kwargs only ([#130](https://github.com/passageidentity/passage-python/issues/130)) ([0f1613e](https://github.com/passageidentity/passage-python/commit/0f1613ea733672e488d242f3f368f07fc174058f))
+* remove auth origin comparison from jwt audience validation ([#129](https://github.com/passageidentity/passage-python/issues/129)) ([52b6859](https://github.com/passageidentity/passage-python/commit/52b6859a72e2b1122be6b1b6e7261be9bbdd2639))
+* remove deprecated methods and classes ([#126](https://github.com/passageidentity/passage-python/issues/126)) ([d4a531e](https://github.com/passageidentity/passage-python/commit/d4a531ed6f268b792b8baf3e5e4d0e1a71badb7e))
+* rename codegen user models ([#125](https://github.com/passageidentity/passage-python/issues/125)) ([7af039c](https://github.com/passageidentity/passage-python/commit/7af039c4aa7ecdbd5ff909d678424ce50ab133c1))
+* update Passage ctor signature to remove deprecated args ([#132](https://github.com/passageidentity/passage-python/issues/132)) ([ac802ca](https://github.com/passageidentity/passage-python/commit/ac802cabe0595299389e7072a4fead5a473d1ffe))
+
 ## [2.6.0](https://github.com/passageidentity/passage-python/compare/v2.5.1...v2.6.0) (2024-12-12)
 
 
