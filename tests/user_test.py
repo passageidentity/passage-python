@@ -5,9 +5,7 @@ import pytest
 from dotenv import load_dotenv
 from faker import Faker
 
-from passageidentity.errors import PassageError
-from passageidentity.passage import Passage
-from passageidentity.user import PassageUser, UpdateUserArgs
+from passageidentity import Passage, PassageError, PassageUser, UpdateUserArgs
 
 load_dotenv()
 f = Faker()
