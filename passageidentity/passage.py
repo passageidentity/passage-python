@@ -1,16 +1,11 @@
 """Provides the Passage class for interacting with the Passage API."""
 
-from __future__ import annotations
-
 from passageidentity.auth import Auth
 from passageidentity.user import User
 
 
 class Passage:
     """Passage class for interacting with the Passage API."""
-
-    COOKIE_AUTH = 1
-    HEADER_AUTH = 2
 
     def __init__(self, app_id: str, api_key: str) -> None:
         """Initialize a new Passage instance."""
