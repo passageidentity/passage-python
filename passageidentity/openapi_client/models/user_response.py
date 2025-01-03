@@ -20,7 +20,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List
-from passageidentity.openapi_client.models.user_info import UserInfo
+from passageidentity.openapi_client.models.passage_user import PassageUser
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +28,7 @@ class UserResponse(BaseModel):
     """
     UserResponse
     """ # noqa: E501
-    user: UserInfo
+    user: PassageUser
     __properties: ClassVar[List[str]] = ["user"]
 
     model_config = ConfigDict(
@@ -85,7 +85,7 @@ class UserResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "user": UserInfo.from_dict(obj["user"]) if obj.get("user") is not None else None
+            "user": PassageUser.from_dict(obj["user"]) if obj.get("user") is not None else None
         })
         return _obj
 

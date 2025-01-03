@@ -15,7 +15,8 @@ docker run --rm -v "${PWD}:/local" -u $(id -u) openapitools/openapi-generator-cl
   -i "/local/$file" \
   -g python \
   -o /local/temp \
-  --additional-properties=modelPropertyNaming=original,packageName=passageidentity.openapi_client
+  --additional-properties=modelPropertyNaming=original,packageName=passageidentity.openapi_client \
+  --model-name-mappings CreateUserRequest=CreateUserArgs,UpdateUserRequest=UpdateUserArgs,UserInfo=PassageUser
 
 mv ./temp/docs ./docs/generated
 mv ./temp/README.md ./docs/generated

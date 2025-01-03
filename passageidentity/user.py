@@ -13,9 +13,13 @@ from .openapi_client.api import (
     UsersApi,
 )
 from .openapi_client.models import (
-    CreateUserRequest,
-    UpdateUserRequest,
-    UserInfo,
+    CreateUserArgs as CreateUserRequest,
+)
+from .openapi_client.models import (
+    PassageUser as UserInfo,
+)
+from .openapi_client.models import (
+    UpdateUserArgs as UpdateUserRequest,
 )
 
 if TYPE_CHECKING:

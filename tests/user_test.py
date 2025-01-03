@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 from faker import Faker
 
 from passageidentity.errors import PassageError
-from passageidentity.openapi_client.models.update_user_request import UpdateUserRequest
-from passageidentity.openapi_client.models.user_info import UserInfo
 from passageidentity.passage import Passage
+from passageidentity.user import PassageUser, UpdateUserArgs
 
 load_dotenv()
 f = Faker()
@@ -23,13 +22,13 @@ def test_get_by_identifier_valid_upper_case() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    new_user = cast(UserInfo, psg.createUser({"email": email}))  # type: ignore[arg-type]
+    new_user = cast(PassageUser, psg.createUser({"email": email}))  # type: ignore[arg-type]
     assert new_user.email == email
 
-    user_by_identifier = cast(UserInfo, psg.getUserByIdentifier(email.upper()))
+    user_by_identifier = cast(PassageUser, psg.getUserByIdentifier(email.upper()))
     assert user_by_identifier.id == new_user.id
 
-    user = cast(UserInfo, psg.user.get(new_user.id))
+    user = cast(PassageUser, psg.user.get(new_user.id))
     assert user.id == new_user.id
 
     assert user_by_identifier == user
@@ -45,7 +44,7 @@ def test_get_by_identifier_user_not_exist() -> None:
 
 def test_get_user_info_valid() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    user = cast(UserInfo, psg.getUser(PASSAGE_USER_ID))
+    user = cast(PassageUser, psg.getUser(PASSAGE_USER_ID))
     assert user.id == PASSAGE_USER_ID
 
 
@@ -53,13 +52,13 @@ def test_get_user_info_by_identifier_valid() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    new_user = cast(UserInfo, psg.createUser({"email": email}))  # type: ignore[arg-type]
+    new_user = cast(PassageUser, psg.createUser({"email": email}))  # type: ignore[arg-type]
     assert new_user.email == email
 
-    user_by_identifier = cast(UserInfo, psg.getUserByIdentifier(email))
+    user_by_identifier = cast(PassageUser, psg.getUserByIdentifier(email))
     assert user_by_identifier.id == new_user.id
 
-    user = cast(UserInfo, psg.getUser(new_user.id))
+    user = cast(PassageUser, psg.getUser(new_user.id))
     assert user.id == new_user.id
 
     assert user_by_identifier == user
@@ -70,13 +69,13 @@ def test_get_user_info_by_identifier_phone_valid() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     phone = "+15005550030"
-    new_user = cast(UserInfo, psg.createUser({"phone": phone}))  # type: ignore[arg-type]
+    new_user = cast(PassageUser, psg.createUser({"phone": phone}))  # type: ignore[arg-type]
     assert new_user.phone == phone
 
-    user_by_identifier = cast(UserInfo, psg.getUserByIdentifier(phone))
+    user_by_identifier = cast(PassageUser, psg.getUserByIdentifier(phone))
     assert user_by_identifier.id == new_user.id
 
-    user = cast(UserInfo, psg.getUser(new_user.id))
+    user = cast(PassageUser, psg.getUser(new_user.id))
     assert user.id == new_user.id
 
     assert user_by_identifier == user
@@ -85,15 +84,15 @@ def test_get_user_info_by_identifier_phone_valid() -> None:
 
 def test_activate_user() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
-    user = cast(UserInfo, psg.activateUser(PASSAGE_USER_ID))
+    user = cast(PassageUser, psg.activateUser(PASSAGE_USER_ID))
     assert user.status == "active"
 
 
 def test_deactivate_user() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
-    user = cast(UserInfo, psg.getUser(PASSAGE_USER_ID))
-    user = cast(UserInfo, psg.deactivateUser(user.id))
+    user = cast(PassageUser, psg.getUser(PASSAGE_USER_ID))
+    user = cast(PassageUser, psg.deactivateUser(user.id))
     assert user.status == "inactive"
 
 
@@ -108,10 +107,10 @@ def test_update_user_phone() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     phone = "+15005550021"
-    new_user = cast(UserInfo, psg.createUser({"phone": phone}))  # type: ignore[arg-type]
+    new_user = cast(PassageUser, psg.createUser({"phone": phone}))  # type: ignore[arg-type]
 
     phone = "+15005550022"
-    user = cast(UserInfo, psg.updateUser(new_user.id, {"phone": phone}))  # type: ignore[arg-type]
+    user = cast(PassageUser, psg.updateUser(new_user.id, {"phone": phone}))  # type: ignore[arg-type]
     assert user.phone == phone
     assert psg.deleteUser(new_user.id)
 
@@ -120,8 +119,8 @@ def test_update_user_email() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    req = UpdateUserRequest(email=email)
-    user = cast(UserInfo, psg.updateUser(PASSAGE_USER_ID, req))
+    req = UpdateUserArgs(email=email)
+    user = cast(PassageUser, psg.updateUser(PASSAGE_USER_ID, req))
     assert user.email == email
 
 
@@ -129,11 +128,11 @@ def test_update_user_with_metadata() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    user = cast(UserInfo, psg.updateUser(PASSAGE_USER_ID, {"email": email, "user_metadata": {"example1": "qwe"}}))  # type: ignore[arg-type]
+    user = cast(PassageUser, psg.updateUser(PASSAGE_USER_ID, {"email": email, "user_metadata": {"example1": "qwe"}}))  # type: ignore[arg-type]
     assert user.email == email
     assert user.user_metadata["example1"] == "qwe"  # type: ignore[index]
 
-    user = cast(UserInfo, psg.updateUser(PASSAGE_USER_ID, {"email": email, "user_metadata": {"example1": "asd"}}))  # type: ignore[arg-type]
+    user = cast(PassageUser, psg.updateUser(PASSAGE_USER_ID, {"email": email, "user_metadata": {"example1": "asd"}}))  # type: ignore[arg-type]
     assert user.email == email
     assert user.user_metadata["example1"] == "asd"  # type: ignore[index]
 
@@ -142,7 +141,7 @@ def test_create_user_with_metadata() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    user = cast(UserInfo, psg.createUser({"email": email, "user_metadata": {"example1": "qwe"}}))  # type: ignore[arg-type]
+    user = cast(PassageUser, psg.createUser({"email": email, "user_metadata": {"example1": "qwe"}}))  # type: ignore[arg-type]
     assert user.email == email
     assert user.user_metadata["example1"] == "qwe"  # type: ignore[index]
     assert psg.deleteUser(user.id)
@@ -152,7 +151,7 @@ def test_create_and_delete_user() -> None:
     psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 
     email = f.email()
-    new_user = cast(UserInfo, psg.createUser({"email": email}))  # type: ignore[arg-type]
+    new_user = cast(PassageUser, psg.createUser({"email": email}))  # type: ignore[arg-type]
     assert new_user.email == email
     assert psg.deleteUser(new_user.id)
 

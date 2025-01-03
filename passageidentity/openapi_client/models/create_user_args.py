@@ -18,17 +18,17 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class UpdateUserRequest(BaseModel):
+class CreateUserArgs(BaseModel):
     """
-    UpdateUserRequest
+    CreateUserArgs
     """ # noqa: E501
-    email: Optional[StrictStr] = None
-    phone: Optional[StrictStr] = None
+    email: Optional[StrictStr] = Field(default=None, description="Email of the new user. Either this or `phone` is required; both may be provided.")
+    phone: Optional[StrictStr] = Field(default=None, description="Phone number of the new user. Either this or `email` is required; both may be provided.")
     user_metadata: Optional[Dict[str, Any]] = None
     __properties: ClassVar[List[str]] = ["email", "phone", "user_metadata"]
 
@@ -50,7 +50,7 @@ class UpdateUserRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of UpdateUserRequest from a JSON string"""
+        """Create an instance of CreateUserArgs from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,7 +75,7 @@ class UpdateUserRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of UpdateUserRequest from a dict"""
+        """Create an instance of CreateUserArgs from a dict"""
         if obj is None:
             return None
 
