@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from passageidentity.errors import PassageError
 from passageidentity.openapi_client.exceptions import ApiException
+from passageidentity.openapi_client.models.model404_error import Model404Error
 
 from .openapi_client.api import (
     TokensApi,
@@ -63,8 +64,9 @@ class User:
             raise PassageError.from_response_error(e, msg) from e
 
         if len(users) == 0:
-            msg = "User not found."
-            raise PassageError(msg)
+            raise PassageError.from_response_error(
+                ApiException(status=404, data=Model404Error(code="user_not_found", error="User not found.")),
+            )
 
         return self.get(users[0].id)
 

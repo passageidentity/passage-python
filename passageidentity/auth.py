@@ -40,20 +40,27 @@ class Auth:
             msg = "jwt is required."
             raise ValueError(msg)
 
-        try:
-            kid = pyjwt.get_unverified_header(jwt)["kid"]
-            public_key = self.jwks.get_signing_key(kid)
-            claims = pyjwt.decode(
-                jwt,
-                public_key,
-                audience=self.app_id,
-                algorithms=["RS256"],
-            )
+        header = pyjwt.get_unverified_header(jwt)
+        kid = header.get("kid")
 
-            return claims["sub"]
-        except Exception as e:
-            msg = f"JWT is not valid: {e}"
-            raise PassageError(msg) from e
+        if kid is None:
+            msg = "kid is missing in the JWT header."
+            raise ValueError(msg)
+
+        public_key = self.jwks.get_signing_key(kid)
+        claims = pyjwt.decode(
+            jwt,
+            public_key,
+            audience=self.app_id,
+            algorithms=["RS256"],
+        )
+
+        sub = claims.get("sub")
+        if sub is None:
+            msg = "sub is missing in the JWT claims."
+            raise ValueError(msg)
+
+        return sub
 
     def create_magic_link(self, args: MagicLinkArgs, options: MagicLinkOptions | None = None) -> MagicLink:
         """Create a Magic Link for your app."""
