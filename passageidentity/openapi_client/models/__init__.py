@@ -15,24 +15,16 @@
 
 
 # import models into model package
-from passageidentity.openapi_client.models.app_info import AppInfo
-from passageidentity.openapi_client.models.app_response import AppResponse
 from passageidentity.openapi_client.models.apple_user_social_connection import AppleUserSocialConnection
-from passageidentity.openapi_client.models.auth_methods import AuthMethods
 from passageidentity.openapi_client.models.create_magic_link_request import CreateMagicLinkRequest
 from passageidentity.openapi_client.models.create_user_args import CreateUserArgs
-from passageidentity.openapi_client.models.element_customization import ElementCustomization
-from passageidentity.openapi_client.models.font_family import FontFamily
 from passageidentity.openapi_client.models.github_user_social_connection import GithubUserSocialConnection
 from passageidentity.openapi_client.models.google_user_social_connection import GoogleUserSocialConnection
-from passageidentity.openapi_client.models.layout_config import LayoutConfig
-from passageidentity.openapi_client.models.layouts import Layouts
 from passageidentity.openapi_client.models.link import Link
 from passageidentity.openapi_client.models.list_devices_response import ListDevicesResponse
 from passageidentity.openapi_client.models.list_paginated_users_item import ListPaginatedUsersItem
 from passageidentity.openapi_client.models.list_paginated_users_response import ListPaginatedUsersResponse
 from passageidentity.openapi_client.models.magic_link import MagicLink
-from passageidentity.openapi_client.models.magic_link_auth_method import MagicLinkAuthMethod
 from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
 from passageidentity.openapi_client.models.magic_link_response import MagicLinkResponse
 from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
@@ -42,19 +34,12 @@ from passageidentity.openapi_client.models.model403_error import Model403Error
 from passageidentity.openapi_client.models.model404_error import Model404Error
 from passageidentity.openapi_client.models.model500_error import Model500Error
 from passageidentity.openapi_client.models.nonce import Nonce
-from passageidentity.openapi_client.models.otp_auth_method import OtpAuthMethod
 from passageidentity.openapi_client.models.paginated_links import PaginatedLinks
 from passageidentity.openapi_client.models.passage_user import PassageUser
-from passageidentity.openapi_client.models.passkeys_auth_method import PasskeysAuthMethod
 from passageidentity.openapi_client.models.social_connection_type import SocialConnectionType
-from passageidentity.openapi_client.models.technologies import Technologies
-from passageidentity.openapi_client.models.theme_type import ThemeType
-from passageidentity.openapi_client.models.ttl_display_unit import TtlDisplayUnit
 from passageidentity.openapi_client.models.update_user_args import UpdateUserArgs
 from passageidentity.openapi_client.models.user_event_action import UserEventAction
 from passageidentity.openapi_client.models.user_event_status import UserEventStatus
-from passageidentity.openapi_client.models.user_metadata_field import UserMetadataField
-from passageidentity.openapi_client.models.user_metadata_field_type import UserMetadataFieldType
 from passageidentity.openapi_client.models.user_recent_event import UserRecentEvent
 from passageidentity.openapi_client.models.user_response import UserResponse
 from passageidentity.openapi_client.models.user_social_connections import UserSocialConnections
