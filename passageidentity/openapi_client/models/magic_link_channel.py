@@ -21,7 +21,7 @@ from typing_extensions import Self
 
 class MagicLinkChannel(str, Enum):
     """
-    MagicLinkChannel
+    The channel for magic link delivery: \"email\" or \"phone\". Required if \"send\" is true.
     """
 
     """

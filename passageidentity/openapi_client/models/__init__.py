@@ -26,6 +26,7 @@ from passageidentity.openapi_client.models.list_paginated_users_item import List
 from passageidentity.openapi_client.models.list_paginated_users_response import ListPaginatedUsersResponse
 from passageidentity.openapi_client.models.magic_link import MagicLink
 from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
+from passageidentity.openapi_client.models.magic_link_language import MagicLinkLanguage
 from passageidentity.openapi_client.models.magic_link_response import MagicLinkResponse
 from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
 from passageidentity.openapi_client.models.model400_error import Model400Error
