@@ -18,18 +18,6 @@ def test_from_response_error() -> None:
         data=Model400Error(code="invalid_request", error="some error"),
     )
 
-    error = PassageError.from_response_error(response_error, "some message")
-    assert error.message == "some message: some error"
-    assert error.status_code == 400
-    assert error.error_code == "invalid_request"
-
-
-def test_from_response_error_without_message() -> None:
-    response_error = MockApiException(
-        status=400,
-        data=Model400Error(code="invalid_request", error="some error"),
-    )
-
     error = PassageError.from_response_error(response_error)
     assert error.message == "some error"
     assert error.status_code == 400

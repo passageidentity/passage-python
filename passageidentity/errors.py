@@ -20,19 +20,18 @@ class PassageError(Exception):
         return self.message
 
     @classmethod
-    def from_response_error(cls, response_error: ApiException, message: str | None = None) -> PassageError:
+    def from_response_error(cls, response_error: ApiException) -> PassageError:
         """Initialize the error with a response body and optional message."""
         if response_error.data is not None:
             data_dict = response_error.data.to_dict()
             error_code = data_dict.get("code")
             error_msg = data_dict.get("error")
-            msg = ": ".join(filter(None, [message, error_msg]))
         else:
             error_code = None
-            msg = str(response_error.body)
+            error_msg = str(response_error.body)
 
         psg_error = cls()
-        psg_error.message = msg
+        psg_error.message = error_msg
         psg_error.status_code = response_error.status
         psg_error.error_code = error_code
 

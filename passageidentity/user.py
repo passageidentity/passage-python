@@ -43,8 +43,7 @@ class User:
         try:
             return self.users_api.get_user(self.app_id, user_id, _headers=self.request_headers).user
         except ApiException as e:
-            msg = "Could not fetch user"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def get_by_identifier(self, identifier: str) -> PassageUser:
         """Get a user's object using their user identifier."""
@@ -60,8 +59,7 @@ class User:
                 _headers=self.request_headers,
             ).users
         except ApiException as e:
-            msg = "Could not fetch user by identifier"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
         if len(users) == 0:
             raise PassageError.from_response_error(
@@ -79,8 +77,7 @@ class User:
         try:
             return self.users_api.activate_user(self.app_id, user_id, _headers=self.request_headers).user
         except ApiException as e:
-            msg = "Could not activate user"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def deactivate(self, user_id: str) -> PassageUser:
         """Deactivate a user using their user ID."""
@@ -91,8 +88,7 @@ class User:
         try:
             return self.users_api.deactivate_user(self.app_id, user_id, _headers=self.request_headers).user
         except ApiException as e:
-            msg = "Could not deactivate user"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def update(self, user_id: str, options: UpdateUserArgs) -> PassageUser:
         """Update a user."""
@@ -103,8 +99,7 @@ class User:
         try:
             return self.users_api.update_user(self.app_id, user_id, options, _headers=self.request_headers).user
         except ApiException as e:
-            msg = "Could not update user"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def create(self, args: CreateUserArgs) -> PassageUser:
         """Create a user."""
@@ -115,8 +110,7 @@ class User:
         try:
             return self.users_api.create_user(self.app_id, args, _headers=self.request_headers).user
         except ApiException as e:
-            msg = "Could not create user"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def delete(self, user_id: str) -> None:
         """Delete a user using their user ID."""
@@ -127,8 +121,7 @@ class User:
         try:
             self.users_api.delete_user(self.app_id, user_id, _headers=self.request_headers)
         except ApiException as e:
-            msg = "Could not delete user"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def list_devices(self, user_id: str) -> list[WebAuthnDevices]:
         """Get a user's devices using their user ID."""
@@ -139,8 +132,7 @@ class User:
         try:
             return self.user_devices_api.list_user_devices(self.app_id, user_id, _headers=self.request_headers).devices
         except ApiException as e:
-            msg = "Could not fetch user's devices"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def revoke_device(self, user_id: str, device_id: str) -> None:
         """Revoke a user's device using their user ID and the device ID."""
@@ -155,8 +147,7 @@ class User:
         try:
             self.user_devices_api.delete_user_devices(self.app_id, user_id, device_id, _headers=self.request_headers)
         except ApiException as e:
-            msg = "Could not revoke user's device"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
 
     def revoke_refresh_tokens(self, user_id: str) -> None:
         """Revokes all of a user's Refresh Tokens using their User ID."""
@@ -167,5 +158,4 @@ class User:
         try:
             self.tokens_api.revoke_user_refresh_tokens(self.app_id, user_id, _headers=self.request_headers)
         except ApiException as e:
-            msg = "Could not revoke user's refresh tokens"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
