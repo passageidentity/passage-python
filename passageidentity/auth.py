@@ -94,5 +94,4 @@ class Auth:
                 _headers=self.request_headers,
             ).magic_link
         except ApiException as e:
-            msg = "Could not create a magic link for this app"
-            raise PassageError.from_response_error(e, msg) from e
+            raise PassageError.from_response_error(e) from e
