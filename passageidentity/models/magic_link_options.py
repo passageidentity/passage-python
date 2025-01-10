@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from passageidentity.openapi_client.models.magic_link_language import MagicLinkLanguage
+
 
 class MagicLinkOptions:
     """Options for creating a Magic Link."""
 
-    language: str | None
+    language: MagicLinkLanguage | None
     magic_link_path: str | None
     redirect_url: str | None
     ttl: int | None
@@ -14,7 +19,7 @@ class MagicLinkOptions:
     def __init__(
         self,
         *,
-        language: str | None = None,
+        language: MagicLinkLanguage | None = None,
         magic_link_path: str | None = None,
         redirect_url: str | None = None,
         ttl: int | None = None,

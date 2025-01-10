@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
 from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
 from typing import Optional, Set
@@ -34,7 +34,7 @@ class MagicLink(BaseModel):
     identifier: StrictStr
     redirect_url: StrictStr
     secret: StrictStr
-    ttl: StrictInt
+    ttl: StrictInt = Field(description="time to live in minutes")
     type: MagicLinkType
     url: StrictStr
     user_id: StrictStr

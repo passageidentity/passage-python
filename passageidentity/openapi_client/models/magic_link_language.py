@@ -19,20 +19,25 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class MagicLinkType(str, Enum):
+class MagicLinkLanguage(str, Enum):
     """
-    The type of magic link to create: \"login\" or \"verify_identifier\". Defaults to \"login\".
+    language of the email or sms to send
     """
 
     """
     allowed enum values
     """
-    LOGIN = 'login'
-    VERIFY_IDENTIFIER = 'verify_identifier'
+    DE = 'de'
+    EN = 'en'
+    ES = 'es'
+    IT = 'it'
+    PL = 'pl'
+    PT = 'pt'
+    ZH = 'zh'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of MagicLinkType from a JSON string"""
+        """Create an instance of MagicLinkLanguage from a JSON string"""
         return cls(json.loads(json_str))
 
 

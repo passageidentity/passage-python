@@ -18,9 +18,11 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from passageidentity.openapi_client.models.magic_link_channel import MagicLinkChannel
+from passageidentity.openapi_client.models.magic_link_language import MagicLinkLanguage
 from passageidentity.openapi_client.models.magic_link_type import MagicLinkType
 from typing import Optional, Set
 from typing_extensions import Self
@@ -31,12 +33,12 @@ class CreateMagicLinkRequest(BaseModel):
     """ # noqa: E501
     channel: Optional[MagicLinkChannel] = None
     email: Optional[StrictStr] = None
-    language: Optional[StrictStr] = Field(default=None, description="language of the email to send (optional)")
+    language: Optional[MagicLinkLanguage] = None
     magic_link_path: Optional[StrictStr] = Field(default=None, description="must be a relative url")
     phone: Optional[StrictStr] = None
     redirect_url: Optional[StrictStr] = None
     send: Optional[StrictBool] = None
-    ttl: Optional[StrictInt] = None
+    ttl: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, description="time to live in minutes")
     type: Optional[MagicLinkType] = None
     user_id: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = ["channel", "email", "language", "magic_link_path", "phone", "redirect_url", "send", "ttl", "type", "user_id"]
