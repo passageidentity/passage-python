@@ -43,8 +43,8 @@ pip install passage-identity
 ### Import
 
 ```python
-from passageidentity import Passage
 import os
+from passageidentity import Passage
 ```
 
 ### Initialize
@@ -65,28 +65,6 @@ psg = Passage(PASSAGE_APP_ID, PASSAGE_API_KEY)
 ### Go Passwordless
 
 Find all core functions, user management details, and more implementation guidance on our [Passkey Complete Python Documentation](https://docs.passage.id/complete/backend-sdks/python) page.
-
-## API Reference
-
-| Method                                                                                          | Description                       |
-| ----------------------------------------------------------------------------------------------- | --------------------------------- |
-| [**activateUser**](./docs/passageidentity/Users.md#activateUser)                                | Activate User                     |
-| [**deactivateUser**](./docs/passageidentity/Users.md#deactivateUser)                            | Deactivate User                   |
-| [**deleteUser**](./docs/passageidentity/Users.md#deleteUser)                                    | Delete User                       |
-| [**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice)                        | Delete User Device                |
-| [**authenticateRequest**](./docs/passageidentity/Authentication.md#authenticateRequest)         | Validates user jwt token          |
-| [**createMagicLink**](./docs/passageidentity/Client.md#createmagiclink)                         | Create Embeddable Magic Link      |
-| [**createUser**](./docs/passageidentity/Users.md#createUser)                                    | Create User                       |
-| [**deleteUserDevice**](./docs/passageidentity/Users.md#deleteUserDevice)                        | Delete a device for a user        |
-| [**getApp**](./docs/passageidentity/Users.md#getApp)                                            | Get App                           |
-| [**getUser**](./docs/passageidentity/Users.md#getUser)                                          | Get User                          |
-| [**getUserByIdentifier**](./docs/passageidentity/Users.md#getUserByIdentifier)                  | Get User By Identifier            |
-| [**listUserDevices**](./docs/passageidentity/Users.md#listUserDevices)                          | List User Devices                 |
-| [**revokeUserDevice**](./docs/passageidentity/Users.md#revokeUserDevice)                        | **Deprecated** Delete User Device |
-| [**revokeUserRefreshTokens**](./docs/passageidentity/Authentication.md#revokeUserRefreshTokens) | Signout User                      |
-| [**signOut**](./docs/passageidentity/Users.md#signout)                                          | **Deprecated** Signout User       |
-| [**updateUser**](./docs/passageidentity/Users.md#updateUser)                                    | Update User                       |
-| [**validateJwt**](./docs/passageidentity/Authentication.md#validateJwt)                         | Validates user jwt token          |
 
 ## Support & Feedback
 
