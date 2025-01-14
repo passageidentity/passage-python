@@ -43,8 +43,8 @@ pip install passage-identity
 ### Import
 
 ```python
-from passageidentity import Passage
 import os
+from passageidentity import Passage
 ```
 
 ### Initialize
