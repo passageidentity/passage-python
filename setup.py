@@ -59,7 +59,6 @@ setuptools.setup(
     extras_require={
         "dev": [
             "pytest ~= 8.3",
-            "python-dotenv ~= 1.0",
             "faker ~= 33.1",
             "build ~= 1.2",
             "ruff ~= 0.8",
