@@ -33,8 +33,6 @@ jobs:
       - name: Install dependencies
         run: pip install -e .[dev]
       - name: Test
-        env:
-          CI: true
         run: pytest
   test-e2e:
     name: Test E2E
