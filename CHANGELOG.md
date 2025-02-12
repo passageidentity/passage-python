@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.1](https://github.com/passageidentity/passage-python/compare/v3.0.0...v3.0.1) (2025-02-12)
+
+
+### Bug Fixes
+
+* add passage-version header to requests ([#142](https://github.com/passageidentity/passage-python/issues/142)) ([733203a](https://github.com/passageidentity/passage-python/commit/733203aad67ec1028ba2bf3bbcacedcccd015e3f))
+
 ## [3.0.0](https://github.com/passageidentity/passage-python/compare/v2.6.0...v3.0.0) (2025-01-14)
 
 
