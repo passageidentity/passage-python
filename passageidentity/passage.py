@@ -1,5 +1,7 @@
 """Provides the Passage class for interacting with the Passage API."""
 
+from importlib import metadata
+
 from passageidentity.auth import Auth
 from passageidentity.user import User
 
@@ -17,7 +19,10 @@ class Passage:
             msg = "A Passage API key is required. Please include (app_id=YOUR_APP_ID, api_key=YOUR_API_KEY)."
             raise ValueError(msg)
 
-        request_headers = {"Authorization": f"Bearer {api_key}"}
+        request_headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Passage-Version": f"passage-python {metadata.version('passage-identity')}",
+        }
 
         self.auth = Auth(app_id, request_headers)
         self.user = User(app_id, request_headers)
