@@ -1,6 +1,86 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
-]
+requires = ["setuptools >= 75.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "passage-identity"
+version = "3.0.1"
+dependencies = [
+    "cryptography ~= 44.0",  # used by pyjwt
+    "pydantic ~= 2.10",  # used by codgen
+    "pyjwt ~= 2.9",
+    "python-dateutil ~= 2.9",  # used by codegen
+    "requests ~= 2.32",
+]
+requires-python = ">=3.8"
+authors = [
+    { name = "Passage by 1Password", email = "support@passage.id" },
+]
+description = "Passkey Complete for Python - Integrate into your Python API or service to enable a completely passwordless standalone auth solution with Passage by 1Password"
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Documentation = "https://docs.passage.id/complete"
+"Bug Tracker" = "https://github.com/passageidentity/.github/blob/main/SUPPORT.md"
+
+[project.license]
+file = "LICENSE"
+
+[project.optional-dependencies]
+test = [
+    "pytest ~= 8.3",
+]
+lint = [
+    "ruff ~= 0.8",
+]
+dev = [
+    "passage-identity[test,lint]",
+]
+
+[tool.ruff]
+exclude = [
+    ".eggs",
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "dist",
+    "passageidentity/openapi_client",
+]
+line-length = 120
+indent-width = 4
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = []
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**.py" = ["D", "S101", "PLR2004"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
