@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/passage-identity.svg)](https://badge.fury.io/py/passage-identity) [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](#) ![GitHub License](https://img.shields.io/github/license/passageidentity/passage-python)
 ![Static Badge](https://img.shields.io/badge/Built_by_1Password-grey?logo=1password)
 
-[!WARNING]
+# ⚠️ DEPRECATED
 **This repository is deprecated and no longer maintained as of January 16, 2026.**
 
 ## About
