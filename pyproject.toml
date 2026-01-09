@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "passage-identity"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
     "cryptography ~= 44.0",  # used by pyjwt
     "pydantic ~= 2.10",  # used by codgen

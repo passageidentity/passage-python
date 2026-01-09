@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.2](https://github.com/passageidentity/passage-python/compare/v3.0.1...v3.0.2) (2026-01-09)
+
+
+### Documentation
+
+* README for sunset ([#147](https://github.com/passageidentity/passage-python/issues/147)) ([015b5a7](https://github.com/passageidentity/passage-python/commit/015b5a77cdabbb88e3fb0813253d61f86969f421))
+
 ## [3.0.1](https://github.com/passageidentity/passage-python/compare/v3.0.0...v3.0.1) (2025-02-12)
 
 
